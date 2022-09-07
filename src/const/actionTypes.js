@@ -1,0 +1,8 @@
+export const ACTUALIZAR = "ACTUALIZAR";
+export const ELIMINAR = "ELIMINAR";
+export const OBTENER = "OBETENER";
+export const OBTENER_LISTA = "OBETENER_LISTA";
+export const OBTENER_LISTA_ACTIVAS = "OBETENER_LISTA_ACTIVAS";
+export const OBTENER_MENU = "OBTENER_MENU";
+export const OBTENER_ACCIONES = "OBTENER_ACCIONES";
+export const REGISTRAR = "REGISTRAR";
