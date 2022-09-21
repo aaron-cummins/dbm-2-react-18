@@ -1,118 +1,65 @@
 import React, { useContext, useEffect } from "react";
-import { LugarTrabajoContext } from "../../../contexts/LugarTrabajoContext";
+import { LugarTrabajoContext } from "../contexts/LugarTrabajoContext";
 import {
-  GridComponent,
-  Inject,
-  ColumnsDirective,
-  ColumnDirective,
-  Search,
-  Page,
-  Sort,
-} from "@syncfusion/ej2-react-grids";
-import { FaRegEdit } from "react-icons/fa";
-import { MdOutlineDelete } from "react-icons/md";
+  Alerts,
+  ColActivoTabla,
+  OpcionesTabla,
+  Tabla,
+} from "../../../components";
+import { useStateContext } from "../../../contexts/ContextProvider";
+import { SelectsContext } from "../../../contexts/SelectsContext";
 
 const TablaLugarTrabajo = () => {
-  const editing = { allowDeleting: true, allowEditing: true };
-  const toolbarOptions = ["Search"];
+  const { lugartrabajoList, obtenerLugaresTrabajo, obtenerLugarTrabajo } =
+    useContext(LugarTrabajoContext);
+  const { mensaje } = useStateContext();
 
   const {
-    lugartrabajoList,
-    obtenerLugaresTrabajo,
-    obtenerLugarTrabajo,
-    mensaje,
-    setMensajen,
-    tipoAlerta,
-    setTipoAlerta,
-    actualizarLugarTrabajo,
-  } = useContext(LugarTrabajoContext);
+    obtenerRegiones,
+    obtenerComunas,
+    obtenerZonas,
+    obtenerTipoLugarTrabajo,
+  } = useContext(SelectsContext);
 
-  const colActivo = (props) => (
-    <button
-      type="button"
-      className={`text-white py-1 px-2 capitalize rounded-2xl text-md ${
-        props.activo ? "bg-green-light-cummins" : "bg-red-cummins"
-      }`}
-    >
-      {props.activo ? "SI" : "NO"}
-    </button>
-  );
-
-  const getLugarTrabajo = (props) => {
-    obtenerLugarTrabajo(props);
-  };
-
-  const colAcciones = (props) => (
-    <>
-      <button
-        type="button"
-        onClick={() => getLugarTrabajo(props)}
-        className={`text-white py-1 px-2 capitalize rounded-2xl text-md bg-blue-light-cummins`}
-        data-bs-toggle="modal"
-        data-bs-target="#lugarTrabajo-modal"
-      >
-        <FaRegEdit />
-      </button>
-
-      <button
-        type="button"
-        className={`text-white py-1 px-2 capitalize rounded-2xl text-md bg-red-cummins`}
-      >
-        <MdOutlineDelete />
-      </button>
-    </>
-  );
+  const getLugarTrabajo = (props) => obtenerLugarTrabajo(props);
 
   useEffect(() => {
     obtenerLugaresTrabajo();
+    obtenerZonas();
+    obtenerRegiones();
+    obtenerComunas();
+    obtenerTipoLugarTrabajo();
   }, []);
 
+  const columns = [
+    { name: "Id", selector: (row) => row.id, sortable: true },
+    { name: "Nombre", selector: (row) => row.nombre, sortable: true },
+    { name: "Abreviación", selector: (row) => row.abreviacion, sortable: true },
+    { name: "Tipo", selector: (row) => row.tipo_lugar_trabajo, sortable: true },
+    {
+      name: "Activo",
+      cell: (props) => <ColActivoTabla activo={props.activo} />,
+      sortable: true,
+    },
+    {
+      name: "Acciones",
+      cell: (props) => (
+        <OpcionesTabla
+          editar={true}
+          FnEditar={() => getLugarTrabajo(props)}
+          nombreform="lugarTrabajo-modal"
+        />
+      ),
+    },
+  ];
+
   return (
-    <GridComponent
-      dataSource={lugartrabajoList}
-      width="auto"
-      allowPaging
-      allowSorting
-      pageSettings={{ pageCount: 5 }}
-      editSettings={editing}
-      toolbar={toolbarOptions}
-    >
-      <ColumnsDirective>
-        <ColumnDirective
-          field="id"
-          headerText="ID"
-          width="100"
-          textAlign="center"
-        />
-        <ColumnDirective field="nombre" headerText="Nombre" width="100" />
-        <ColumnDirective
-          field="abreviacion"
-          headerText="Abreviación"
-          width="100"
-          textAlign="center"
-        />
-        <ColumnDirective
-          field="tipo_lugar_trabajo"
-          headerText="Tipo"
-          width="100"
-          textAlign="center"
-        />
-        <ColumnDirective
-          field="activo"
-          headerText="Activo"
-          width="100"
-          textAlign="center"
-          template={colActivo}
-        />
-        <ColumnDirective
-          headerText="Acciones"
-          width="100"
-          textAlign="center"
-          template={colAcciones}
-        />
-      </ColumnsDirective>
-      <Inject services={[Search, Page, Sort]} />
-    </GridComponent>
+    <>
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
+      <Tabla data={lugartrabajoList} columns={columns} />
+    </>
   );
 };
 

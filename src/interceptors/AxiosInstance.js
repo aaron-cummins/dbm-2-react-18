@@ -1,11 +1,7 @@
-import { useContext } from 'react';
 import axios from 'axios';
-import { LoginContext } from '../contexts/LoginContext';
 
- 
 const AxiosInstance = axios.create({
     baseURL: process.env.REACT_APP_API_BASE_URL,
-    
 });
 
 AxiosInstance.interceptors.request.use(
@@ -44,6 +40,12 @@ AxiosInstance.interceptors.response.use((response) =>
     }
     if(error.response.status === 404){
         console.log("no lo encontro, 404");
+        return new Promise((resolve, reject) => {
+            reject(error);
+        });
+    }
+    if(error.response.status === 500){
+      console.log("500 - " , error.response);
         return new Promise((resolve, reject) => {
             reject(error);
         });

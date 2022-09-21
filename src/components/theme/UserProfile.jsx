@@ -11,9 +11,9 @@ const UserProfile = () => {
 
   const handleLogOut = (e) => {
     e.preventDefault();
-    LogOut();
     setLogeado(false);
-    window.location.href = "/";
+    LogOut();
+    //window.location.href = "/";
   };
 
   return (

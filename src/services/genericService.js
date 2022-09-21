@@ -11,7 +11,6 @@ export const getByID = (url, id) => {
     return { call: AxiosInstance.get(`${url}/${id}`, { signal: controller.signal}), controller };
 }
 
-
 export const postObject = (url, object) => {
     const controller = loadAbortAxios();
     return { call: AxiosInstance.post(url, object, { signal: controller.signal}), controller };

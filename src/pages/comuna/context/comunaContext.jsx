@@ -5,7 +5,6 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-  OBTENER_LISTA_ACTIVAS,
 } from "../../../const/actionTypes";
 import {
   getList,
@@ -26,31 +25,10 @@ export const ComunaContextProvider = (props) => {
   const urlApi = "comuna";
   const initialState = {
     comunaList: [],
-    regionListActiva: [],
     comunaActual: null,
   };
 
   const [state, dispatch] = useReducer(comunaReducer, initialState);
-
-  /* OBETENER LISTADO DE REGIONES ACTIVAS */
-  const obtenerRegionesActivas = async () => {
-    try {
-      const resultado = await callEndpoint(getList("region"));
-      if (resultado && resultado.data) {
-        let RegionActivas = [];
-        resultado.data.map((item) => {
-          return item.activo && RegionActivas.push(item);
-        });
-
-        dispatch({
-          type: OBTENER_LISTA_ACTIVAS,
-          payload: RegionActivas,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   /* OBETENER LISTADO DE COMUNAS */
   const obtenerComunas = async () => {
@@ -92,7 +70,9 @@ export const ComunaContextProvider = (props) => {
   /* REGISTRAR COMUNA */
   const registrarComuna = async (comuna) => {
     try {
-      const resultado = await callEndpoint(postObject(`${urlApi}/create`, comuna));
+      const resultado = await callEndpoint(
+        postObject(`${urlApi}/create`, comuna)
+      );
       dispatch({
         type: REGISTRAR,
         payload: resultado.data,
@@ -100,7 +80,10 @@ export const ComunaContextProvider = (props) => {
       alerta("success", "Comuna creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear la comuna. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear la comuna. ${error}`
+      );
     }
   };
 
@@ -115,7 +98,10 @@ export const ComunaContextProvider = (props) => {
       alerta("success", "Comuna actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar la comuna. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar la comuna. ${error}`
+      );
     }
   };
 
@@ -130,7 +116,10 @@ export const ComunaContextProvider = (props) => {
       alerta("success", "Comuna eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar la comuna. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar la comuna. ${error}`
+      );
     }
   };
 
@@ -139,14 +128,12 @@ export const ComunaContextProvider = (props) => {
       value={{
         comunaList: state.comunaList,
         comunaActual: state.comunaActual,
-        regionListActiva: state.regionListActiva,
 
         obtenerComunas,
         obtenerComuna,
         registrarComuna,
         actualizarComuna,
         eliminarComuna,
-        obtenerRegionesActivas,
       }}>
       {props.children}
     </ComunaContext.Provider>

@@ -29,6 +29,7 @@ export { default as ModuloControl } from "./moduloControl/ModuloControl";
 export { default as Modulos } from "./modulos/Modulos";
 export { default as Oem } from "./oem/Oem";
 export { default as Pais } from "./pais/Pais";
+export { default as PermisosGlobales } from "./permisosGlobales/PermisosGlobales";
 export { default as Region } from "./region/Region";
 export { default as Roles } from "./roles/Roles";
 export { default as TipoAdmision } from "./tipoAdmision/TipoAdmision";

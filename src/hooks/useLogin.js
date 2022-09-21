@@ -63,7 +63,6 @@ const useLogin = () => {
   const JWT = async (correo) => {
     const credenciales = loginAdapter(correo);
     const jwt = await callEndpoint(login(credenciales));
-
     if (jwt && jwt.data) {
       await persistJwt(jwt.data);
       await entrar(correo);

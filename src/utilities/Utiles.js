@@ -1,5 +1,3 @@
-import { useStateContext } from '../contexts/ContextProvider';
-
 export const closeModal = () => {
     let close = document.querySelector("#cerrar_modal_");
     close.click();

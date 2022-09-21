@@ -28,25 +28,9 @@ export const VistasGroupContextProvider = (props) => {
   const initialState = {
     vistasgroupList: [],
     vistasgroupActual: null,
-    modulosList: [],
   };
 
   const [state, dispatch] = useReducer(vistasGroupReducer, initialState);
-
-  /* OBETENER LISTADO DE MODULOSS */
-  const obtenerModuloslist = async () => {
-    try {
-      const resultado = await callEndpoint(getList("modulos"));
-      if (resultado && resultado.data) {
-        dispatch({
-          type: OBTENER_LISTA_ACTIVAS,
-          payload: resultado.data,
-        });
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   /* OBETENER LISTADO DE VISTASGROUPS */
   const obtenerVistasGrouplist = async () => {
@@ -96,7 +80,10 @@ export const VistasGroupContextProvider = (props) => {
       alerta("success", "Módulo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear el Módulo. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear el Módulo. ${error}`
+      );
     }
   };
 
@@ -112,7 +99,10 @@ export const VistasGroupContextProvider = (props) => {
       alerta("success", "Módulo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar el Módulo. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar el Módulo. ${error}`
+      );
     }
   };
 
@@ -127,7 +117,10 @@ export const VistasGroupContextProvider = (props) => {
       alerta("success", "Módulo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar el Módulo. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar el Módulo. ${error}`
+      );
     }
   };
 
@@ -136,14 +129,12 @@ export const VistasGroupContextProvider = (props) => {
       value={{
         vistasgroupList: state.vistasgroupList,
         vistasgroupActual: state.vistasgroupActual,
-        modulosList: state.modulosList,
 
         obtenerVistasGrouplist,
         obtenerVistasGroup,
         registrarVistasGroup,
         actualizarVistasGroup,
         eliminarVistasGroup,
-        obtenerModuloslist,
       }}>
       {props.children}
     </VistasGroupContext.Provider>

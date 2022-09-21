@@ -38,6 +38,7 @@ import {
   ColorPicker,
   ColorMapping,
   Editor,
+  PermisosGlobales,
 } from "../pages";
 import AuthGuard from "./AuthGuard";
 
@@ -65,6 +66,7 @@ const Rutas = () => {
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
+        <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
         <Route path="/tipoadmision" element={<TipoAdmision />}></Route>
         <Route path="/tipocombustible" element={<TipoCombustible />}></Route>
         <Route path="/tipoemision" element={<TipoEmision />}></Route>

@@ -3,7 +3,7 @@ import { useStateContext } from "../../contexts/ContextProvider";
 import { LoginContext } from "../../contexts/LoginContext";
 import { Link } from "react-router-dom";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-import { getPermisosUser, getUsuarioLugarTrabajo } from "../../utilities/Login_utiles";
+import { getUsuarioLugarTrabajo } from "../../utilities/Login_utiles";
 import { iconModulo } from "../../data/iconos";
 import Menu from "./Menu";
 
@@ -74,6 +74,7 @@ const Sidebar2 = () => {
   useEffect(() => {
     let l_t = getUsuarioLugarTrabajo();
     setMenuUsuario(l_t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -103,12 +104,18 @@ const Sidebar2 = () => {
                   key={item.id}
                   to={item.accion ? item.accion : "#"}
                   onClick={(e) => {
-                    item.grupos ? handleActiveMenu(e, item.controller) : handleCloseSideBar();
+                    item.grupos
+                      ? handleActiveMenu(e, item.controller)
+                      : handleCloseSideBar();
                   }}
                   className="relative w-full h-12 flex flex-col justify-center items-center">
-                  <div className=" flex rounded-full w-8 h-8 text-3xl">{iconos(item.icono)}</div>
+                  <div className=" flex rounded-full w-8 h-8 text-3xl">
+                    {iconos(item.icono ? item.icono : 0)}
+                  </div>
                   <p className="flex text-center text-[0.6rem]">
-                    {item.nombre.length > 8 ? `${item.nombre.slice(0, 8)}.` : item.nombre}
+                    {item.nombre.length > 8
+                      ? `${item.nombre.slice(0, 8)}.`
+                      : item.nombre}
                   </p>
                 </Link>
               </TooltipComponent>

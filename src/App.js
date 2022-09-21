@@ -2,7 +2,7 @@ import { useEffect, useContext } from "react";
 import "./assets/css/App.css";
 import { Login } from "./pages";
 import { LoginContext } from "./contexts/LoginContext";
-import { LugarTrabajoContextProvider } from "./contexts/LugarTrabajoContext";
+import { SelectsContextProvider } from "./contexts/SelectsContext";
 import { createUserAdapter } from "./adapters";
 import { AuthenticatedTemplate, UnauthenticatedTemplate, useMsal } from "@azure/msal-react";
 import { LogOut, getUsuarioPersist } from "./utilities/Login_utiles";
@@ -20,7 +20,8 @@ const Aplicacion = () => {
 
       if (usuarioLog === null) {
         if (accounts[0] && accounts[0].username && !logeado) {
-          JWT(accounts[0].username);
+          JWT(accounts[0].username)
+            .then(res => !res && LogOut()); 
         }
       } else {
         if (accounts[0] && accounts[0].username) {
@@ -47,9 +48,9 @@ const MainContent = () => {
   return (
     <div className="App">
       <AuthenticatedTemplate>
-        <LugarTrabajoContextProvider>
+        <SelectsContextProvider>
           <Aplicacion />
-        </LugarTrabajoContextProvider>
+        </SelectsContextProvider>
       </AuthenticatedTemplate>
 
       <UnauthenticatedTemplate>

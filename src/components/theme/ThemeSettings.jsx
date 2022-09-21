@@ -7,7 +7,7 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useStateContext } from "../../contexts/ContextProvider";
 import { LoginContext } from "../../contexts/LoginContext";
 import { setUsuarioLugarTrabajo } from "../../utilities/Login_utiles";
-import SelectLugarTrabajo from "../common/SelectLugarTrabajo";
+import { SelectLugarTrabajo } from "../";
 
 const ThemeSettings = () => {
   const { setMode, currentMode, setThemeSettings } = useStateContext();

@@ -11,9 +11,10 @@ export const persistUsuarioState = (usuario) => {
   let LTrabajos = new Set(l_trabajo);
   let LugarTrabajo = [...LTrabajos];
   //console.log(LugarTrabajo);
+  LugarTrabajo = LugarTrabajo ? LugarTrabajo : [0];
   sessionStorage.setItem("user_info_lugaresTrabajo", JSON.stringify({ LugarTrabajo }));
 
-  let id_trabajo = usuario.lugarTrabajos.id;
+  let id_trabajo = usuario.lugarTrabajos.id ? usuario.lugarTrabajos.id : 0;
   sessionStorage.setItem("user_info_lugarTrabajo_actual", id_trabajo);
 };
 
@@ -27,6 +28,7 @@ export const LogOut = () => {
   localStorage.removeItem("accessToken");
   sessionStorage.removeItem("user_info");
   sessionStorage.removeItem("@AnZr1SmZp2CvPa3-ToKnN_@CDRF");
+  window.location.href = "/";
   return true;
 };
 
@@ -69,10 +71,10 @@ export const getPermisosUser = (lugar_trabajo) => {
   ];
 
   let modulos = JSON.parse(sessionStorage.getItem("user_info"));
-  modulos.permisos.map((item) => {
+  modulos.permisos.forEach((item) => {
     if (item.lugarTrabajo === lugar_trabajo) {
       let permisosGlob = item.roles.permisosGlobales;
-      permisosGlob.map((i) => {
+      permisosGlob.forEach((i) => {
         i.modulo && permisos.push(i.modulo);
       });
     }

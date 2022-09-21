@@ -28,6 +28,14 @@ export { default as Alerts } from "./common/Alerts";
 export { default as ColActivoTabla } from "./common/ColActivoTabla";
 export { default as Modal } from "./common/Modal";
 export { default as OpcionesTabla } from "./common/OpcionesTabla";
-export { default as SelectLugarTrabajo } from "./common/SelectLugarTrabajo";
+export { default as Tabla } from "./common/Tabla";
 
+export { default as SelectLugarTrabajo } from "./Selects/SelectLugarTrabajo";
+export { default as SelectZona } from "./Selects/SelectZona";
+export { default as SelectPais } from "./Selects/SelectPais";
+export { default as SelectRegion } from "./Selects/SelectRegion";
+export { default as SelectComuna } from "./Selects/SelectComuna";
+export { default as SelectTipoLugarTrabajo } from "./Selects/SelectTipoLugarTrabajo";
+export { default as SelectModulo } from "./Selects/SelectModulo";
+export { default as SelectRol } from "./Selects/SelectRol";
 // eslint-disable-next-line import/no-cycle

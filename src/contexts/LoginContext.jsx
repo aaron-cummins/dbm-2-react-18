@@ -45,10 +45,11 @@ export const LoginContextProvider = (props) => {
       ];
 
       let modulos = JSON.parse(sessionStorage.getItem("user_info"));
-      modulos.permisos.map((item) => {
+
+      modulos.permisos.forEach((item) => {
         if (item.lugarTrabajo === id_lugar_trabajo) {
           let permisosGlob = item.roles.permisosGlobales;
-          permisosGlob.map((i) => {
+          permisosGlob.forEach((i) => {
             i.modulo && permisos.push(i.modulo);
           });
         }
@@ -58,7 +59,9 @@ export const LoginContextProvider = (props) => {
         payload: permisos,
       });
 
-      let grupo = permisos.map((item) => item.grupos).filter((element) => element !== undefined);
+      let grupo = permisos
+        .map((item) => item.grupos)
+        .filter((element) => element !== undefined);
       let vistas = grupo.map((grup) => grup.map((vistas) => vistas.vistas));
       let acciones = vistas.flat(2);
 

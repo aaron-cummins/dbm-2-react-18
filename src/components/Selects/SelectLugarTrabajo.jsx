@@ -1,13 +1,13 @@
 import React, { useEffect, useContext, useState } from "react";
-import { LugarTrabajoContext } from "../../contexts/LugarTrabajoContext";
+import { SelectsContext } from "../../contexts/SelectsContext";
 import {
   getUsuarioLugaresTrabajoList,
   getUsuarioLugarTrabajo,
-  setUsuarioLugarTrabajo,
 } from "../../utilities/Login_utiles";
+import Label from "../Forms/Label";
 
 const SelectLugarTrabajo = (props) => {
-  const { lugartrabajoList } = useContext(LugarTrabajoContext);
+  const { lugarTrabajoList } = useContext(SelectsContext);
   const [lugaresTrabajo, setLugaresTrabajo] = useState([]);
   const [lugarTrabajoActual, setLugarTrabajoActual] = useState(0);
 
@@ -15,11 +15,11 @@ const SelectLugarTrabajo = (props) => {
     setLugarTrabajoActual(getUsuarioLugarTrabajo());
     let LTrabajoUser = getUsuarioLugaresTrabajoList();
 
-    if (lugartrabajoList.length > 0) {
+    if (lugarTrabajoList.length > 0) {
       setLugaresTrabajo([]);
       LTrabajoUser.LugarTrabajo.map((item) => {
         return lugaresTrabajo.push(
-          lugartrabajoList?.find((obj) => {
+          lugarTrabajoList?.find((obj) => {
             return obj.id === item;
           })
         );
@@ -30,24 +30,23 @@ const SelectLugarTrabajo = (props) => {
   }, []);
 
   return (
-    <div className="flex justify-center">
-      <div className="mb-3 xl:w-96">
-        <select
-          className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300
+    <>
+      <Label>Lugar de trabajo</Label>
+      <select
+        className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300
                     rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-          id="lugar_trabajo_global"
-          name="lugar_trabajo_global"
-          value={lugarTrabajoActual}
-          onChange={props.onChangeFN}
-          aria-label="Select LugarTrabajo">
-          {lugaresTrabajo?.map((item) => (
-            <option key={item.id} value={item.id}>
-              {item.nombre}
-            </option>
-          ))}
-        </select>
-      </div>
-    </div>
+        id="lugar_trabajo_global"
+        name="lugar_trabajo_global"
+        value={lugarTrabajoActual}
+        onChange={props.onChangeFN}
+        aria-label="Select LugarTrabajo">
+        {lugaresTrabajo?.map((item) => (
+          <option key={item.id} value={item.id}>
+            {item.nombre}
+          </option>
+        ))}
+      </select>
+    </>
   );
 };
 

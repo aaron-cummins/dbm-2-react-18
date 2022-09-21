@@ -1,57 +1,32 @@
 import React, { createContext, useReducer, useState } from 'react';
-import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR, OBTENER_LISTA_ACTIVAS } from '../const/actionTypes';
-import { getList, getByID, postObject, putObject, deleteObject } from '../services/genericService';
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR} from '../../../const/actionTypes';
+import { getList, getByID, postObject, putObject, deleteObject } from '../../../services/genericService';
 import lugartrabajoReducer from '../reducer/lugarTrabajoReducer';
-import useFetchAndLoad from '../hooks/useFetchAndLoad';
+import useFetchAndLoad from '../../../hooks/useFetchAndLoad';
+import { useStateContext } from '../../../contexts/ContextProvider';
 
 export const LugarTrabajoContext = createContext();
 
 export const LugarTrabajoContextProvider = props => {
-    const { loading , callEndpoint } = useFetchAndLoad();
+    const { callEndpoint } = useFetchAndLoad();
+    const { alerta } = useStateContext()
     const urlApi = 'lugartrabajo';
+
     const initialState = {
         lugartrabajoList: [],
+        lugartrabajoActual: null,
+
+        zonaList: [],
+        tipoLugarTrabajoList:[],
         regionListActiva: [],
-        lugartrabajoActual: null
+        comunaList: []
     }
 
     const [state, dispatch] = useReducer(lugartrabajoReducer, initialState);
     const [mensaje, SetMensaje] = useState(null);
     const [tipoAlerta, SetTipoAlerta] = useState(null);
 
-    /* Muestra alerta y la destruye a los 5 segundos */
-    const alerta = (tipoAlerta, mensaje) => {
-        
-        SetMensaje(mensaje);
-        SetTipoAlerta(tipoAlerta);
-
-        setTimeout(() => {
-            SetMensaje(null);
-            SetTipoAlerta(null);    
-        }, 5000);
-    }
-
-    /* OBETENER LISTADO DE REGIONES ACTIVAS */
-    const obtenerRegionesActivas = async () => {
-        try {
-            const resultado = await callEndpoint(getList('region'));
-            if(resultado && resultado.data){
-                let RegionActivas = [];
-                resultado.data.map((item) => {
-                    item.activo && RegionActivas.push(item);
-                });
-                
-                dispatch({
-                    type: OBTENER_LISTA_ACTIVAS,
-                    payload: RegionActivas
-                });    
-            }
-            
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
+   
     /* OBETENER LISTADO DE LUGARTRABAJOS */
     const obtenerLugaresTrabajo = async () => {
         try {
@@ -125,7 +100,7 @@ export const LugarTrabajoContextProvider = props => {
     /* ELIMINAR LUGARTRABAJO */
     const eliminarLugarTrabajo = async id => {
         try {
-            const resultado = await callEndpoint(deleteObject(urlApi, id));
+            await callEndpoint(deleteObject(urlApi, id));
             dispatch({
                 type: ELIMINAR,
                 payload: id
@@ -143,15 +118,19 @@ export const LugarTrabajoContextProvider = props => {
             value={{
                 lugartrabajoList: state.lugartrabajoList,
                 lugartrabajoActual: state.lugartrabajoActual,
+                
+
+                zonaList: state.zonaList,
+                tipoLugarTrabajoList: state.tipoLugarTrabajoList,
                 regionListActiva: state.regionListActiva,
+                comunaList: state.comunaList,
 
                 obtenerLugaresTrabajo,
                 obtenerLugarTrabajo,
                 registrarLugarTrabajo,
                 actualizarLugarTrabajo,
                 eliminarLugarTrabajo,
-                obtenerRegionesActivas,
-
+               
                 mensaje, SetMensaje,
                 tipoAlerta, SetTipoAlerta
             }}

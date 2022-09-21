@@ -17,7 +17,7 @@ export const createUserAdapter = (usuario) => (
     permisos: usuario.permisos,
 
     lugarTrabajos: {
-        id: usuario.permisos[0].lugarTrabajo
+        id: usuario?.permisos[0]?.lugarTrabajo
     },
     activo: usuario.activo
 })
@@ -26,6 +26,6 @@ export const createUserAdapter = (usuario) => (
 export const loginAdapter = (correo) => (
     {
         username: correo,
-        password: "123456"
+        password: correo
     }
 )
