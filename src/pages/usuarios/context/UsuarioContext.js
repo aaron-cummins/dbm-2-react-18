@@ -1,8 +1,8 @@
 import React, { createContext, useReducer, useState } from 'react';
-import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from '../const/actionTypes';
-import usuarioReducer from '../reducer/usuarioReducer';
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from '../../../const/actionTypes';
+import usuarioReducer from '../../../reducer/usuarioReducer';
 import axios from 'axios';
-import useFetchAndLoad from '../hooks/useFetchAndLoad';
+import useFetchAndLoad from '../../../hooks/useFetchAndLoad';
 
 export const UsuarioContext = createContext();
 

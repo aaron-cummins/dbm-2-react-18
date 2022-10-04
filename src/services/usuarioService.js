@@ -1,10 +1,11 @@
 import { loadAbortAxios } from '../utilities/loadAbortAxios';
 import AxiosInstance from '../interceptors/AxiosInstance';
+import AxiosInstanceOauth from '../interceptors/AxiosInstanceOauth';
 
 
 export const login = (credenciales) => {
     const controller = loadAbortAxios();
-    return { call: AxiosInstance.post(`login`, credenciales , { signal: controller.signal}), controller };
+    return { call: AxiosInstanceOauth.post(`oauth/token`, credenciales , { signal: controller.signal}), controller };
     //return { type: 'post', url: 'login', data: credenciales, signal: controller.signal, control: controller }
 }
 

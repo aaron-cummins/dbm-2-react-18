@@ -1,13 +1,13 @@
 import axios from 'axios';
 
-const AxiosInstance = axios.create({
-    baseURL: process.env.REACT_APP_API_BASE_URL,
+const AxiosInstanceOauth = axios.create({
+    baseURL: process.env.REACT_APP_API_BASE_URL_OAUTH,
 });
 
-AxiosInstance.interceptors.request.use(
+AxiosInstanceOauth.interceptors.request.use(
     (request) => {
       //request.headers.common['Accept'] = 'application/json';
-      request.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('@AnZr1SmZp2CvPa3-ToKnN_@CDRF')}`;
+      //request.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('@AnZr1SmZp2CvPa3-ToKnN_@CDRF')}`;
       request.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //'application/json';
       return request;
     },
@@ -17,7 +17,7 @@ AxiosInstance.interceptors.request.use(
     }
 );
 
-AxiosInstance.interceptors.response.use((response) => 
+AxiosInstanceOauth.interceptors.response.use((response) => 
   new Promise((resolve, reject) => {
     resolve(response);
   }),
@@ -54,4 +54,4 @@ AxiosInstance.interceptors.response.use((response) =>
 
 );
 
-export default AxiosInstance;
+export default AxiosInstanceOauth;

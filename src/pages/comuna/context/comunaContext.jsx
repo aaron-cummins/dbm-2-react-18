@@ -70,9 +70,7 @@ export const ComunaContextProvider = (props) => {
   /* REGISTRAR COMUNA */
   const registrarComuna = async (comuna) => {
     try {
-      const resultado = await callEndpoint(
-        postObject(`${urlApi}/create`, comuna)
-      );
+      const resultado = await callEndpoint(postObject(`${urlApi}`, comuna));
       dispatch({
         type: REGISTRAR,
         payload: resultado.data,
@@ -90,7 +88,7 @@ export const ComunaContextProvider = (props) => {
   /* ACTUALIZAR COMUNA */
   const actualizarComuna = async (comuna) => {
     try {
-      const resultado = await callEndpoint(putObject(`${urlApi}/save`, comuna));
+      const resultado = await callEndpoint(putObject(`${urlApi}`, comuna));
       dispatch({
         type: ACTUALIZAR,
         payload: resultado.data,

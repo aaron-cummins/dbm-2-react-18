@@ -11,13 +11,13 @@ export const createUserAdapter = (usuario) => (
     anexo: usuario.anexo,
     //id_cargo: usuario.cargo.id,
     cargo: {
-        id: usuario.cargo.id,
-        nombre: usuario.cargo.nombre,
+        id: usuario.cargo?.id,
+        nombre: usuario.cargo?.nombre,
     },
     permisos: usuario.permisos,
 
     lugarTrabajos: {
-        id: usuario?.permisos[0]?.lugarTrabajo
+        id: usuario.permisos ? usuario?.permisos[0]?.lugarTrabajo : 0
     },
     activo: usuario.activo
 })
@@ -26,6 +26,7 @@ export const createUserAdapter = (usuario) => (
 export const loginAdapter = (correo) => (
     {
         username: correo,
-        password: correo
+        password: correo,
+        grant_type: process.env.REACT_APP_GRANT_TYPE
     }
 )

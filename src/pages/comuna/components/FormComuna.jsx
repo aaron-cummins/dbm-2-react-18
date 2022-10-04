@@ -20,12 +20,13 @@ const FormComuna = () => {
     () => ({
       id: 0,
       nombre: "",
-      region: {
+      regionId: 0,
+      /*region: {
         activo: true,
         id: 0,
         nombre: "",
         numero: "",
-      },
+      },*/
       activo: false,
     }),
     []
@@ -42,14 +43,6 @@ const FormComuna = () => {
       ? setComuna({
           ...comuna,
           [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "regionId"
-      ? setComuna({
-          ...comuna,
-          region: {
-            id: e.target.value,
-            nombre: e.target.options[e.target.selectedIndex].text,
-          },
         })
       : setComuna({
           ...comuna,
