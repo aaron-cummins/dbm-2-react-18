@@ -18,8 +18,9 @@ export const persistUsuarioState = (usuario) => {
   sessionStorage.setItem("user_info_lugarTrabajo_actual", id_trabajo);
 };
 
-export const persistJwt = (jwt) => {
+export const persistJwt = (jwt, Rjwt) => {
   sessionStorage.setItem("@AnZr1SmZp2CvPa3-ToKnN_@CDRF", jwt);
+  sessionStorage.setItem("@AnZr1SmZp2CvPa3-ToKnN_@CDRF_refresh", Rjwt);
 };
 
 /*  Elimina los datos de sesion */
@@ -28,6 +29,7 @@ export const LogOut = () => {
   localStorage.removeItem("accessToken");
   sessionStorage.removeItem("user_info");
   sessionStorage.removeItem("@AnZr1SmZp2CvPa3-ToKnN_@CDRF");
+  sessionStorage.removeItem("@AnZr1SmZp2CvPa3-ToKnN_@CDRF_refresh");
   window.location.href = "/";
   return true;
 };
