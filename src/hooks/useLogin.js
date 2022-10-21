@@ -29,7 +29,7 @@ const useLogin = () => {
         crearUsuario(adapUser);
         persistUsuarioState(adapUser);
 
-        setMenuUsuario(await getUsuarioLugarTrabajo());
+        //setMenuUsuario(await getUsuarioLugarTrabajo());
 
         setMensajeOk("Logeado con Exito!");
         setMensajeErr(null);
@@ -64,15 +64,41 @@ const useLogin = () => {
     const credenciales = loginAdapter(correo);
     const jwt = await callEndpoint(login(credenciales));
 
-    console.log(jwt.data);
+    let respuesta = false;
 
     if (jwt && jwt.data) {
       await persistJwt(jwt.data.access_token, jwt.data.refresh_token);
+      
       //await entrar(correo);
-      return true;
+      const adapUser = createUserAdapter(jwt.data);
+      crearUsuario(adapUser);
+      persistUsuarioState(adapUser);
+
+      setMensajeOk("Logeado con Exito!");
+      setMensajeErr(null);
+      setLogeado(true);
+
+      respuesta = true;
     } else {
-      return false;
+      setMensajeErr(
+        "No se encontró el usuario (no se pudo recuperar el token), póngase en contacto con Soporte DBM"
+      );
+      LogOut();
+      //clearUsuarioState();
+      setMensajeOk(null);
+      setLogeado(false);
+
+      respuesta = false;
     }
+  
+    setLoading(false);
+
+    setTimeout(() => {
+      setMensajeErr(null);
+      setMensajeOk(null);
+    }, 5000);
+
+    return respuesta;
   };
 
   return { entrar, JWT };

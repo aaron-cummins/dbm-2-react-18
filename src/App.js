@@ -17,7 +17,7 @@ const Aplicacion = () => {
   useEffect(() => {
     try {
       const usuarioLog = getUsuarioPersist();
-
+      
       if (usuarioLog === null) {
         if (accounts[0] && accounts[0].username && !logeado) {
           JWT(accounts[0].username)

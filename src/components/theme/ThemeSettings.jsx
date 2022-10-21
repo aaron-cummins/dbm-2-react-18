@@ -10,12 +10,14 @@ import { setUsuarioLugarTrabajo } from "../../utilities/Login_utiles";
 import { SelectLugarTrabajo } from "../";
 
 const ThemeSettings = () => {
-  const { setMode, currentMode, setThemeSettings } = useStateContext();
+  const { setMode, currentMode, setThemeSettings, setLugarTrabajoSelected } =
+    useStateContext();
   const { setMenuUsuario } = useContext(LoginContext);
 
   const handleOnChange = (e) => {
     setUsuarioLugarTrabajo(e.target.value);
-    setMenuUsuario(e.target.value);
+    setLugarTrabajoSelected(e.target.value);
+    //setMenuUsuario(e.target.value);
   };
 
   return (

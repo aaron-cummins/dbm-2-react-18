@@ -13,7 +13,7 @@ const FormZona = () => {
     return {
       id: 0,
       nombre: "",
-      pais_id: 0,
+      pais: 0,
       activo: false,
     };
   }, []);
@@ -72,9 +72,9 @@ const FormZona = () => {
         </div>
         <div className="form-group mb-4">
           <SelectPais
-            id="pais_id"
-            name="pais_id"
-            value={zona.pais_id}
+            id="pais"
+            name="pais"
+            value={zona.pais}
             onChange={handleChange}
           />
         </div>

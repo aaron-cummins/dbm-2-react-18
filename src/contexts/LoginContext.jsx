@@ -44,7 +44,7 @@ export const LoginContextProvider = (props) => {
         },
       ];
 
-      let modulos = JSON.parse(sessionStorage.getItem("user_info"));
+      /*let modulos = JSON.parse(sessionStorage.getItem("user_info"));
 
       modulos.permisos.forEach((item) => {
         if (item.lugarTrabajo === id_lugar_trabajo) {
@@ -53,7 +53,7 @@ export const LoginContextProvider = (props) => {
             i.modulo && permisos.push(i.modulo);
           });
         }
-      });
+      });*/
       dispatch({
         type: OBTENER_MENU,
         payload: permisos,
@@ -79,7 +79,7 @@ export const LoginContextProvider = (props) => {
     try {
       let modulosEncontrada = null;
       if (id_modulo !== null) {
-        const resultado = await callEndpoint(getByID("nodulos", id_modulo));
+        const resultado = await callEndpoint(getByID("modulos", id_modulo));
         if (resultado && resultado.data) {
           modulosEncontrada = resultado.data;
         }

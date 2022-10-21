@@ -4,9 +4,11 @@ export const persistUsuarioState = (usuario) => {
   sessionStorage.setItem("user_info", JSON.stringify({ ...usuario }));
 
   let l_trabajo = [];
-  usuario.permisos.map((item) => {
-    return l_trabajo.push(item.lugarTrabajo);
-  });
+
+  usuario.permisos_mgdi.map((item) => {
+    l_trabajo.push(item);
+  })
+  
 
   let LTrabajos = new Set(l_trabajo);
   let LugarTrabajo = [...LTrabajos];
@@ -50,11 +52,12 @@ export const getUsuarioPersist = () => {
 };
 
 export const setUsuarioLugarTrabajo = (id_lugar_trabajo) => {
-  return JSON.parse(sessionStorage.setItem("user_info_lugarTrabajo_actual", id_lugar_trabajo));
+  return sessionStorage.setItem("user_info_lugarTrabajo_actual", id_lugar_trabajo);
 };
 
 export const getUsuarioLugarTrabajo = () => {
-  return JSON.parse(sessionStorage.getItem("user_info_lugarTrabajo_actual"));
+  let lt = sessionStorage.getItem("user_info_lugarTrabajo_actual");
+  return lt;
 };
 
 export const getUsuarioLugaresTrabajoList = () => {

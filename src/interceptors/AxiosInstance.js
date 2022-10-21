@@ -6,9 +6,9 @@ const AxiosInstance = axios.create({
 
 AxiosInstance.interceptors.request.use(
     (request) => {
-      //request.headers.common['Accept'] = 'application/json';
+      request.headers.common['Accept'] = 'application/json';
       request.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('@AnZr1SmZp2CvPa3-ToKnN_@CDRF')}`;
-      request.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //'application/json';
+      request.headers.post['Content-Type'] = 'application/json';
       return request;
     },
     (error) => {

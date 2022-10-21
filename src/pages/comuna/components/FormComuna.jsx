@@ -90,7 +90,7 @@ const FormComuna = () => {
           <SelectRegion
             id="regionId"
             name="regionId"
-            value={comuna.region?.id}
+            value={comuna.regionId}
             onChange={handleChange}
           />
         </div>
