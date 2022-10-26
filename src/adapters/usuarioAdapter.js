@@ -12,7 +12,7 @@ export const createUserAdapter = (usuario) => (
     //id_cargo: usuario.cargo.id,
     cargo: {
         //id: usuario.cargo?.id,
-        nombre: usuario.cargo,
+        nombre: usuario.cargo.nombre ? usuario.cargo.nombre : usuario.cargo
     },
 
     permisos_mgdi: usuario.relacion_base ? usuario.relacion_base : usuario.permisos_mgdi,

@@ -104,7 +104,7 @@ const Sidebar2 = () => {
                   key={item.id}
                   to={item.accion ? item.accion : "#"}
                   onClick={(e) => {
-                    item.grupos
+                    item.grupo
                       ? handleActiveMenu(e, item.controller)
                       : handleCloseSideBar();
                   }}
@@ -134,12 +134,12 @@ const Sidebar2 = () => {
         } w-64 flex-none overflow-auto bg-gray-cummins p-2 flex-col`}>
         {menu?.map(
           (item) =>
-            item.grupos && (
+            item.grupo && (
               <Menu
                 key={`submenu-${item.controller}`}
                 controller={item.controller}
                 nombremodulo={item.nombre}
-                grupo={item.grupos}
+                grupo={item.grupo}
               />
             )
         )}

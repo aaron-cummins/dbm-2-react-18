@@ -3,6 +3,7 @@ import { OBTENER, OBTENER_MENU, OBTENER_ACCIONES } from "../const/actionTypes";
 import loginReducer from "../reducer/loginReducer";
 import useFetchAndLoad from "../hooks/useFetchAndLoad";
 import { getByID } from "../services/genericService";
+import { PermisosUsuario } from "../utilities/Login_utiles";
 
 export const LoginContext = createContext();
 
@@ -34,7 +35,7 @@ export const LoginContextProvider = (props) => {
 
   const setMenuUsuario = async (id_lugar_trabajo) => {
     try {
-      let permisos = [
+      /*let permisos = [
         {
           id: 0,
           nombre: "Inicio",
@@ -42,7 +43,24 @@ export const LoginContextProvider = (props) => {
           accion: "ecommerce",
           icono: 0,
         },
-      ];
+      ];*/
+
+      let permisos = [];
+      let vistas = [];
+
+      let lugares_trabajo = JSON.parse(
+        sessionStorage.getItem("user_info_lugaresTrabajo")
+      );
+
+      let modulos = lugares_trabajo.LugarTrabajo;
+
+      modulos.forEach((item) => {
+        if (parseInt(item.lugar_trabajo_id) === parseInt(id_lugar_trabajo)) {
+          vistas.push(item.vistas[0]);
+        }
+      });
+
+      permisos = PermisosUsuario(vistas);
 
       /*let modulos = JSON.parse(sessionStorage.getItem("user_info"));
 
@@ -59,7 +77,7 @@ export const LoginContextProvider = (props) => {
         payload: permisos,
       });
 
-      let grupo = permisos
+      /*let grupo = permisos
         .map((item) => item.grupos)
         .filter((element) => element !== undefined);
       let vistas = grupo.map((grup) => grup.map((vistas) => vistas.vistas));
@@ -68,7 +86,7 @@ export const LoginContextProvider = (props) => {
       dispatch({
         type: OBTENER_ACCIONES,
         payload: acciones,
-      });
+      });*/
     } catch (error) {
       console.log(error);
     }

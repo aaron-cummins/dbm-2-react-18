@@ -1,3 +1,6 @@
+import { valueSorted } from "@syncfusion/ej2/pivotview";
+import modulosReducer from "../pages/modulos/reducer/modulosReducer";
+
 /** PERSISTENCIA DE LA DATA **/
 export const persistUsuarioState = (usuario) => {
   //localStorage.setItem('user_info', JSON.stringify({ ...usuario}));
@@ -86,3 +89,30 @@ export const getPermisosUser = (lugar_trabajo) => {
   });
   return permisos;
 };
+
+
+export const PermisosUsuario = (permisos) => {
+  let permisosU = [
+    {
+      id: 0,
+      nombre: "Inicio",
+      controller: "inicio",
+      accion: "ecommerce",
+      icono: 0,
+    },
+  ];
+
+ permisos.forEach((item)  => {
+    permisosU.push({
+      id: item.moduloId,
+      nombre: item.modulo,
+      controller: item.moduloController,
+      accion: "#",
+      icono: item.moduloIcono,
+      grupo: item.vistas
+    })
+  });
+
+  //if(grupoID !== item.grupoId) grupoID = item.grupoId ;
+  return permisosU;
+}
