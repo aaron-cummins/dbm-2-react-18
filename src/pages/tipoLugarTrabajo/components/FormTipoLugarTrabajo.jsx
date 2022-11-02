@@ -20,7 +20,9 @@ const FormTipolugartrabajo = () => {
     };
   }, []);
 
-  const [tipolugartrabajo, setTipolugartrabajo] = useState(tipolugartrabajoDefault);
+  const [tipolugartrabajo, setTipolugartrabajo] = useState(
+    tipolugartrabajoDefault
+  );
 
   useEffect(() => {
     tipolugartrabajoActual
@@ -63,7 +65,9 @@ const FormTipolugartrabajo = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -73,7 +77,7 @@ const FormTipolugartrabajo = () => {
             label="Tipo"
             value={tipolugartrabajo.tipo}
             onChangeFN={handleChange}
-            required
+            required={true}
           />
         </div>
       </div>

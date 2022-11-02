@@ -1,4 +1,4 @@
-import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR } from '../const/actionTypes';
+import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR} from '../../../const/actionTypes';
 
 export default (state, action) => {
     

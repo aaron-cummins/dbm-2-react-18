@@ -5,7 +5,8 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { closeModal } from "../../../utilities/Utiles";
 
 const FormPais = () => {
-  const { registrarPais, paisActual, actualizarPais, obtenerPais } = useContext(PaisContext);
+  const { registrarPais, paisActual, actualizarPais, obtenerPais } =
+    useContext(PaisContext);
   const { mensaje } = useStateContext();
   const paisDefault = useMemo(() => {
     return {
@@ -53,7 +54,9 @@ const FormPais = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -63,6 +66,7 @@ const FormPais = () => {
             label="Nombre"
             value={pais.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -73,6 +77,7 @@ const FormPais = () => {
             label="Abreviacion"
             value={pais.abreviacion}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
       </div>

@@ -30,12 +30,13 @@ export { default as Modal } from "./common/Modal";
 export { default as OpcionesTabla } from "./common/OpcionesTabla";
 export { default as Tabla } from "./common/Tabla";
 
+export { default as SelectComuna } from "./Selects/SelectComuna";
+export { default as SelectCargo } from "./Selects/SelectCargo";
+export { default as SelectModulo } from "./Selects/SelectModulo";
 export { default as SelectLugarTrabajo } from "./Selects/SelectLugarTrabajo";
-export { default as SelectZona } from "./Selects/SelectZona";
 export { default as SelectPais } from "./Selects/SelectPais";
 export { default as SelectRegion } from "./Selects/SelectRegion";
-export { default as SelectComuna } from "./Selects/SelectComuna";
-export { default as SelectTipoLugarTrabajo } from "./Selects/SelectTipoLugarTrabajo";
-export { default as SelectModulo } from "./Selects/SelectModulo";
 export { default as SelectRol } from "./Selects/SelectRol";
+export { default as SelectTipoLugarTrabajo } from "./Selects/SelectTipoLugarTrabajo";
+export { default as SelectZona } from "./Selects/SelectZona";
 // eslint-disable-next-line import/no-cycle

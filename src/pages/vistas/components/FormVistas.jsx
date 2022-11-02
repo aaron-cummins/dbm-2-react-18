@@ -6,8 +6,13 @@ import SelectGrupo from "./SelectGrupo";
 import { useStateContext } from "../../../contexts/ContextProvider";
 
 const FormVistas = () => {
-  const { registrarVistas, vistasActual, actualizarVistas, obtenerVistasGrouplist, obtenerVistas } =
-    useContext(VistasContext);
+  const {
+    registrarVistas,
+    vistasActual,
+    actualizarVistas,
+    obtenerVistasGrouplist,
+    obtenerVistas,
+  } = useContext(VistasContext);
   const { mensaje } = useStateContext();
   const vistasDefault = useMemo(() => {
     return {
@@ -15,7 +20,7 @@ const FormVistas = () => {
       nombre: "",
       controller: "",
       accion: "",
-      id_grupo: 0,
+      grupoVistasId: 0,
       created_at: formatDate(Date(Date.now)),
       updated_at: formatDate(Date(Date.now)),
     };
@@ -46,7 +51,9 @@ const FormVistas = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    vistasActual ? actualizarVistas(VistasAEnviar()) : registrarVistas(VistasAEnviar());
+    vistasActual
+      ? actualizarVistas(VistasAEnviar())
+      : registrarVistas(VistasAEnviar());
 
     limpiaForm();
     closeModal();
@@ -59,7 +66,9 @@ const FormVistas = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -69,14 +78,15 @@ const FormVistas = () => {
             label="Nombre"
             value={vistas.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
           <label className="text-gray-700">Grupo</label>
           <SelectGrupo
-            id="id_grupo"
-            name="id_grupo"
-            value={vistas.id_grupo}
+            id="grupoVistasId"
+            name="grupoVistasId"
+            value={vistas.grupoVistasId}
             onChange={handleChange}
           />
         </div>
@@ -91,6 +101,7 @@ const FormVistas = () => {
             label="Acción"
             value={vistas.accion}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -101,6 +112,7 @@ const FormVistas = () => {
             label="Controller"
             value={vistas.controller}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
       </div>

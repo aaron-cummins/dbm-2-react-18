@@ -41,7 +41,9 @@ const FormModulos = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    modulosActual ? actualizarModulos(ModulosAEnviar()) : registrarModulos(ModulosAEnviar());
+    modulosActual
+      ? actualizarModulos(ModulosAEnviar())
+      : registrarModulos(ModulosAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -56,7 +58,9 @@ const FormModulos = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -77,7 +81,7 @@ const FormModulos = () => {
             label="Controller"
             value={modulos.controller}
             onChangeFN={handleChange}
-            required
+            required={true}
           />
         </div>
       </div>
@@ -90,7 +94,7 @@ const FormModulos = () => {
             label="Icono"
             value={modulos.icono}
             onChangeFN={handleChange}
-            required
+            required={true}
           />
         </div>
       </div>

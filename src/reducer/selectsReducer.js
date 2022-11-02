@@ -1,4 +1,4 @@
-import { OBTENER_LISTA_COMUNAS, OBTENER_LISTA_LUGAR_TRABAJO, OBTENER_LISTA_MODULOS, OBTENER_LISTA_PAISES, OBTENER_LISTA_REGIONES, OBTENER_LISTA_ROLES, OBTENER_LISTA_TIPO_LUGAR_TRABAJO, OBTENER_LISTA_ZONAS} from '../const/actionTypes';
+import { OBTENER_LISTA_CARGOS, OBTENER_LISTA_COMUNAS, OBTENER_LISTA_LUGAR_TRABAJO, OBTENER_LISTA_MODULOS, OBTENER_LISTA_PAISES, OBTENER_LISTA_REGIONES, OBTENER_LISTA_ROLES, OBTENER_LISTA_TIPO_LUGAR_TRABAJO, OBTENER_LISTA_ZONAS} from '../const/actionTypes';
 
 export default (state, action) => {
     
@@ -29,6 +29,11 @@ export default (state, action) => {
                 ...state,
                 comunaList: action.payload
             };
+        case OBTENER_LISTA_CARGOS:
+            return {
+                ...state,
+                cargosList: action.payload
+            };
         case OBTENER_LISTA_PAISES:
             return {
                 ...state,
@@ -47,4 +52,5 @@ export default (state, action) => {
         default:
             return state;
     }
+   //import/no-anonymous-default-export
 }

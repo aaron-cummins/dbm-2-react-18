@@ -17,7 +17,7 @@ const FormVistasGroup = () => {
     return {
       id: 0,
       nombre: "",
-      id_modulo: 0,
+      moduloId: 0,
     };
   }, []);
 
@@ -75,13 +75,14 @@ const FormVistasGroup = () => {
             label="Nombre"
             value={vistasgroup.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
           <SelectModulo
-            id="id_modulo"
-            name="id_modulo"
-            value={vistasgroup.id_modulo}
+            id="moduloId"
+            name="moduloId"
+            value={vistasgroup.moduloId}
             onChange={handleChange}
           />
         </div>

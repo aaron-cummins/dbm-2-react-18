@@ -7,7 +7,9 @@ const SelectComuna = (props) => {
 
   return (
     <>
-      <Label>Comuna</Label>
+      <Label>
+        Comuna {props.required ? <b className="text-red-500"> * </b> : ""}
+      </Label>
       <select
         className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300
                     rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
@@ -15,7 +17,8 @@ const SelectComuna = (props) => {
         name={props.name}
         value={props.value}
         onChange={props.onChange}
-        aria-label="Select Comuna">
+        aria-label="Select Comuna"
+        required={props.required}>
         <option defaultValue="00" key="00">
           Seleccione una Comuna
         </option>

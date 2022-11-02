@@ -5,7 +5,8 @@ import { useStateContext } from "../../../contexts/ContextProvider";
 import { closeModal } from "../../../utilities/Utiles";
 
 const FormOem = () => {
-  const { registrarOem, oemActual, actualizarOem, obtenerOem } = useContext(OemContext);
+  const { registrarOem, oemActual, actualizarOem, obtenerOem } =
+    useContext(OemContext);
   const { mensaje } = useStateContext();
   const oemDefault = useMemo(() => {
     return {
@@ -41,7 +42,9 @@ const FormOem = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    oemActual !== null ? actualizarOem(OemAEnviar()) : registrarOem(OemAEnviar());
+    oemActual !== null
+      ? actualizarOem(OemAEnviar())
+      : registrarOem(OemAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -53,7 +56,9 @@ const FormOem = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -63,6 +68,7 @@ const FormOem = () => {
             label="Nombre"
             value={oem.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -73,6 +79,7 @@ const FormOem = () => {
             label="Abreviacion"
             value={oem.abreviacion}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
       </div>

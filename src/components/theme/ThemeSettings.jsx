@@ -36,7 +36,7 @@ const ThemeSettings = () => {
         <div className="flex-col border-t-1 border-color p-4 ml-4">
           <p className="font-semibold text-xl ">Faena</p>
           <div className="mt-4">
-            <SelectLugarTrabajo onChangeFN={handleOnChange} />
+            <SelectLugarTrabajo onChange={handleOnChange} />
           </div>
         </div>
         <div className="flex-col border-t-1 border-color p-4 ml-4">

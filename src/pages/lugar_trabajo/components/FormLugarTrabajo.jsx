@@ -83,6 +83,7 @@ const FormLugarTrabajo = () => {
             label="Nombre"
             value={lugarTrabajo.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -93,6 +94,7 @@ const FormLugarTrabajo = () => {
             label="Abreviación"
             value={lugarTrabajo.abreviacion}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
       </div>
@@ -139,6 +141,7 @@ const FormLugarTrabajo = () => {
             placeholder="Zona"
             value={lugarTrabajo.id_zona}
             onChange={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-6">
@@ -148,6 +151,7 @@ const FormLugarTrabajo = () => {
             placeholder="Tipo Lugar"
             value={lugarTrabajo.id_tipo_lugar}
             onChange={handleChange}
+            required={true}
           />
         </div>
       </div>
@@ -159,6 +163,7 @@ const FormLugarTrabajo = () => {
             name="id_Region"
             placeholder="Region"
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-6">

@@ -68,6 +68,7 @@ const FormZona = () => {
             label="Nombre"
             value={zona.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -76,6 +77,7 @@ const FormZona = () => {
             name="pais"
             value={zona.pais}
             onChange={handleChange}
+            required={true}
           />
         </div>
       </div>

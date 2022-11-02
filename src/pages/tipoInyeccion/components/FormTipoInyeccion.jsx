@@ -68,7 +68,9 @@ const FormTipoInyeccion = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -78,7 +80,7 @@ const FormTipoInyeccion = () => {
             label="Nombre"
             value={tipoinyeccion.nombre}
             onChangeFN={handleChange}
-            required
+            required={true}
           />
         </div>
         <div className="form-group mb-4">

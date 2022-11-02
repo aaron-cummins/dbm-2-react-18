@@ -44,7 +44,9 @@ const FormRegion = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    regionActual ? actualizarRegion(RegionAEnviar()) : registrarRegion(RegionAEnviar());
+    regionActual
+      ? actualizarRegion(RegionAEnviar())
+      : registrarRegion(RegionAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -58,7 +60,9 @@ const FormRegion = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -68,6 +72,7 @@ const FormRegion = () => {
             label="Nombre"
             value={region.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -78,6 +83,7 @@ const FormRegion = () => {
             label="Numero"
             value={region.numero}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
       </div>

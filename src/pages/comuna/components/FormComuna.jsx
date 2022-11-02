@@ -83,6 +83,7 @@ const FormComuna = () => {
             label="Nombre"
             value={comuna.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -92,6 +93,7 @@ const FormComuna = () => {
             name="regionId"
             value={comuna.regionId}
             onChange={handleChange}
+            required={true}
           />
         </div>
       </div>

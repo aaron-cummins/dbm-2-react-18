@@ -16,6 +16,7 @@ const SelectLugarTrabajo = (props) => {
   useEffect(() => {
     let lta = getUsuarioLugarTrabajo();
     setLugarTrabajoActual(lta);
+    let lug_trabajos = [];
 
     let LTrabajoUser = getUsuarioLugaresTrabajoList();
 
@@ -23,28 +24,34 @@ const SelectLugarTrabajo = (props) => {
       setLugaresTrabajo([]);
 
       LTrabajoUser.LugarTrabajo.map((item) => {
-        return lugaresTrabajo.push(
+        return lug_trabajos.push(
           lugarTrabajoList?.find((obj) => {
-            return obj.id === item;
+            return obj.id === item.lugar_trabajo_id ? obj : null;
           })
         );
       });
     }
-    setLugaresTrabajo(lugaresTrabajo);
+
+    setLugaresTrabajo([...new Set(lug_trabajos)]);
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
     <>
-      <Label>Lugar de trabajo</Label>
+      <Label>
+        Lugar de trabajo{" "}
+        {props.required ? <b className="text-red-500"> * </b> : ""}
+      </Label>
       <select
         className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300
                     rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
         id="lugar_trabajo_global"
         name="lugar_trabajo_global"
         value={lugarTrabajoSelected}
-        onChange={props.onChangeFN}
-        aria-label="Select LugarTrabajo">
+        onChange={props.onChange}
+        aria-label="Select LugarTrabajo"
+        required={props.required}>
         {lugaresTrabajo?.map((item) => (
           <option key={item.id} value={item.id}>
             {item.nombre}

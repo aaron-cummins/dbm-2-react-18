@@ -1,5 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import {
+  OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_MODULOS,
@@ -26,6 +27,7 @@ export const SelectsContextProvider = (props) => {
     paisList: [],
     modulosList: [],
     rolesList: [],
+    cargosList: []
   };
 
   const [state, dispatch] = useReducer(selectsReducer, initialState);
@@ -165,6 +167,21 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBETENER LISTADO DE Cargos */
+  const obtenerCargos = async () => {
+    try {
+      const resultado = await callEndpoint(getList("cargo"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_CARGOS,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -176,15 +193,20 @@ export const SelectsContextProvider = (props) => {
         paisList: state.paisList,
         modulosList: state.modulosList,
         rolesList: state.rolesList,
+        cargosList: state.cargosList,
 
-        obtenerLugaresTrabajo,
-        obtenerRegiones,
+        
+        
+        obtenerCargos,
         obtenerComunas,
-        obtenerZonas,
-        obtenerTipoLugarTrabajo,
-        obtenerPais,
         obtenerModulos,
+        obtenerLugaresTrabajo,
+        obtenerPais,
+        obtenerRegiones,
         obtenerRol,
+        obtenerTipoLugarTrabajo,
+        obtenerZonas,
+        
       }}>
       {props.children}
     </SelectsContext.Provider>
