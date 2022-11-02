@@ -1,4 +1,4 @@
-import { useState, useContext, useMemo } from "react";
+import { useState, useContext, useMemo, useEffect } from "react";
 import {
   Alerts,
   InputText,
@@ -31,16 +31,23 @@ const FormLugarTrabajo = () => {
       latitud: "",
       longitud: "",
       altura: "",
-      id_zona: 0,
       direccion: "",
-      id_comuna: 0,
-      id_region: 0,
-      id_tipo_lugar: 0,
+      telefono: "",
+      zonaId: 0,
+      comunaId: 0,
+      region_id: 0,
+      tipoLugarTrabajoId: 0,
       activo: false,
     };
   }, []);
 
   const [lugarTrabajo, setLugarTrabajo] = useState(lugarTrabajoDefault);
+
+  useEffect(() => {
+    lugartrabajoActual !== null
+      ? setLugarTrabajo(lugartrabajoActual)
+      : setLugarTrabajo(lugarTrabajoDefault);
+  }, [lugartrabajoActual, lugarTrabajoDefault]);
 
   const handleChange = (e) => {
     setLugarTrabajo({
@@ -74,8 +81,8 @@ const FormLugarTrabajo = () => {
       {mensaje.mensaje ? (
         <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
       ) : null}
-      <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-8">
+      <div className="grid grid-cols-3 gap-4">
+        <div className="form-group mb-6">
           <InputText
             id="nombre"
             name="nombre"
@@ -86,7 +93,7 @@ const FormLugarTrabajo = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-4">
+        <div className="form-group mb-3">
           <InputText
             id="abreviacion"
             name="abreviacion"
@@ -95,6 +102,16 @@ const FormLugarTrabajo = () => {
             value={lugarTrabajo.abreviacion}
             onChangeFN={handleChange}
             required={true}
+          />
+        </div>
+        <div className="form-group mb-3">
+          <InputText
+            id="telefono"
+            name="telefono"
+            placeholder="Telefono"
+            label="Telefono"
+            value={lugarTrabajo.telefono}
+            onChangeFN={handleChange}
           />
         </div>
       </div>
@@ -136,20 +153,20 @@ const FormLugarTrabajo = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
           <SelectZona
-            id="id_zona"
-            name="id_zona"
+            id="zonaId"
+            name="zonaId"
             placeholder="Zona"
-            value={lugarTrabajo.id_zona}
+            value={lugarTrabajo.zonaId}
             onChange={handleChange}
             required={true}
           />
         </div>
         <div className="form-group mb-6">
           <SelectTipoLugarTrabajo
-            id="id_tipo_lugar"
-            name="id_tipo_lugar"
+            id="tipoLugarTrabajoId"
+            name="tipoLugarTrabajoId"
             placeholder="Tipo Lugar"
-            value={lugarTrabajo.id_tipo_lugar}
+            value={lugarTrabajo.tipoLugarTrabajoId}
             onChange={handleChange}
             required={true}
           />
@@ -158,33 +175,24 @@ const FormLugarTrabajo = () => {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
-          <SelectRegion
-            id="id_Region"
-            name="id_Region"
-            placeholder="Region"
-            onChangeFN={handleChange}
-            required={true}
-          />
-        </div>
-        <div className="form-group mb-6">
           <SelectComuna
-            id="id_comuna"
-            name="id_comuna"
+            id="comunaId"
+            name="comunaId"
             placeholder="Comuna"
-            value={lugarTrabajo.id_comuna}
+            value={lugarTrabajo.comunaId}
             onChange={handleChange}
           />
         </div>
-      </div>
 
-      <div className="form-group mb-6">
-        <Checkbox
-          id="activo"
-          name="activo"
-          onChangeFN={handleChange}
-          checked={lugarTrabajo.activo}
-          label="Activo"
-        />
+        <div className="form-group mb-6">
+          <Checkbox
+            id="activo"
+            name="activo"
+            onChangeFN={handleChange}
+            checked={lugarTrabajo.activo}
+            label="Activo"
+          />
+        </div>
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

@@ -15,7 +15,7 @@ const TablaLugarTrabajo = () => {
   const { mensaje } = useStateContext();
 
   const {
-    obtenerRegiones,
+    //obtenerRegiones,
     obtenerComunas,
     obtenerZonas,
     obtenerTipoLugarTrabajo,
@@ -26,9 +26,10 @@ const TablaLugarTrabajo = () => {
   useEffect(() => {
     obtenerLugaresTrabajo();
     obtenerZonas();
-    obtenerRegiones();
+    //obtenerRegiones();
     obtenerComunas();
     obtenerTipoLugarTrabajo();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const columns = [
@@ -47,7 +48,7 @@ const TablaLugarTrabajo = () => {
         <OpcionesTabla
           editar={true}
           FnEditar={() => getLugarTrabajo(props)}
-          nombreform="lugarTrabajo-modal"
+          nombreform="lugarTrabajo"
         />
       ),
     },

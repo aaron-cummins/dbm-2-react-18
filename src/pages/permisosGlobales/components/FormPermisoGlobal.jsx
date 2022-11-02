@@ -22,10 +22,8 @@ const FormPermisoGlobal = () => {
   const permisoGlobalDefault = useMemo(() => {
     return {
       id: 0,
-      id_rol: 0,
-      modulo: {
-        id: 0,
-      },
+      rolID: 0,
+      moduloID: 0,
     };
   }, []);
 
@@ -38,17 +36,10 @@ const FormPermisoGlobal = () => {
   }, [permisoGlobalActual, permisoGlobalDefault]);
 
   const handleChange = (e) => {
-    e.target.name === "modulo"
-      ? setPermisoGlobal({
-          ...PermisoGlobal,
-          modulo: {
-            id: e.target.value,
-          },
-        })
-      : setPermisoGlobal({
-          ...PermisoGlobal,
-          [e.target.name]: e.target.value,
-        });
+    setPermisoGlobal({
+      ...PermisoGlobal,
+      [e.target.name]: e.target.value,
+    });
   };
 
   const limpiaForm = () => {
@@ -78,18 +69,20 @@ const FormPermisoGlobal = () => {
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <SelectModulo
-            id="modulo"
-            name="modulo"
-            value={PermisoGlobal.modulo.id}
+            id="moduloId"
+            name="moduloId"
+            value={PermisoGlobal.moduloId}
             onChange={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
           <SelectRol
-            id="id_rol"
-            name="id_rol"
-            value={PermisoGlobal.id_rol}
+            id="rolId"
+            name="rolId"
+            value={PermisoGlobal.rolId}
             onChange={handleChange}
+            required={true}
           />
         </div>
       </div>

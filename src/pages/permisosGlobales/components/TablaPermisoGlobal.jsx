@@ -29,8 +29,8 @@ const TablaPermisoGlobal = () => {
 
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
-    { name: "Rol", selector: (row) => row.id_rol, sortable: true },
-    { name: "Módulo", selector: (row) => row.modulo.nombre, sortable: true },
+    { name: "Rol", selector: (row) => row.rolId, sortable: true },
+    { name: "Módulo", selector: (row) => row.moduloId, sortable: true },
     {
       name: "Acciones",
       cell: (props) => (
