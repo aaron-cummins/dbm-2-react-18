@@ -40,6 +40,7 @@ export { default as TipoEmision } from "./tipoEmision/TipoEmision";
 export { default as TipoFiltrado } from "./tipoFiltrado/TipoFiltrado";
 export { default as TipoInyeccion } from "./tipoInyeccion/TipoInyeccion";
 export { default as TipoLugarTrabajo } from "./tipoLugarTrabajo/TipoLugarTrabajo";
+export { default as VersionEquipo } from "./versionEquipo/VersionEquipo";
 export { default as Vistas } from "./vistas/Vistas";
 export { default as VistasGroup } from "./vistasGroup/VistasGroup";
 export { default as Usuario } from "./usuarios/Usuario";

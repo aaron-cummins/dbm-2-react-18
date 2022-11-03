@@ -1,9 +1,11 @@
 import React, { createContext, useReducer } from "react";
 import {
+  OBTENER_LISTA_APLICACION_OEM,
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_MODULOS,
+  OBTENER_LISTA_OEM,
   OBTENER_LISTA_PAISES,
   OBTENER_LISTA_REGIONES,
   OBTENER_LISTA_ROLES,
@@ -27,7 +29,9 @@ export const SelectsContextProvider = (props) => {
     paisList: [],
     modulosList: [],
     rolesList: [],
-    cargosList: []
+    cargosList: [],
+    aplicacionOemsList: [],
+    oemsList: []
   };
 
   const [state, dispatch] = useReducer(selectsReducer, initialState);
@@ -182,6 +186,36 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBETENER LISTADO DE Aplicacion OEM */
+  const obtenerAplicacionOems = async () => {
+    try {
+      const resultado = await callEndpoint(getList("aplicacionoem"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_APLICACION_OEM,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Aplicacion OEM */
+  const obtenerOems = async () => {
+    try {
+      const resultado = await callEndpoint(getList("oem"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_OEM,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -194,12 +228,14 @@ export const SelectsContextProvider = (props) => {
         modulosList: state.modulosList,
         rolesList: state.rolesList,
         cargosList: state.cargosList,
+        aplicacionOemsList: state.aplicacionOemsList,
+        oemsList: state.oemsList,
 
-        
-        
+        obtenerAplicacionOems,
         obtenerCargos,
         obtenerComunas,
         obtenerModulos,
+        obtenerOems,
         obtenerLugaresTrabajo,
         obtenerPais,
         obtenerRegiones,

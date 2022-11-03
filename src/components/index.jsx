@@ -30,9 +30,11 @@ export { default as Modal } from "./common/Modal";
 export { default as OpcionesTabla } from "./common/OpcionesTabla";
 export { default as Tabla } from "./common/Tabla";
 
+export { default as SelectAplicacionOem } from "./Selects/SelectAplicacionOem";
 export { default as SelectComuna } from "./Selects/SelectComuna";
 export { default as SelectCargo } from "./Selects/SelectCargo";
 export { default as SelectModulo } from "./Selects/SelectModulo";
+export { default as SelectOem } from "./Selects/SelectOem";
 export { default as SelectLugarTrabajo } from "./Selects/SelectLugarTrabajo";
 export { default as SelectPais } from "./Selects/SelectPais";
 export { default as SelectRegion } from "./Selects/SelectRegion";

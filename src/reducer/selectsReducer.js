@@ -1,4 +1,4 @@
-import { OBTENER_LISTA_CARGOS, OBTENER_LISTA_COMUNAS, OBTENER_LISTA_LUGAR_TRABAJO, OBTENER_LISTA_MODULOS, OBTENER_LISTA_PAISES, OBTENER_LISTA_REGIONES, OBTENER_LISTA_ROLES, OBTENER_LISTA_TIPO_LUGAR_TRABAJO, OBTENER_LISTA_ZONAS} from '../const/actionTypes';
+import { OBTENER_LISTA_APLICACION_OEM, OBTENER_LISTA_CARGOS, OBTENER_LISTA_COMUNAS, OBTENER_LISTA_LUGAR_TRABAJO, OBTENER_LISTA_MODULOS, OBTENER_LISTA_OEM, OBTENER_LISTA_PAISES, OBTENER_LISTA_REGIONES, OBTENER_LISTA_ROLES, OBTENER_LISTA_TIPO_LUGAR_TRABAJO, OBTENER_LISTA_ZONAS} from '../const/actionTypes';
 
 export default (state, action) => {
     
@@ -44,11 +44,23 @@ export default (state, action) => {
                 ...state,
                 modulosList: action.payload
             };
-            case OBTENER_LISTA_ROLES:
-                return {
-                    ...state,
-                    rolesList: action.payload
-                };
+        case OBTENER_LISTA_ROLES:
+            return {
+                ...state,
+                rolesList: action.payload
+            };
+
+        case OBTENER_LISTA_APLICACION_OEM:
+            return {
+                ...state,
+                aplicacionOemsList: action.payload
+            };
+
+        case OBTENER_LISTA_OEM:
+            return {
+                ...state,
+                oemsList: action.payload
+            };
         default:
             return state;
     }
