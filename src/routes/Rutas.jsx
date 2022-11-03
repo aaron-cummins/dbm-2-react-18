@@ -39,6 +39,8 @@ import {
   ColorMapping,
   Editor,
   PermisosGlobales,
+  Equipo,
+  Flota,
 } from "../pages";
 import AuthGuard from "./AuthGuard";
 
@@ -57,6 +59,8 @@ const Rutas = () => {
       <Route path="/aplicacionoem" element={<AplicacionOem />}></Route>
       <Route path="/cargo" element={<Cargo />}></Route>
       <Route path="/comuna" element={<Comuna />}></Route>
+      <Route path="/equipo" element={<Equipo />}></Route>
+      <Route path="/flota" element={<Flota />}></Route>
       <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
       <Route path="/modulocontrol" element={<ModuloControl />}></Route>
       <Route path="/modulos" element={<Modulos />}></Route>

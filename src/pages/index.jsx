@@ -23,6 +23,8 @@ export { default as Aplicacion } from "./aplicacion/Aplicacion";
 export { default as AplicacionOem } from "./aplicacionOem/AplicacionOem";
 export { default as Cargo } from "./cargo/Cargo";
 export { default as Comuna } from "./comuna/Comuna";
+export { default as Equipo } from "./equipo/Equipo";
+export { default as Flota } from "./flota/Flota";
 export { default as Login } from "./login/Login";
 export { default as LugarTrabajo } from "./lugar_trabajo/LugarTrabajo";
 export { default as ModuloControl } from "./moduloControl/ModuloControl";

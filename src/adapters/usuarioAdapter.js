@@ -30,7 +30,7 @@ export const createUserAdapter = (usuario) => (
 export const loginAdapter = (correo) => (
     {
         username: correo,
-        password: "cristian.reyesf@cummins.cl",
+        password: correo,
         grant_type: process.env.REACT_APP_GRANT_TYPE
     }
 )
