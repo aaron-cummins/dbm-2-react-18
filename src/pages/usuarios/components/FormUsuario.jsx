@@ -77,7 +77,7 @@ const FormUsuario = () => {
 
     usuarioActual !== null
       ? actualizarUsuario(UsuarioAEnviar())
-      : actualizarUsuario(UsuarioAEnviar());
+      : registrarUsuario(UsuarioAEnviar());
     limpiaForm();
     closeModal();
   };

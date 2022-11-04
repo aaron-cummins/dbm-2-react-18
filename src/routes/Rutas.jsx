@@ -42,6 +42,7 @@ import {
   Equipo,
   Flota,
   VersionEquipo,
+  Unidad,
 } from "../pages";
 import AuthGuard from "./AuthGuard";
 
@@ -55,33 +56,35 @@ const Rutas = () => {
       <Route path="/" element={<Ecommerce />}></Route>
       <Route path="/ecommerce" element={<Ecommerce />}></Route>
 
-      {/* Administración */}
-      <Route path="/aplicacion" element={<Aplicacion />}></Route>
-      <Route path="/aplicacionoem" element={<AplicacionOem />}></Route>
-      <Route path="/cargo" element={<Cargo />}></Route>
-      <Route path="/comuna" element={<Comuna />}></Route>
-      <Route path="/equipo" element={<Equipo />}></Route>
-      <Route path="/flota" element={<Flota />}></Route>
-      <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
-      <Route path="/modulocontrol" element={<ModuloControl />}></Route>
-      <Route path="/modulos" element={<Modulos />}></Route>
-      <Route path="/oem" element={<Oem />}></Route>
-      <Route path="/pais" element={<Pais />}></Route>
-      <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
-      <Route path="/region" element={<Region />}></Route>
-      <Route path="/roles" element={<Roles />}></Route>
-      <Route path="/tipoadmision" element={<TipoAdmision />}></Route>
-      <Route path="/tipocombustible" element={<TipoCombustible />}></Route>
-      <Route path="/tipoemision" element={<TipoEmision />}></Route>
-      <Route path="/tipofiltrado" element={<TipoFiltrado />}></Route>
-      <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
-      <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
-      <Route path="/usuarios" element={<Usuario />}></Route>
-      <Route path="/versionequipo" element={<VersionEquipo />}></Route>
-      <Route path="/vistas" element={<Vistas />}></Route>
-      <Route path="/vistasgroup" element={<VistasGroup />}></Route>
-      <Route path="/zona" element={<Zona />}></Route>
-
+      <Route element={<AuthGuard />}>
+        {/* Administración */}
+        <Route path="/aplicacion" element={<Aplicacion />}></Route>
+        <Route path="/aplicacionoem" element={<AplicacionOem />}></Route>
+        <Route path="/cargo" element={<Cargo />}></Route>
+        <Route path="/comuna" element={<Comuna />}></Route>
+        <Route path="/equipo" element={<Equipo />}></Route>
+        <Route path="/flota" element={<Flota />}></Route>
+        <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
+        <Route path="/modulocontrol" element={<ModuloControl />}></Route>
+        <Route path="/modulos" element={<Modulos />}></Route>
+        <Route path="/oem" element={<Oem />}></Route>
+        <Route path="/pais" element={<Pais />}></Route>
+        <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
+        <Route path="/region" element={<Region />}></Route>
+        <Route path="/roles" element={<Roles />}></Route>
+        <Route path="/tipoadmision" element={<TipoAdmision />}></Route>
+        <Route path="/tipocombustible" element={<TipoCombustible />}></Route>
+        <Route path="/tipoemision" element={<TipoEmision />}></Route>
+        <Route path="/tipofiltrado" element={<TipoFiltrado />}></Route>
+        <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
+        <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
+        <Route path="/unidad" element={<Unidad />}></Route>
+        <Route path="/usuarios" element={<Usuario />}></Route>
+        <Route path="/versionequipo" element={<VersionEquipo />}></Route>
+        <Route path="/vistas" element={<Vistas />}></Route>
+        <Route path="/vistasgroup" element={<VistasGroup />}></Route>
+        <Route path="/zona" element={<Zona />}></Route>
+      </Route>
       {/* Pages */}
       <Route path="/orders" element={<Orders />}></Route>
       <Route path="/employees" element={<Employees />}></Route>

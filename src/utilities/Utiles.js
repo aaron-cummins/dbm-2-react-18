@@ -17,3 +17,15 @@ export const formatDate = (fecha_para_formatear)=>{
 
     return formatted_date;
 }
+
+export const formatDateshort = (fecha_para_formatear)=>{
+    
+    let fecha = new Date(fecha_para_formatear);
+    let ano = fecha.getFullYear()
+    let mes = ((fecha.getMonth() + 1) <= 9 ? `0${fecha.getMonth() + 1}` : fecha.getMonth() + 1);
+    let dia = (fecha.getDate() <= 9 ? `0${fecha.getDate()}` : fecha.getDate());
+
+    let formatted_date = ano + "-" + mes + "-" + dia;
+
+    return formatted_date;
+}

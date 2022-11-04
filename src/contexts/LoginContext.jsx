@@ -35,58 +35,39 @@ export const LoginContextProvider = (props) => {
 
   const setMenuUsuario = async (id_lugar_trabajo) => {
     try {
-      /*let permisos = [
-        {
-          id: 0,
-          nombre: "Inicio",
-          controller: "inicio",
-          accion: "ecommerce",
-          icono: 0,
-        },
-      ];*/
-
       let permisos = [];
       let vistas = [];
 
       let lugares_trabajo = JSON.parse(
         sessionStorage.getItem("user_info_lugaresTrabajo")
       );
-
       let modulos = lugares_trabajo.LugarTrabajo;
-
       modulos.forEach((item) => {
         if (parseInt(item.lugar_trabajo_id) === parseInt(id_lugar_trabajo)) {
           vistas.push(item.vistas[0]);
         }
       });
-
       permisos = PermisosUsuario(vistas);
 
-      /*let modulos = JSON.parse(sessionStorage.getItem("user_info"));
-
-      modulos.permisos.forEach((item) => {
-        if (item.lugarTrabajo === id_lugar_trabajo) {
-          let permisosGlob = item.roles.permisosGlobales;
-          permisosGlob.forEach((i) => {
-            i.modulo && permisos.push(i.modulo);
-          });
-        }
-      });*/
       dispatch({
         type: OBTENER_MENU,
         payload: permisos,
       });
 
-      /*let grupo = permisos
-        .map((item) => item.grupos)
+      let grupo = permisos
+        .map((item) => item.grupo)
         .filter((element) => element !== undefined);
-      let vistas = grupo.map((grup) => grup.map((vistas) => vistas.vistas));
-      let acciones = vistas.flat(2);
+
+      let vistas_v2 = grupo.map((item) => {
+        return item.map((grupo) => grupo.vistas);
+      });
+      let vistas_ = vistas_v2.flat(2);
+      let acciones = vistas_.map((item) => item.accion);
 
       dispatch({
         type: OBTENER_ACCIONES,
         payload: acciones,
-      });*/
+      });
     } catch (error) {
       console.log(error);
     }

@@ -27,7 +27,6 @@ const Aplicacion = () => {
         if (accounts[0] && accounts[0].username) {
           setLogeado(true);
           crearUsuario(createUserAdapter(usuarioLog));
-          //setMensajeOk("Datos recuperados.");
         } else {
           LogOut();
         }

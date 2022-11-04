@@ -5,8 +5,7 @@ import { LoginContext } from "../contexts/LoginContext";
 import {
   LogOut,
   persistUsuarioState,
-  persistJwt,
-  getUsuarioLugarTrabajo,
+  persistJwt
 } from "../utilities/Login_utiles";
 import useFetchAndLoad from "./useFetchAndLoad";
 
@@ -14,7 +13,7 @@ import { useContext } from "react";
 
 const useLogin = () => {
   const isAuthenticated = useIsAuthenticated();
-  const { setLogeado, crearUsuario, setMensajeErr, setMensajeOk, setMenuUsuario } =
+  const { setLogeado, crearUsuario, setMensajeErr, setMensajeOk } =
     useContext(LoginContext);
   const { callEndpoint, setLoading } = useFetchAndLoad();
 

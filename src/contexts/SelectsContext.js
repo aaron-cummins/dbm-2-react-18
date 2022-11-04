@@ -3,6 +3,7 @@ import {
   OBTENER_LISTA_APLICACION_OEM,
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
+  OBTENER_LISTA_FLOTAS,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_MODULOS,
   OBTENER_LISTA_OEM,
@@ -10,6 +11,7 @@ import {
   OBTENER_LISTA_REGIONES,
   OBTENER_LISTA_ROLES,
   OBTENER_LISTA_TIPO_LUGAR_TRABAJO,
+  OBTENER_LISTA_VERSION_EQUIPO,
   OBTENER_LISTA_ZONAS,
 } from "../const/actionTypes";
 import { getList } from "../services/genericService";
@@ -31,7 +33,9 @@ export const SelectsContextProvider = (props) => {
     rolesList: [],
     cargosList: [],
     aplicacionOemsList: [],
-    oemsList: []
+    oemsList: [],
+    versionEquiposList: [],
+    flotasList: []
   };
 
   const [state, dispatch] = useReducer(selectsReducer, initialState);
@@ -216,6 +220,37 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBETENER LISTADO DE Flotas */
+  const obtenerFlotas = async () => {
+    try {
+      const resultado = await callEndpoint(getList("flotas"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_FLOTAS,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  
+  /* OBETENER LISTADO DE Aplicacion OEM */
+  const obtenerVersionEquipos = async () => {
+    try {
+      const resultado = await callEndpoint(getList("versionequipo"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_VERSION_EQUIPO,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -230,6 +265,8 @@ export const SelectsContextProvider = (props) => {
         cargosList: state.cargosList,
         aplicacionOemsList: state.aplicacionOemsList,
         oemsList: state.oemsList,
+        versionEquiposList: state.versionEquiposList,
+        flotasList: state.flotasList,
 
         obtenerAplicacionOems,
         obtenerCargos,
@@ -242,6 +279,8 @@ export const SelectsContextProvider = (props) => {
         obtenerRol,
         obtenerTipoLugarTrabajo,
         obtenerZonas,
+        obtenerFlotas,
+        obtenerVersionEquipos
         
       }}>
       {props.children}
