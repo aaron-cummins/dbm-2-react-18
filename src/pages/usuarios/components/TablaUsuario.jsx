@@ -1,8 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { UsuarioContext } from "../context/usuarioContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "../../../components";
-import { SelectsContext } from "../../../contexts/SelectsContext";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, OpcionesTabla, Tabla } from "components";
+import { SelectsContext } from "contexts/SelectsContext";
+import { useNavigate } from "react-router-dom";
 
 const TablaUsuario = () => {
   const { usuarioList, obtenerUsuariolist, obtenerUsuario } =
@@ -10,7 +11,14 @@ const TablaUsuario = () => {
   const { mensaje } = useStateContext();
   const { obtenerCargos } = useContext(SelectsContext);
 
+  const navigate = useNavigate();
+
   const getUsuario = (props) => obtenerUsuario(props);
+  const getUsuarioPermisos = (props) => {
+    obtenerUsuario(props);
+    let ruta = `permisosusuario/${props.id}`;
+    navigate(ruta);
+  };
 
   useEffect(() => {
     obtenerUsuariolist();
@@ -31,11 +39,18 @@ const TablaUsuario = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getUsuario(props)}
-          nombreform="usuario"
-        />
+        <>
+          <OpcionesTabla
+            editar={true}
+            FnEditar={() => getUsuario(props)}
+            nombreform="usuario"
+          />
+          <OpcionesTabla
+            info={true}
+            FnInfo={() => getUsuarioPermisos(props)}
+            nombreform="usuario"
+          />
+        </>
       ),
     },
   ];

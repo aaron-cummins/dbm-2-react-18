@@ -6,10 +6,10 @@ import {
   Checkbox,
   SelectCargo,
   SelectLugarTrabajo,
-} from "../../../components";
+} from "components";
 import { UsuarioContext } from "../context/usuarioContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 import { useContext } from "react";
 
 const FormUsuario = () => {

@@ -6,10 +6,7 @@ const AxiosInstanceOauth = axios.create({
 
 AxiosInstanceOauth.interceptors.request.use(
     (request) => {
-      //request.headers.common['Accept'] = 'application/json';
-      //request.headers.common['Authorization'] = `Bearer ${sessionStorage.getItem('@AnZr1SmZp2CvPa3-ToKnN_@CDRF')}`;
       request.headers.common['Authorization'] = "Basic bWdkaS1jbGllbnQ6bWdkaS1jbGllbnQtc2VjcmV0";
-      //request.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'; //'application/json';
       return request;
     },
     (error) => {
@@ -29,14 +26,9 @@ AxiosInstanceOauth.interceptors.response.use((response) =>
       });
     }
     if(error.response.status === 403){
-      //const { setMensajeErr } = useContext(LoginContext);
-      //setMensajeErr("Se termino su sesion, favor ingresar nuevamente.");
-
       console.log(error.response);
-
       sessionStorage.clear();
       localStorage.removeItem('accessToken');
-      
       window.location.href = '/?forbiden';
     }
     if(error.response.status === 404){

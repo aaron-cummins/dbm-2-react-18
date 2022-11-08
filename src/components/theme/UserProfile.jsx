@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { MdOutlineCancel, MdLogout } from "react-icons/md";
 import { Button } from "..";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { LoginContext } from "../../contexts/LoginContext";
-import { LogOut } from "../../utilities/Login_utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { LoginContext } from "contexts/LoginContext";
+import { LogOut } from "utilities/Login_utiles";
 
 const UserProfile = () => {
   const { currentColor } = useStateContext();

@@ -1,10 +1,10 @@
 import React, { useEffect, useContext, useState } from "react";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { SelectsContext } from "../../contexts/SelectsContext";
+import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
 import {
   getUsuarioLugaresTrabajoList,
   getUsuarioLugarTrabajo,
-} from "../../utilities/Login_utiles";
+} from "utilities/Login_utiles";
 import Label from "../Forms/Label";
 
 const SelectLugarTrabajo = (props) => {

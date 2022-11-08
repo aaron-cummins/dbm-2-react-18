@@ -5,10 +5,10 @@ import {
   Buttons,
   Checkbox,
   SelectLugarTrabajo,
-} from "../../../components";
+} from "components";
 import { FlotaContext } from "../context/flotaContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormFlota = () => {
   const { registrarFlota, flotaActual, actualizarFlota, obtenerFlota } =

@@ -1,18 +1,16 @@
-import React, { useContext } from "react";
+import React from "react";
 import { MdOutlineCancel } from "react-icons/md";
 //import { BsCheck } from 'react-icons/bs';
 //import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 //import { themeColors } from '../data/dummy';
-import { useStateContext } from "../../contexts/ContextProvider";
-import { LoginContext } from "../../contexts/LoginContext";
-import { setUsuarioLugarTrabajo } from "../../utilities/Login_utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { setUsuarioLugarTrabajo } from "utilities/Login_utiles";
 import { SelectLugarTrabajo } from "../";
 
 const ThemeSettings = () => {
   const { setMode, currentMode, setThemeSettings, setLugarTrabajoSelected } =
     useStateContext();
-  const { setMenuUsuario } = useContext(LoginContext);
 
   const handleOnChange = (e) => {
     setUsuarioLugarTrabajo(e.target.value);

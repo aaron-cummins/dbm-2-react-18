@@ -1,9 +1,9 @@
 import React, { createContext, useReducer, useState } from "react";
-import { OBTENER, OBTENER_MENU, OBTENER_ACCIONES } from "../const/actionTypes";
-import loginReducer from "../reducer/loginReducer";
-import useFetchAndLoad from "../hooks/useFetchAndLoad";
-import { getByID } from "../services/genericService";
-import { PermisosUsuario } from "../utilities/Login_utiles";
+import { OBTENER, OBTENER_MENU, OBTENER_ACCIONES } from "const/actionTypes";
+import loginReducer from "reducer/loginReducer";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { getByID } from "services/genericService";
+import { PermisosUsuario } from "utilities/Login_utiles";
 
 export const LoginContext = createContext();
 

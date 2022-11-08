@@ -1,10 +1,10 @@
 import React from "react";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { useStateContext } from "contexts/ContextProvider";
 import { Link, NavLink } from "react-router-dom";
 import { MdOutlineCancel } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
-import logo from "../../assets/img/DBM2.0.png";
+import logo from "assets/img/DBM2.0.png";
 
 const initialState = {
   chat: false,
@@ -14,7 +14,8 @@ const initialState = {
 };
 
 const Menu = (props) => {
-  const { currentColor, activeMenu, setActiveMenu, setIsClicked } = useStateContext();
+  const { currentColor, activeMenu, setActiveMenu, setIsClicked } =
+    useStateContext();
 
   //const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
@@ -25,7 +26,8 @@ const Menu = (props) => {
     setIsClicked(initialState);
   };
 
-  const activeLink = "flex items-center gap-3 pl-2 pt-1 pb-1 rounded-lg text-white text-md";
+  const activeLink =
+    "flex items-center gap-3 pl-2 pt-1 pb-1 rounded-lg text-white text-md";
   const normalLink =
     "flex items-center gap-3 pl-2 pt-1 pb-1 rounded-lg text-md text-white hover:text-gray-100 hover:bg-light-gray";
 
@@ -91,7 +93,9 @@ const Menu = (props) => {
                     style={({ isActive }) => ({
                       backgroundColor: isActive ? currentColor : "",
                     })}
-                    className={({ isActive }) => (isActive ? activeLink : normalLink)}>
+                    className={({ isActive }) =>
+                      isActive ? activeLink : normalLink
+                    }>
                     <span className="capitalize text-sm">{menu.nombre}</span>
                   </NavLink>
                 ))}

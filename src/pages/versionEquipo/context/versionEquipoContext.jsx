@@ -5,19 +5,19 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
-//import { getVersionEquipoList, getVersionEquipo, postVersionEquipo, putVersionEquipo, deleteVersionEquipo } from '../../../services/versionequipoService';
+} from "const/actionTypes";
+//import { getVersionEquipoList, getVersionEquipo, postVersionEquipo, putVersionEquipo, deleteVersionEquipo } from 'services/versionequipoService';
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import versionEquipoReducer from "../reducer/versionEquipoReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
 
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const VersionEquipoContext = createContext();
 

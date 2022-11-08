@@ -6,10 +6,10 @@ import {
   Checkbox,
   SelectAplicacionOem,
   SelectOem,
-} from "../../../components";
+} from "components";
 import { EquipoContext } from "../context/equipoContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormEquipo = () => {
   const { registrarEquipo, equipoActual, actualizarEquipo, obtenerEquipo } =

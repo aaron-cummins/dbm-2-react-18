@@ -8,7 +8,8 @@ const AuthGuard = () => {
   const { pathname } = useLocation();
 
   const path_location = pathname.substring(1);
-  const acceso = paginas.find((dir) => dir === path_location) === path_location;
+  const path_inicial = path_location.split("/")[0];
+  const acceso = paginas.find((dir) => dir === path_inicial) === path_inicial;
   return acceso ? <Outlet /> : <ForbiddenPage />;
 };
 

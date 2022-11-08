@@ -1,7 +1,7 @@
 import DataTable from "react-data-table-component";
 import Checkbox from "@mui/material/Checkbox";
 import { ArrowDownward } from "@mui/icons-material";
-import useFetchAndLoad from "../../hooks/useFetchAndLoad";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
 
 const sortIcon = <ArrowDownward />;
 const selectProps = { indeterminate: (isIndeterminate) => isIndeterminate };

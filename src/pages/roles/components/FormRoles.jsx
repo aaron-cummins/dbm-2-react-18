@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "../../../components";
+import { Alerts, InputText, Buttons } from "components";
 import { RolesContext } from "../context/rolesContext";
-import { closeModal, formatDate } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal, formatDate } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormRoles = () => {
   const { registrarRoles, rolesActual, actualizarRoles, obtenerRoles } =

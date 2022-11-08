@@ -6,10 +6,10 @@ import {
   Checkbox,
   SelectModulo,
   SelectRol,
-} from "../../../components";
+} from "components";
 import { PermisosGlobalesContext } from "../context/permisosGlobalesContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormPermisoGlobal = () => {
   const {

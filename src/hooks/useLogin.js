@@ -1,12 +1,12 @@
-import { createUserAdapter, loginAdapter } from "../adapters";
-import { login, obtenerUsuarioCorreo } from "../services/usuarioService";
+import { createUserAdapter, loginAdapter } from "adapters";
+import { login, obtenerUsuarioCorreo } from "services/usuarioService";
 import { useIsAuthenticated } from "@azure/msal-react";
-import { LoginContext } from "../contexts/LoginContext";
+import { LoginContext } from "contexts/LoginContext";
 import {
   LogOut,
   persistUsuarioState,
   persistJwt
-} from "../utilities/Login_utiles";
+} from "utilities/Login_utiles";
 import useFetchAndLoad from "./useFetchAndLoad";
 
 import { useContext } from "react";

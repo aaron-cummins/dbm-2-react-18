@@ -5,17 +5,17 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import rolesReducer from "../reducer/rolesReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const RolesContext = createContext();
 

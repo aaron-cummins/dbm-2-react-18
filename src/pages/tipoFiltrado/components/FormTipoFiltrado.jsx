@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { TipoFiltradoContext } from "../context/tipofiltradoContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormTipoFiltrado = () => {
   const {

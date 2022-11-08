@@ -1,8 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { VistasGroupContext } from "../context/vistasGroupContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "../../../components";
-import { SelectsContext } from "../../../contexts/SelectsContext";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, OpcionesTabla, Tabla } from "components";
+import { SelectsContext } from "contexts/SelectsContext";
 
 const TablaVistasGroup = () => {
   const { vistasgroupList, obtenerVistasGrouplist, obtenerVistasGroup } =

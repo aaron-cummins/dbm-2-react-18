@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { AplicacionOemContext } from "../context/aplicacionOemContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaAplicacionOem = () => {
   const { aplicacionOemList, obtenerAplicacionOem, obtenerAplicacionesOem } =

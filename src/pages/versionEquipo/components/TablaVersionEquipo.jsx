@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { VersionEquipoContext } from "../context/versionEquipoContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaVersionEquipo = () => {
   const { versionequipoList, obtenerVersionEquipos, obtenerVersionEquipo } =

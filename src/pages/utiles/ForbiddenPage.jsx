@@ -1,4 +1,4 @@
-import "../../assets/css/forbidden_page.css";
+import "assets/css/forbidden_page.css";
 
 const ForbiddenPage = () => {
   return (

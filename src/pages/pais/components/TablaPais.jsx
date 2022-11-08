@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { PaisContext } from "../context/paisContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaPais = () => {
   const { paisList, obtenerPaises, obtenerPais } = useContext(PaisContext);

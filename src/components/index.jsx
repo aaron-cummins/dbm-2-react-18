@@ -2,7 +2,6 @@ export { default as Rutas } from "../routes/Rutas";
 
 export { default as ThemeSettings } from "./theme/ThemeSettings";
 export { default as Sidebar } from "./theme/Sidebar";
-export { default as Sidebar2 } from "./theme/Sidebar2";
 export { default as Navbar } from "./theme/Navbar";
 export { default as Footer } from "./theme/Footer";
 export { default as Chat } from "./theme/Chat";
@@ -30,6 +29,7 @@ export { default as Modal } from "./common/Modal";
 export { default as OpcionesTabla } from "./common/OpcionesTabla";
 export { default as Tabla } from "./common/Tabla";
 
+export { default as SelectAplicacion } from "./Selects/SelectAplicacion";
 export { default as SelectAplicacionOem } from "./Selects/SelectAplicacionOem";
 export { default as SelectCargo } from "./Selects/SelectCargo";
 export { default as SelectComuna } from "./Selects/SelectComuna";

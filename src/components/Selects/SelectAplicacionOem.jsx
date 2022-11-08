@@ -1,5 +1,5 @@
 import { useContext } from "react";
-import { SelectsContext } from "../../contexts/SelectsContext";
+import { SelectsContext } from "contexts/SelectsContext";
 import Label from "../Forms/Label";
 
 const SelectAplicacionOem = (props) => {

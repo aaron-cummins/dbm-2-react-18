@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { CargoContext } from "../context/cargoContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormCargo = () => {
-  const { registrarCargo, cargoActual, actualizarCargo, obtenerCargo } = useContext(CargoContext);
+  const { registrarCargo, cargoActual, actualizarCargo, obtenerCargo } =
+    useContext(CargoContext);
   const { mensaje } = useStateContext();
   const cargoDefault = useMemo(() => {
     return {
@@ -40,7 +41,9 @@ const FormCargo = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    cargoActual !== null ? actualizarCargo(CargoAEnviar()) : registrarCargo(CargoAEnviar());
+    cargoActual !== null
+      ? actualizarCargo(CargoAEnviar())
+      : registrarCargo(CargoAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -52,7 +55,9 @@ const FormCargo = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText

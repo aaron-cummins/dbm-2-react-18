@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { TipolugartrabajoContext } from "../context/tipolugartrabajoContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, OpcionesTabla, Tabla } from "components";
 
 const TablaTipolugarTrabajo = () => {
   const {

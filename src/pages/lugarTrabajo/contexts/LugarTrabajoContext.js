@@ -1,9 +1,9 @@
 import React, { createContext, useReducer, useState } from 'react';
-import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR} from '../../../const/actionTypes';
-import { getList, getByID, postObject, putObject, deleteObject } from '../../../services/genericService';
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR} from 'const/actionTypes';
+import { getList, getByID, postObject, putObject, deleteObject } from 'services/genericService';
 import lugartrabajoReducer from '../reducer/lugarTrabajoReducer';
-import useFetchAndLoad from '../../../hooks/useFetchAndLoad';
-import { useStateContext } from '../../../contexts/ContextProvider';
+import useFetchAndLoad from 'hooks/useFetchAndLoad';
+import { useStateContext } from 'contexts/ContextProvider';
 
 export const LugarTrabajoContext = createContext();
 

@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { OemContext } from "../context/oemContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormOem = () => {
   const { registrarOem, oemActual, actualizarOem, obtenerOem } =

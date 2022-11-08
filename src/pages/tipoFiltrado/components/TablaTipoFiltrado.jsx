@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { TipoFiltradoContext } from "../context/tipofiltradoContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoFiltrado = () => {
   const { tipofiltradoList, obtenerTipoFiltrados, obtenerTipoFiltrado } =

@@ -1,13 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { ZonaContext } from "../context/zonaContext";
-import { SelectsContext } from "../../../contexts/SelectsContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { SelectsContext } from "contexts/SelectsContext";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaZona = () => {
   const { zonaList, obtenerZonalist, obtenerZona } = useContext(ZonaContext);

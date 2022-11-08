@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { CargoContext } from "../context/cargoContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaCargo = () => {
   const { cargoList, obtenerCargos, obtenerCargo } = useContext(CargoContext);

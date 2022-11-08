@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "../../../components";
+import { Alerts, InputText, Buttons } from "components";
 import { VistasContext } from "../context/vistasContext";
-import { closeModal, formatDate } from "../../../utilities/Utiles";
+import { closeModal, formatDate } from "utilities/Utiles";
 import SelectGrupo from "./SelectGrupo";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormVistas = () => {
   const {

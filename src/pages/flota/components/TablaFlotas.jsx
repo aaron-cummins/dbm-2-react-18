@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { FlotaContext } from "../context/flotaContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaFlotas = () => {
   const { flotaList, obtenerFlotas, obtenerFlota } = useContext(FlotaContext);

@@ -7,10 +7,10 @@ import {
   SelectLugarTrabajo,
   SelectFlota,
   SelectVersionEquipo,
-} from "../../../components";
+} from "components";
 import { UnidadContext } from "../context/unidadContext";
-import { closeModal, formatDateshort } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal, formatDateshort } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 import { useContext } from "react";
 
 const FormUnidad = () => {

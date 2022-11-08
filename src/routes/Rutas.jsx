@@ -43,7 +43,10 @@ import {
   Flota,
   VersionEquipo,
   Unidad,
-} from "../pages";
+  Motor,
+  PermisosUsuario,
+  IndexUsuario,
+} from "pages";
 import AuthGuard from "./AuthGuard";
 
 const Rutas = () => {
@@ -67,6 +70,7 @@ const Rutas = () => {
         <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>
+        <Route path="/motor" element={<Motor />}></Route>
         <Route path="/oem" element={<Oem />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
         <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
@@ -79,7 +83,12 @@ const Rutas = () => {
         <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
-        <Route path="/usuarios" element={<Usuario />}></Route>
+        <Route path="/usuarios" element={<Usuario />}>
+          <Route index element={<IndexUsuario />}></Route>
+          <Route
+            path="permisosusuario/:iduser"
+            element={<PermisosUsuario />}></Route>
+        </Route>
         <Route path="/versionequipo" element={<VersionEquipo />}></Route>
         <Route path="/vistas" element={<Vistas />}></Route>
         <Route path="/vistasgroup" element={<VistasGroup />}></Route>

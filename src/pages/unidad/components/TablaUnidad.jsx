@@ -1,9 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { UnidadContext } from "../context/unidadContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "../../../components";
-import { SelectsContext } from "../../../contexts/SelectsContext";
-import { formatDateshort } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, OpcionesTabla, Tabla } from "components";
+import { SelectsContext } from "contexts/SelectsContext";
+import { formatDateshort } from "utilities/Utiles";
 
 const TablaUnidad = () => {
   const { unidadList, obtenerUnidadlist, obtenerUnidad } =

@@ -1,12 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { TipoInyeccionContext } from "../context/tipoinyeccionContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoInyeccion = () => {
   const { tipoinyeccionList, obtenerTipoInyecciones, obtenerTipoInyeccion } =

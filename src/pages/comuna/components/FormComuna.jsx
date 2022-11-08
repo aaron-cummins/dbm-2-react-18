@@ -1,15 +1,9 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  Label,
-} from "../../../components";
-import { SelectRegion } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox, Label } from "components";
+import { SelectRegion } from "components";
 import { ComunaContext } from "../context/comunaContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormComuna = () => {
   const { registrarComuna, comunaActual, actualizarComuna, obtenerComuna } =

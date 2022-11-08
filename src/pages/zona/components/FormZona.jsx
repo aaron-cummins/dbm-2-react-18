@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { ZonaContext } from "../context/zonaContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { SelectPais } from "../../../components";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { SelectPais } from "components";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormZona = () => {
   const { registrarZona, zonaActual, actualizarZona, obtenerZona } =

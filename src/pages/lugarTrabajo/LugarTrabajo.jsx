@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
-import { Header, Modal } from "../../components";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { Header, Modal } from "components";
+import { useStateContext } from "contexts/ContextProvider";
 
 import FormLugarTrabajo from "./components/FormLugarTrabajo";
 import { LugarTrabajoContextProvider } from "./contexts/LugarTrabajoContext";

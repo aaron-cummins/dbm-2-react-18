@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { PaisContext } from "../context/paisContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormPais = () => {
   const { registrarPais, paisActual, actualizarPais, obtenerPais } =

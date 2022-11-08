@@ -8,10 +8,10 @@ import {
   SelectComuna,
   SelectTipoLugarTrabajo,
   SelectZona,
-} from "../../../components";
+} from "components";
 import { LugarTrabajoContext } from "../contexts/LugarTrabajoContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormLugarTrabajo = () => {
   const {

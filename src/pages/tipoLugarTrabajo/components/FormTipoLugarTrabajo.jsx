@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "../../../components";
+import { Alerts, InputText, Buttons } from "components";
 import { TipolugartrabajoContext } from "../context/tipolugartrabajoContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormTipolugartrabajo = () => {
   const {

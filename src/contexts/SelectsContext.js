@@ -1,5 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import {
+  OBTENER_LISTA_APLICACION,
   OBTENER_LISTA_APLICACION_OEM,
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
@@ -13,10 +14,10 @@ import {
   OBTENER_LISTA_TIPO_LUGAR_TRABAJO,
   OBTENER_LISTA_VERSION_EQUIPO,
   OBTENER_LISTA_ZONAS,
-} from "../const/actionTypes";
-import { getList } from "../services/genericService";
-import selectsReducer from "../reducer/selectsReducer";
-import useFetchAndLoad from "../hooks/useFetchAndLoad";
+} from "const/actionTypes";
+import { getList } from "services/genericService";
+import selectsReducer from "reducer/selectsReducer";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
 
 export const SelectsContext = createContext();
 
@@ -35,7 +36,8 @@ export const SelectsContextProvider = (props) => {
     aplicacionOemsList: [],
     oemsList: [],
     versionEquiposList: [],
-    flotasList: []
+    flotasList: [],
+    aplicacionesList: []
   };
 
   const [state, dispatch] = useReducer(selectsReducer, initialState);
@@ -251,6 +253,21 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+   /* OBETENER LISTADO DE Aplicacion */
+   const obtenerAplicaciones = async () => {
+    try {
+      const resultado = await callEndpoint(getList("aplicacion"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_APLICACION,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -267,7 +284,9 @@ export const SelectsContextProvider = (props) => {
         oemsList: state.oemsList,
         versionEquiposList: state.versionEquiposList,
         flotasList: state.flotasList,
+        aplicacionesList: state.aplicacionesList,
 
+        obtenerAplicaciones,
         obtenerAplicacionOems,
         obtenerCargos,
         obtenerComunas,

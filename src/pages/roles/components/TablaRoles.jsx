@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { RolesContext } from "../context/rolesContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, OpcionesTabla, Tabla } from "components";
 
 const TablaRoles = () => {
   const { rolesList, obtenerRoleslist, obtenerRoles } =

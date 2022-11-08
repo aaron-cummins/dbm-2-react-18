@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { VistasContext } from "../context/vistasContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { Alerts, OpcionesTabla, Tabla } from "components";
 
 const TablaVistas = () => {
   const { vistasList, obtenerVistas, obtenerVistaslist } =

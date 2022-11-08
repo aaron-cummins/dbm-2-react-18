@@ -5,7 +5,7 @@ import {
   ACTUALIZAR,
   ELIMINAR,
   OBTENER_LISTA_ACTIVAS,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 
 export default (state, action) => {
   switch (action.type) {

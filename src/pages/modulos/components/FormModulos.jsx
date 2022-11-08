@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "../../../components";
+import { Alerts, InputText, Buttons } from "components";
 import { ModulosContext } from "../context/modulosContext";
-import { closeModal, formatDate } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal, formatDate } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormModulos = () => {
   const { registrarModulos, modulosActual, actualizarModulos, obtenerModulos } =

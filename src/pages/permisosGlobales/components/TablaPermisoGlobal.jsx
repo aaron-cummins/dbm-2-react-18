@@ -1,13 +1,8 @@
 import React, { useEffect, useContext } from "react";
 import { PermisosGlobalesContext } from "../context/permisosGlobalesContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { SelectsContext } from "../../../contexts/SelectsContext";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
+import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaPermisoGlobal = () => {
   const { permisoGlobalList, obtenerPermisosGlobales, obtenerPermisoGlobal } =

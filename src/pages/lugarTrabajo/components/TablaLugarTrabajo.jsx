@@ -1,13 +1,8 @@
 import React, { useContext, useEffect } from "react";
 import { LugarTrabajoContext } from "../contexts/LugarTrabajoContext";
-import {
-  Alerts,
-  ColActivoTabla,
-  OpcionesTabla,
-  Tabla,
-} from "../../../components";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { SelectsContext } from "../../../contexts/SelectsContext";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
 
 const TablaLugarTrabajo = () => {
   const { lugartrabajoList, obtenerLugaresTrabajo, obtenerLugarTrabajo } =

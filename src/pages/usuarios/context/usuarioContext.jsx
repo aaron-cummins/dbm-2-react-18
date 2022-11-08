@@ -5,17 +5,17 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import usuarioReducer from "../reducer/usuarioReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const UsuarioContext = createContext();
 
@@ -79,7 +79,10 @@ export const UsuarioContextProvider = (props) => {
       alerta("success", "Usuario creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear el Usuario. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear el Usuario. ${error}`
+      );
     }
   };
 
@@ -95,7 +98,10 @@ export const UsuarioContextProvider = (props) => {
       alerta("success", "Usuario actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar el Usuario. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar el Usuario. ${error}`
+      );
     }
   };
 
@@ -110,7 +116,10 @@ export const UsuarioContextProvider = (props) => {
       alerta("success", "Usuario eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar el Usuario. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar el Usuario. ${error}`
+      );
     }
   };
 
