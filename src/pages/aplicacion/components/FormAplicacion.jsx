@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { AplicacionContext } from "../context/aplicacionContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormAplicacion = () => {
-  const { registrarAplicacion, aplicacionActual, actualizarAplicacion, obtenerAplicacion } =
-    useContext(AplicacionContext);
+  const {
+    registrarAplicacion,
+    aplicacionActual,
+    actualizarAplicacion,
+    obtenerAplicacion,
+  } = useContext(AplicacionContext);
   const { mensaje, alerta } = useStateContext();
 
   const aplicacionDefault = useMemo(() => {
@@ -20,7 +24,9 @@ const FormAplicacion = () => {
   const [aplicacion, setAplicacion] = useState(aplicacionDefault);
 
   useEffect(() => {
-    aplicacionActual !== null ? setAplicacion(aplicacionActual) : setAplicacion(aplicacionDefault);
+    aplicacionActual !== null
+      ? setAplicacion(aplicacionActual)
+      : setAplicacion(aplicacionDefault);
   }, [aplicacionActual, aplicacionDefault]);
 
   const handleChange = (e) => {
@@ -63,7 +69,9 @@ const FormAplicacion = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText

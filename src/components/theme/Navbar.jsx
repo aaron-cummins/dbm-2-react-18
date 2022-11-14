@@ -7,8 +7,8 @@ import { MdKeyboardArrowDown } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
 import { Cart, Chat, Notification, UserProfile } from "..";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { LoginContext } from "../../contexts/LoginContext";
+import { useStateContext } from "contexts/ContextProvider";
+import { LoginContext } from "contexts/LoginContext";
 
 const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
   <TooltipComponent content={title} position="BottomCenter">
@@ -27,8 +27,14 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
 );
 
 const Navbar = () => {
-  const { activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } =
-    useStateContext();
+  const {
+    activeMenu,
+    setActiveMenu,
+    handleClick,
+    isClicked,
+    setScreenSize,
+    screenSize,
+  } = useStateContext();
   const { usuarioLogeado } = useContext(LoginContext);
 
   useEffect(() => {
@@ -81,7 +87,11 @@ const Navbar = () => {
           <div
             className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray-2 rounded-lg"
             onClick={() => handleClick("userProfile")}>
-            <img className="rounded-full w-8 h-8" src="img/users/d2.jpg" alt="Perfil" />
+            <img
+              className="rounded-full w-8 h-8"
+              src="img/users/d2.jpg"
+              alt="Perfil"
+            />
             <p>
               <span className="text-gray-400 font-bold ml-1 text-14">
                 {usuarioLogeado?.nombres}

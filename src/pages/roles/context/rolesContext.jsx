@@ -5,17 +5,17 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import rolesReducer from "../reducer/rolesReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const RolesContext = createContext();
 
@@ -76,10 +76,10 @@ export const RolesContextProvider = (props) => {
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "Módulo creado con exito!");
+      alerta("success", "Rol creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear el Módulo. ${error}`);
+      alerta("danger", `'Ocurrió un error al intentar crear el Rol. ${error}`);
     }
   };
 
@@ -92,10 +92,13 @@ export const RolesContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "Módulo actualizado con exito!");
+      alerta("success", "Rol actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar el Módulo. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar el Rol. ${error}`
+      );
     }
   };
 
@@ -107,10 +110,13 @@ export const RolesContextProvider = (props) => {
         type: ELIMINAR,
         payload: id,
       });
-      alerta("success", "Módulo eliminado con exito!");
+      alerta("success", "Rol eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar el Módulo. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar el Rol. ${error}`
+      );
     }
   };
 

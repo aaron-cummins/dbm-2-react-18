@@ -1,35 +1,32 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox, Label } from "../../../components";
-import SelectRegion from "./SelectRegion";
+import { Alerts, InputText, Buttons, Checkbox, Label } from "components";
+import { SelectRegion } from "components";
 import { ComunaContext } from "../context/comunaContext";
-import { useStateContext } from "../../../contexts/ContextProvider";
-import { closeModal } from "../../../utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
 const FormComuna = () => {
-  const { registrarComuna, comunaActual, actualizarComuna, obtenerRegionesActivas, obtenerComuna } =
+  const { registrarComuna, comunaActual, actualizarComuna, obtenerComuna } =
     useContext(ComunaContext);
+
   const { mensaje } = useStateContext();
   const comunaDefault = useMemo(
     () => ({
       id: 0,
       nombre: "",
-      region: {
+      regionId: 0,
+      /*region: {
         activo: true,
         id: 0,
         nombre: "",
         numero: "",
-      },
+      },*/
       activo: false,
     }),
     []
   );
 
   const [comuna, setComuna] = useState(comunaDefault);
-
-  useEffect(() => {
-    obtenerRegionesActivas();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     comunaActual !== null ? setComuna(comunaActual) : setComuna(comunaDefault);
@@ -40,14 +37,6 @@ const FormComuna = () => {
       ? setComuna({
           ...comuna,
           [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "regionId"
-      ? setComuna({
-          ...comuna,
-          region: {
-            id: e.target.value,
-            nombre: e.target.options[e.target.selectedIndex].text,
-          },
         })
       : setComuna({
           ...comuna,
@@ -62,7 +51,9 @@ const FormComuna = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    comunaActual !== null ? actualizarComuna(ComunaAEnviar()) : registrarComuna(ComunaAEnviar());
+    comunaActual !== null
+      ? actualizarComuna(ComunaAEnviar())
+      : registrarComuna(ComunaAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -74,7 +65,9 @@ const FormComuna = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -84,6 +77,7 @@ const FormComuna = () => {
             label="Nombre"
             value={comuna.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
@@ -91,8 +85,9 @@ const FormComuna = () => {
           <SelectRegion
             id="regionId"
             name="regionId"
-            value={comuna.region?.id}
+            value={comuna.regionId}
             onChange={handleChange}
+            required={true}
           />
         </div>
       </div>

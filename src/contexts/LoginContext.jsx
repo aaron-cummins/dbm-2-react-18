@@ -1,8 +1,9 @@
 import React, { createContext, useReducer, useState } from "react";
-import { OBTENER, OBTENER_MENU, OBTENER_ACCIONES } from "../const/actionTypes";
-import loginReducer from "../reducer/loginReducer";
-import useFetchAndLoad from "../hooks/useFetchAndLoad";
-import { getByID } from "../services/genericService";
+import { OBTENER, OBTENER_MENU, OBTENER_ACCIONES } from "const/actionTypes";
+import loginReducer from "reducer/loginReducer";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { getByID } from "services/genericService";
+import { PermisosUsuario } from "utilities/Login_utiles";
 
 export const LoginContext = createContext();
 
@@ -34,33 +35,34 @@ export const LoginContextProvider = (props) => {
 
   const setMenuUsuario = async (id_lugar_trabajo) => {
     try {
-      let permisos = [
-        {
-          id: 0,
-          nombre: "Inicio",
-          controller: "inicio",
-          accion: "ecommerce",
-          icono: 0,
-        },
-      ];
+      let permisos = [];
+      let vistas = [];
 
-      let modulos = JSON.parse(sessionStorage.getItem("user_info"));
-      modulos.permisos.map((item) => {
-        if (item.lugarTrabajo === id_lugar_trabajo) {
-          let permisosGlob = item.roles.permisosGlobales;
-          permisosGlob.map((i) => {
-            i.modulo && permisos.push(i.modulo);
-          });
+      let lugares_trabajo = JSON.parse(
+        sessionStorage.getItem("user_info_lugaresTrabajo")
+      );
+      let modulos = lugares_trabajo.LugarTrabajo;
+      modulos.forEach((item) => {
+        if (parseInt(item.lugar_trabajo_id) === parseInt(id_lugar_trabajo)) {
+          vistas.push(item.vistas[0]);
         }
       });
+      permisos = PermisosUsuario(vistas);
+
       dispatch({
         type: OBTENER_MENU,
         payload: permisos,
       });
 
-      let grupo = permisos.map((item) => item.grupos).filter((element) => element !== undefined);
-      let vistas = grupo.map((grup) => grup.map((vistas) => vistas.vistas));
-      let acciones = vistas.flat(2);
+      let grupo = permisos
+        .map((item) => item.grupo)
+        .filter((element) => element !== undefined);
+
+      let vistas_v2 = grupo.map((item) => {
+        return item.map((grupo) => grupo.vistas);
+      });
+      let vistas_ = vistas_v2.flat(2);
+      let acciones = vistas_.map((item) => item.accion);
 
       dispatch({
         type: OBTENER_ACCIONES,
@@ -76,7 +78,7 @@ export const LoginContextProvider = (props) => {
     try {
       let modulosEncontrada = null;
       if (id_modulo !== null) {
-        const resultado = await callEndpoint(getByID("nodulos", id_modulo));
+        const resultado = await callEndpoint(getByID("modulos", id_modulo));
         if (resultado && resultado.data) {
           modulosEncontrada = resultado.data;
         }

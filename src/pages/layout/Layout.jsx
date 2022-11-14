@@ -2,15 +2,20 @@ import { Suspense, useContext, useEffect } from "react";
 import { BrowserRouter } from "react-router-dom";
 import { FiSettings } from "react-icons/fi";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
-import { Navbar, Footer, Sidebar2, ThemeSettings, Rutas } from "../../components";
-import { useStateContext } from "../../contexts/ContextProvider";
-import { LugarTrabajoContext } from "../../contexts/LugarTrabajoContext";
-import LoadPage from "../utiles/LoadPage";
+import { Navbar, Footer, Sidebar, ThemeSettings, Rutas } from "components";
+import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
+import LoadPage from "pages/utiles/LoadPage";
 
 const Layout = () => {
-  const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } =
-    useStateContext();
-  const { obtenerLugaresTrabajo } = useContext(LugarTrabajoContext);
+  const {
+    activeMenu,
+    themeSettings,
+    setThemeSettings,
+    currentColor,
+    currentMode,
+  } = useStateContext();
+  const { obtenerLugaresTrabajo } = useContext(SelectsContext);
 
   useEffect(() => {
     obtenerLugaresTrabajo();
@@ -37,11 +42,11 @@ const Layout = () => {
             {/* SIDEBARS */}
             {activeMenu ? (
               <div className="w-screen md:w-80 fixed sidebar dark:bg-secondary-dark-bg bg-secondary-dark-bg">
-                <Sidebar2 />
+                <Sidebar />
               </div>
             ) : (
               <div className="w-0 md:w-16 dark:bg-secondary-dark-bg">
-                <Sidebar2 />
+                <Sidebar />
               </div>
             )}
 

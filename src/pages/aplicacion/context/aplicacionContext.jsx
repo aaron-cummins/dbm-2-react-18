@@ -5,18 +5,18 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import aplicacionReducer from "../reducer/aplicacionReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
 
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const AplicacionContext = createContext();
 
@@ -80,7 +80,10 @@ export const AplicacionContextProvider = (props) => {
       alerta("success", "Aplicacion creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear el aplicacion. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear el aplicacion. ${error}`
+      );
     }
   };
 
@@ -96,7 +99,10 @@ export const AplicacionContextProvider = (props) => {
       alerta("success", "Aplicacion actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar el aplicacion. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar el aplicacion. ${error}`
+      );
     }
   };
 
@@ -111,7 +117,10 @@ export const AplicacionContextProvider = (props) => {
       alerta("success", "Aplicacion eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar el aplicacion. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar el aplicacion. ${error}`
+      );
     }
   };
 

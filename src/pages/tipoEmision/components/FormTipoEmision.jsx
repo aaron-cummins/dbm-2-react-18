@@ -1,12 +1,16 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { TipoEmisionContext } from "../context/tipoemisionContext";
-import { closeModal } from "../../../utilities/Utiles";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormTipoEmision = () => {
-  const { registrarTipoEmision, tipoemisionActual, actualizarTipoEmision, obtenerTipoEmision } =
-    useContext(TipoEmisionContext);
+  const {
+    registrarTipoEmision,
+    tipoemisionActual,
+    actualizarTipoEmision,
+    obtenerTipoEmision,
+  } = useContext(TipoEmisionContext);
   const { mensaje, alerta } = useStateContext();
   const tipoemisionDefault = useMemo(() => {
     return {
@@ -19,7 +23,9 @@ const FormTipoEmision = () => {
   const [tipoemision, setTipoEmision] = useState(tipoemisionDefault);
 
   useEffect(() => {
-    tipoemisionActual ? setTipoEmision(tipoemisionActual) : setTipoEmision(tipoemisionDefault);
+    tipoemisionActual
+      ? setTipoEmision(tipoemisionActual)
+      : setTipoEmision(tipoemisionDefault);
   }, [tipoemisionActual, tipoemisionDefault]);
 
   const handleChange = (e) => {
@@ -62,7 +68,9 @@ const FormTipoEmision = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -72,7 +80,7 @@ const FormTipoEmision = () => {
             label="Nombre"
             value={tipoemision.nombre}
             onChangeFN={handleChange}
-            required
+            required={true}
           />
         </div>
         <div className="form-group mb-4">

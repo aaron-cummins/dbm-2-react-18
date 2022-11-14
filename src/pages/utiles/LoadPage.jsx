@@ -1,10 +1,14 @@
 import React from "react";
-import "../../assets/css/error_page.css";
-import img from "../../assets/img/img.png";
+import "assets/css/error_page.css";
+import img from "assets/img/img.png";
 
 const LoadPage = () => {
   return (
-    <div className="relative z-10" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+    <div
+      className="relative z-10"
+      aria-labelledby="modal-title"
+      role="dialog"
+      aria-modal="true">
       <div className="fixed inset-0 bg-main-dark-bg bg-opacity-75 transition-opacity"></div>
       <div className="fixed z-10 inset-0 overflow-y-auto">
         <h1 className="text-center text-white"> Cargando ... </h1>

@@ -1,4 +1,4 @@
-import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR, OBTENER_LISTA_ACTIVAS} from '../../../const/actionTypes';
+import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR} from 'const/actionTypes';
 
 export default (state, action) => {
     
@@ -30,11 +30,6 @@ export default (state, action) => {
                 ...state,
                 zonaList: state.zonaList.filter( zona => zona.id !== action.payload)
             }
-        case OBTENER_LISTA_ACTIVAS:
-            return {
-                ...state,
-                paisList: action.payload
-            };
         default:
             return state;
     }

@@ -1,6 +1,6 @@
 import React from "react";
-import { Header, Modal } from "../../components";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { Header, Modal } from "components";
+import { useStateContext } from "contexts/ContextProvider";
 import { ZonaContextProvider } from "./context/zonaContext";
 
 import FormZona from "./components/FormZona";

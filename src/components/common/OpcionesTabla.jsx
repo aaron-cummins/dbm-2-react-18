@@ -1,8 +1,17 @@
 import React from "react";
 import { FaRegEdit } from "react-icons/fa";
 import { MdOutlineDelete } from "react-icons/md";
+import { GrContactInfo } from "react-icons/gr";
 
-const OpcionesTabla = ({ editar, FnEditar, eliminar, FnEliminar, nombreform }) => {
+const OpcionesTabla = ({
+  editar,
+  FnEditar,
+  eliminar,
+  FnEliminar,
+  info,
+  FnInfo,
+  nombreform,
+}) => {
   const buttonStyle = "text-white py-1 px-2 capitalize rounded-2xl text-md";
 
   return (
@@ -15,6 +24,15 @@ const OpcionesTabla = ({ editar, FnEditar, eliminar, FnEliminar, nombreform }) =
           data-bs-toggle="modal"
           data-bs-target={`#${nombreform}-modal`}>
           <FaRegEdit />
+        </button>
+      )}
+
+      {info && (
+        <button
+          type="button"
+          onClick={() => FnInfo()}
+          className={`${buttonStyle} bg-yellow-400`}>
+          <GrContactInfo />
         </button>
       )}
 

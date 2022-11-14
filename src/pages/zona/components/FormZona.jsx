@@ -1,29 +1,24 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox, Label } from "../../../components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { ZonaContext } from "../context/zonaContext";
-import { closeModal } from "../../../utilities/Utiles";
-import SelectPais from "./SelectPais";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
+import { SelectPais } from "components";
+import { useStateContext } from "contexts/ContextProvider";
 
 const FormZona = () => {
-  const { registrarZona, zonaActual, actualizarZona, obtenerZonalist, obtenerZona } =
+  const { registrarZona, zonaActual, actualizarZona, obtenerZona } =
     useContext(ZonaContext);
   const { mensaje } = useStateContext();
   const zonaDefault = useMemo(() => {
     return {
       id: 0,
       nombre: "",
-      pais_id: 0,
+      pais: 0,
       activo: false,
     };
   }, []);
 
   const [zona, setZona] = useState(zonaDefault);
-
-  useEffect(() => {
-    obtenerZonalist();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   useEffect(() => {
     zonaActual ? setZona(zonaActual) : setZona(zonaDefault);
@@ -61,7 +56,9 @@ const FormZona = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? (
+        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
+      ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -71,11 +68,17 @@ const FormZona = () => {
             label="Nombre"
             value={zona.nombre}
             onChangeFN={handleChange}
+            required={true}
           />
         </div>
         <div className="form-group mb-4">
-          <Label>País</Label>
-          <SelectPais id="pais_id" name="pais_id" value={zona.pais_id} onChange={handleChange} />
+          <SelectPais
+            id="pais"
+            name="pais"
+            value={zona.pais}
+            onChange={handleChange}
+            required={true}
+          />
         </div>
       </div>
 

@@ -5,17 +5,17 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import regionReducer from "../reducer/regionReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const RegionContext = createContext();
 
@@ -79,7 +79,10 @@ export const RegionContextProvider = (props) => {
       alerta("success", "Región creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear la región. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear la región. ${error}`
+      );
     }
   };
 
@@ -94,7 +97,10 @@ export const RegionContextProvider = (props) => {
       alerta("success", "Región actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar la región. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar la región. ${error}`
+      );
     }
   };
 
@@ -109,7 +115,10 @@ export const RegionContextProvider = (props) => {
       alerta("success", "Región eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar la región. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar la región. ${error}`
+      );
     }
   };
 

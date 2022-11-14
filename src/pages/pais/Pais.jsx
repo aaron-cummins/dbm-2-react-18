@@ -1,6 +1,6 @@
 import React from "react";
-import { Header, Modal } from "../../components";
-import { useStateContext } from "../../contexts/ContextProvider";
+import { Header, Modal } from "components";
+import { useStateContext } from "contexts/ContextProvider";
 import { PaisContextProvider } from "./context/paisContext";
 
 import FormPais from "./components/FormPais";
@@ -21,8 +21,7 @@ const Pais = () => {
               color: "white",
               borderRadius: "10px",
             }}
-            className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}
-          >
+            className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
             Nuevo País
           </button>
         </Header>

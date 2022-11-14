@@ -5,17 +5,17 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-} from "../../../const/actionTypes";
+} from "const/actionTypes";
 import {
   getList,
   getByID,
   postObject,
   putObject,
   deleteObject,
-} from "../../../services/genericService";
+} from "services/genericService";
 import tipoinyeccionReducer from "../reducer/tipoinyeccionReducer";
-import useFetchAndLoad from "../../../hooks/useFetchAndLoad";
-import { useStateContext } from "../../../contexts/ContextProvider";
+import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 export const TipoInyeccionContext = createContext();
 
@@ -79,7 +79,10 @@ export const TipoInyeccionContextProvider = (props) => {
       alerta("success", "Tipo Admisión creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear el tipo admisión. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear el tipo admisión. ${error}`
+      );
     }
   };
 
@@ -94,7 +97,10 @@ export const TipoInyeccionContextProvider = (props) => {
       alerta("success", "Tipo Admisión actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar actualizar el tipo admisión. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar actualizar el tipo admisión. ${error}`
+      );
     }
   };
 
@@ -109,7 +115,10 @@ export const TipoInyeccionContextProvider = (props) => {
       alerta("success", "Tipo Admisión eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar eliminar el tipo admisión. ${error}`);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar el tipo admisión. ${error}`
+      );
     }
   };
 

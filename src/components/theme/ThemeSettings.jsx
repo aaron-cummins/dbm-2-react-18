@@ -1,21 +1,21 @@
-import React, { useContext } from "react";
+import React from "react";
 import { MdOutlineCancel } from "react-icons/md";
 //import { BsCheck } from 'react-icons/bs';
 //import { TooltipComponent } from '@syncfusion/ej2-react-popups';
 
 //import { themeColors } from '../data/dummy';
-import { useStateContext } from "../../contexts/ContextProvider";
-import { LoginContext } from "../../contexts/LoginContext";
-import { setUsuarioLugarTrabajo } from "../../utilities/Login_utiles";
-import SelectLugarTrabajo from "../common/SelectLugarTrabajo";
+import { useStateContext } from "contexts/ContextProvider";
+import { setUsuarioLugarTrabajo } from "utilities/Login_utiles";
+import { SelectLugarTrabajo } from "../";
 
 const ThemeSettings = () => {
-  const { setMode, currentMode, setThemeSettings } = useStateContext();
-  const { setMenuUsuario } = useContext(LoginContext);
+  const { setMode, currentMode, setThemeSettings, setLugarTrabajoSelected } =
+    useStateContext();
 
   const handleOnChange = (e) => {
     setUsuarioLugarTrabajo(e.target.value);
-    setMenuUsuario(e.target.value);
+    setLugarTrabajoSelected(e.target.value);
+    //setMenuUsuario(e.target.value);
   };
 
   return (
@@ -34,7 +34,7 @@ const ThemeSettings = () => {
         <div className="flex-col border-t-1 border-color p-4 ml-4">
           <p className="font-semibold text-xl ">Faena</p>
           <div className="mt-4">
-            <SelectLugarTrabajo onChangeFN={handleOnChange} />
+            <SelectLugarTrabajo onChange={handleOnChange} />
           </div>
         </div>
         <div className="flex-col border-t-1 border-color p-4 ml-4">
