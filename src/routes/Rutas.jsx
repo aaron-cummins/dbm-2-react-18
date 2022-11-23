@@ -12,6 +12,7 @@ import {
   ModuloControl,
   Modulos,
   Pais,
+  PostTratamiento,
   TipoAdmision,
   TipoCombustible,
   TipoEmision,
@@ -45,7 +46,7 @@ import {
   Unidad,
   Motor,
   PermisosUsuario,
-  IndexUsuario,
+  IndexUsuario
 } from "pages";
 import AuthGuard from "./AuthGuard";
 
@@ -83,7 +84,9 @@ const Rutas = () => {
         <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
+        <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
         <Route path="/usuarios" element={<Usuario />}>
+
           <Route index element={<IndexUsuario />}></Route>
           <Route
             path="permisosusuario/:iduser"

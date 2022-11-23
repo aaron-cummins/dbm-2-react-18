@@ -50,3 +50,4 @@ export { default as VersionEquipo } from "./versionEquipo/VersionEquipo";
 export { default as Vistas } from "./vistas/Vistas";
 export { default as VistasGroup } from "./vistasGroup/VistasGroup";
 export { default as Zona } from "./zona/Zona";
+export { default as PostTratamiento } from "./postTratamiento/PostTratamiento";
