@@ -5,6 +5,9 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
+  REGISTRAR_OTRO,
+  ELIMINAR_OTRO,
+  OBTENER_LISTA_OTROS,
 } from "const/actionTypes";
 import {
   getList,
@@ -27,6 +30,7 @@ export const UsuarioContextProvider = (props) => {
   const initialState = {
     usuarioList: [],
     usuarioActual: null,
+    usuarioPermisosList: [],
   };
 
   const [state, dispatch] = useReducer(usuarioReducer, initialState);
@@ -123,17 +127,85 @@ export const UsuarioContextProvider = (props) => {
     }
   };
 
+  /* REGISTRAR PERMISOS USUARIO */
+  const registrarPermisosUsuario = async (permisos) => {
+    try {
+      for (const permi of permisos) {
+        const resultado = await callEndpoint(
+          postObject("permisosusuario", permi)
+        );
+        dispatch({
+          type: REGISTRAR_OTRO,
+          payload: resultado.data,
+        });
+      }
+
+      alerta("success", "Usuario creado con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear el Usuario. ${error}`
+      );
+    }
+  };
+
+  /* ELIMINAR PERMISOS USUARIO */
+  const eliminarPermisosUsuario = async (id_usuario) => {
+    try {
+      await callEndpoint(
+        deleteObject("permisosusuario/delusuario", id_usuario)
+      );
+      dispatch({
+        type: ELIMINAR_OTRO,
+        payload: id_usuario,
+      });
+      //alerta("success", "Usuario eliminado con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar eliminar el Usuario. ${error}`
+      );
+    }
+  };
+
+  const obtenerPermisosUsuariolist = async (id_usuario) => {
+    try {
+      let permisos = null;
+
+      if (id_usuario !== null) {
+        const resultado = await callEndpoint(
+          getByID("permisosusuario/usuario", id_usuario)
+        );
+        permisos = resultado.data;
+      }
+
+      dispatch({
+        type: OBTENER_LISTA_OTROS,
+        payload: permisos,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <UsuarioContext.Provider
       value={{
         usuarioList: state.usuarioList,
         usuarioActual: state.usuarioActual,
+        usuarioPermisosList: state.usuarioPermisosList,
 
         obtenerUsuariolist,
         obtenerUsuario,
         registrarUsuario,
         actualizarUsuario,
         eliminarUsuario,
+
+        obtenerPermisosUsuariolist,
+        registrarPermisosUsuario,
+        eliminarPermisosUsuario,
       }}>
       {props.children}
     </UsuarioContext.Provider>

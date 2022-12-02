@@ -10,7 +10,11 @@ const Checkbox = ({ name, id, onChangeFN, checked, label }) => {
         onChange={onChangeFN}
         checked={checked}
       />
-      <label className="form-check-label inline-block text-gray-800">{label}</label>
+      {label && (
+        <label className="form-check-label inline-block text-gray-800">
+          {label}
+        </label>
+      )}
     </>
   );
 };

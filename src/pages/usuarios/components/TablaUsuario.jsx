@@ -6,15 +6,20 @@ import { SelectsContext } from "contexts/SelectsContext";
 import { useNavigate } from "react-router-dom";
 
 const TablaUsuario = () => {
-  const { usuarioList, obtenerUsuariolist, obtenerUsuario } =
-    useContext(UsuarioContext);
+  const {
+    usuarioList,
+    obtenerUsuariolist,
+    obtenerUsuario,
+    obtenerPermisosUsuariolist,
+  } = useContext(UsuarioContext);
   const { mensaje } = useStateContext();
-  const { obtenerCargos } = useContext(SelectsContext);
+  const { obtenerCargos, obtenerRol } = useContext(SelectsContext);
 
   const navigate = useNavigate();
 
   const getUsuario = (props) => obtenerUsuario(props);
   const getUsuarioPermisos = (props) => {
+    obtenerPermisosUsuariolist(props.id);
     obtenerUsuario(props);
     let ruta = `permisosusuario/${props.id}`;
     navigate(ruta);
@@ -23,6 +28,7 @@ const TablaUsuario = () => {
   useEffect(() => {
     obtenerUsuariolist();
     obtenerCargos();
+    obtenerRol();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -47,6 +53,7 @@ const TablaUsuario = () => {
           />
           <OpcionesTabla
             info={true}
+            tooltip="Permisos"
             FnInfo={() => getUsuarioPermisos(props)}
             nombreform="usuario"
           />

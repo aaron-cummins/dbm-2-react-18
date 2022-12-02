@@ -86,6 +86,26 @@ export const PermisosGlobalesContextProvider = (props) => {
     }
   };
 
+  /* REGISTRAR permisoGlobal listado */
+  const registrarPermisoGlobalList = async (permisoGloballist) => {
+    try {
+      for (const permi of permisoGloballist) {
+        const resultado = await callEndpoint(postObject(urlApi, permi));
+        dispatch({
+          type: REGISTRAR,
+          payload: resultado.data,
+        });
+      }
+      alerta("success", "permisoGlobal creado con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta(
+        "danger",
+        `'Ocurrió un error al intentar crear el permisoGlobal. ${error}`
+      );
+    }
+  };
+
   /* ACTUALIZAR permisoGlobal */
   const actualizarPermisoGlobal = async (permisoGlobal) => {
     try {
@@ -134,6 +154,7 @@ export const PermisosGlobalesContextProvider = (props) => {
         registrarPermisoGlobal,
         actualizarPermisoGlobal,
         eliminarPermisoGlobal,
+        registrarPermisoGlobalList,
       }}>
       {props.children}
     </PermisosGlobalesContext.Provider>

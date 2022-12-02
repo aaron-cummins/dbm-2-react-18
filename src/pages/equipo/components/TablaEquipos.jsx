@@ -22,6 +22,12 @@ const TablaEquipos = () => {
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
+    { name: "Oem", selector: (row) => row.oem?.nombre, sortable: true },
+    {
+      name: "Aplicación Oem",
+      selector: (row) => row.aplicacionOem?.nombre,
+      sortable: true,
+    },
     {
       name: "Activo",
       cell: (props) => <ColActivoTabla activo={props.activo} />,

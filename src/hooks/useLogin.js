@@ -17,7 +17,7 @@ const useLogin = () => {
     useContext(LoginContext);
   const { callEndpoint, setLoading } = useFetchAndLoad();
 
-  const entrar = async (correo) => {
+  /*const entrar = async (correo) => {
     if (isAuthenticated) {
       const userServices = await obtenerUsuarioCorreo(correo);
       const user = await callEndpoint(userServices);
@@ -57,7 +57,7 @@ const useLogin = () => {
       setMensajeErr(null);
       setMensajeOk(null);
     }, 5000);
-  };
+  };*/
 
   const JWT = async (correo) => {
     const credenciales = loginAdapter(correo);
@@ -100,7 +100,7 @@ const useLogin = () => {
     return respuesta;
   };
 
-  return { entrar, JWT };
+  return {  JWT };
 };
 
 export default useLogin;

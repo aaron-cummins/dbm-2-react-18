@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox, Label } from "components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { SelectRegion } from "components";
 import { ComunaContext } from "../context/comunaContext";
 import { useStateContext } from "contexts/ContextProvider";
@@ -15,12 +15,9 @@ const FormComuna = () => {
       id: 0,
       nombre: "",
       regionId: 0,
-      /*region: {
-        activo: true,
-        id: 0,
+      region: {
         nombre: "",
-        numero: "",
-      },*/
+      },
       activo: false,
     }),
     []
@@ -37,6 +34,14 @@ const FormComuna = () => {
       ? setComuna({
           ...comuna,
           [e.target.name]: e.target.checked,
+        })
+      : e.target.name === "regionId"
+      ? setComuna({
+          ...comuna,
+          regionId: e.target.value,
+          region: {
+            nombre: e.target.options[e.target.selectedIndex].text,
+          },
         })
       : setComuna({
           ...comuna,
@@ -81,10 +86,10 @@ const FormComuna = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <Label>Región</Label>
           <SelectRegion
             id="regionId"
             name="regionId"
+            Label="Región"
             value={comuna.regionId}
             onChange={handleChange}
             required={true}

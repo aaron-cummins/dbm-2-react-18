@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { RolesContext } from "../context/rolesContext";
 import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaRoles = () => {
   const { rolesList, obtenerRoleslist, obtenerRoles } =
@@ -18,6 +18,11 @@ const TablaRoles = () => {
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
+    {
+      name: "Activo",
+      cell: (props) => <ColActivoTabla activo={props.activo} />,
+      sortable: true,
+    },
     {
       name: "Acciones",
       cell: (props) => (

@@ -6,7 +6,7 @@ import { FlotaContextProvider } from "./context/flotaContext";
 import FormFlota from "./components/FormFlota";
 import TablaFlotas from "./components/TablaFlotas";
 
-const Flota = () => {
+const Flotas = () => {
   const { currentColor } = useStateContext();
 
   return (
@@ -23,7 +23,6 @@ const Flota = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nueva Flota
           </button>
         </Header>
@@ -38,4 +37,4 @@ const Flota = () => {
   );
 };
 
-export default Flota;
+export default Flotas;

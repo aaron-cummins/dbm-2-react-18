@@ -36,7 +36,9 @@ export const EquipoContextProvider = (props) => {
   /* OBETENER LISTADO DE EQUIPOS */
   const obtenerEquipos = async () => {
     try {
-      const resultado = await callEndpoint(getList(urlApi));
+      const resultado = await callEndpoint(
+        getList(`${urlApi}/oemaplicacionoem`)
+      );
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,
@@ -51,19 +53,19 @@ export const EquipoContextProvider = (props) => {
   /* OBTENER UNA EQUIPO */
   const obtenerEquipo = async (equipo) => {
     try {
-      let equipoEncontrada = null;
+      let equipoEncontrado = null;
       if (equipo !== null) {
         const resultado = await callEndpoint(getByID(urlApi, equipo.id));
         if (resultado && resultado.data) {
-          equipoEncontrada = resultado.data;
+          equipoEncontrado = resultado.data;
         }
       } else {
-        equipoEncontrada = equipo;
+        equipoEncontrado = equipo;
       }
 
       dispatch({
         type: OBTENER,
-        payload: equipoEncontrada,
+        payload: equipoEncontrado,
       });
     } catch (error) {
       console.log(error);
@@ -74,9 +76,12 @@ export const EquipoContextProvider = (props) => {
   const registrarEquipo = async (equipo) => {
     try {
       const resultado = await callEndpoint(postObject(urlApi, equipo));
+      let resul = resultado.data;
+      resul.oem = equipo.oem;
+      resul.aplicacionOem = equipo.aplicacionOem;
       dispatch({
         type: REGISTRAR,
-        payload: resultado.data,
+        payload: resul,
       });
       alerta("success", "Región creada con exito!");
     } catch (error) {
@@ -92,9 +97,12 @@ export const EquipoContextProvider = (props) => {
   const actualizarEquipo = async (equipo) => {
     try {
       const resultado = await callEndpoint(putObject(urlApi, equipo));
+      let resul = resultado.data;
+      resul.oem = equipo.oem;
+      resul.aplicacionOem = equipo.aplicacionOem;
       dispatch({
         type: ACTUALIZAR,
-        payload: resultado.data,
+        payload: resul,
       });
       alerta("success", "Región actualizada con exito!");
     } catch (error) {
@@ -109,7 +117,7 @@ export const EquipoContextProvider = (props) => {
   /* ELIMINAR EQUIPO */
   const eliminarEquipo = async (id) => {
     try {
-      const resultado = await callEndpoint(deleteObject(urlApi, id));
+      await callEndpoint(deleteObject(urlApi, id));
       dispatch({
         type: ELIMINAR,
         payload: id,
