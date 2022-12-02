@@ -48,21 +48,21 @@ export const PostTratamientoContextProvider = (props) => {
   };
 
   /* OBTENER UN POSTTRATAMIENTO */
-  const obtenerPostTratamiento = async (aplicacionoem) => {
+  const obtenerPostTratamiento = async (posttratamiento) => {
     try {
-      let aplicacionoemEncontrado = null;
-      if (aplicacionoem !== null) {
-        const resultado = await callEndpoint(getByID(urlApi, aplicacionoem.id));
+      let posttratamientoEncontrado = null;
+      if (posttratamiento !== null) {
+        const resultado = await callEndpoint(getByID(urlApi, posttratamiento.id));
         if (resultado && resultado.data) {
-          aplicacionoemEncontrado = resultado.data;
+          posttratamientoEncontrado = resultado.data;
         }
       } else {
-        aplicacionoemEncontrado = aplicacionoem;
+        posttratamientoEncontrado = posttratamiento;
       }
 
       dispatch({
         type: OBTENER,
-        payload: aplicacionoemEncontrado,
+        payload: posttratamientoEncontrado,
       });
     } catch (error) {
       console.log(error);
@@ -70,9 +70,9 @@ export const PostTratamientoContextProvider = (props) => {
   };
 
   /* REGISTRAR POSTTRATAMIENTO */
-  const registrarPostTratamiento = async (aplicacionoem) => {
+  const registrarPostTratamiento = async (posttratamiento) => {
     try {
-      const resultado = await callEndpoint(postObject(urlApi, aplicacionoem));
+      const resultado = await callEndpoint(postObject(urlApi, posttratamiento));
       dispatch({
         type: REGISTRAR,
         payload: resultado.data,
@@ -88,9 +88,9 @@ export const PostTratamientoContextProvider = (props) => {
   };
 
   /* ACTUALIZAR POSTTRATAMIENTO*/
-  const actualizarPostTratamiento = async (aplicacionoem) => {
+  const actualizarPostTratamiento = async (posttratamiento) => {
     try {
-      const resultado = await callEndpoint(putObject(urlApi, aplicacionoem));
+      const resultado = await callEndpoint(putObject(urlApi, posttratamiento));
       dispatch({
         type: ACTUALIZAR,
         payload: resultado.data,

@@ -28,6 +28,7 @@ export { default as ColActivoTabla } from "./common/ColActivoTabla";
 export { default as Modal } from "./common/Modal";
 export { default as OpcionesTabla } from "./common/OpcionesTabla";
 export { default as Tabla } from "./common/Tabla";
+export { default as ColExperimentalTabla } from "./common/ColExperimentalTabla";
 
 export { default as SelectAplicacion } from "./Selects/SelectAplicacion";
 export { default as SelectAplicacionOem } from "./Selects/SelectAplicacionOem";
