@@ -10,6 +10,7 @@ module.exports = {
       extend: {
         animation: {
           'spin-slow': 'spin 5s linear infinite',
+          'spin-medium': 'spin 3s linear infinite',
         },
         fontSize: {
           14: '14px',

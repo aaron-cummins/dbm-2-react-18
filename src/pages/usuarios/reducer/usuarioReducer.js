@@ -1,4 +1,4 @@
-import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR} from 'const/actionTypes';
+import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR, REGISTRAR_OTRO, ELIMINAR_OTRO, OBTENER_LISTA_OTROS} from 'const/actionTypes';
 
 export default (state, action) => {
     
@@ -29,6 +29,23 @@ export default (state, action) => {
             return {
                 ...state,
                 usuarioList: state.usuarioList.filter( usuario => usuario.id !== action.payload)
+            }
+
+        case REGISTRAR_OTRO:
+            return {
+                ...state,
+                usuarioPermisosList: [...state.usuarioPermisosList, action.payload]
+            };
+
+        case OBTENER_LISTA_OTROS:
+            return {
+                ...state,
+                usuarioPermisosList: action.payload
+            };
+        case ELIMINAR_OTRO:
+            return {
+                ...state,
+                usuarioPermisosList: state.usuarioPermisosList.filter( usuario => usuario.id !== action.payload)
             }
         default:
             return state;

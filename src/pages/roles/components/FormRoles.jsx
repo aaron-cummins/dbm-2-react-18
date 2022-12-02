@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { RolesContext } from "../context/rolesContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
@@ -15,6 +15,7 @@ const FormRoles = () => {
       permisosGlobales: [],
       created_at: formatDate(Date(Date.now)),
       updated_at: formatDate(Date(Date.now)),
+      activo: false,
     };
   }, []);
 
@@ -25,10 +26,15 @@ const FormRoles = () => {
   }, [rolesActual, rolesDefault]);
 
   const handleChange = (e) => {
-    setRoles({
-      ...roles,
-      [e.target.name]: e.target.value,
-    });
+    e.target.name === "activo"
+      ? setRoles({
+          ...roles,
+          [e.target.name]: e.target.checked,
+        })
+      : setRoles({
+          ...roles,
+          [e.target.name]: e.target.value,
+        });
   };
 
   const limpiaForm = () => {
@@ -59,7 +65,7 @@ const FormRoles = () => {
         <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
       ) : null}
       <div className="grid gap-4">
-        <div className="form-group mb-8">
+        <div className="form-group">
           <InputText
             id="nombre"
             name="nombre"
@@ -68,6 +74,15 @@ const FormRoles = () => {
             value={roles.nombre}
             onChangeFN={handleChange}
             required={true}
+          />
+        </div>
+        <div className="form-group form-check mb-6 items-center">
+          <Checkbox
+            id="activo"
+            name="activo"
+            label="Activo"
+            onChangeFN={handleChange}
+            checked={roles.activo}
           />
         </div>
       </div>

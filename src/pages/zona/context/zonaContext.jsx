@@ -36,7 +36,7 @@ export const ZonaContextProvider = (props) => {
   /* OBETENER LISTADO DE ZONAS */
   const obtenerZonalist = async () => {
     try {
-      const resultado = await callEndpoint(getList(urlApi));
+      const resultado = await callEndpoint(getList(`${urlApi}/pais`));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,

@@ -20,7 +20,7 @@ const TablaComunas = () => {
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
-    { name: "Región", selector: (row) => "", sortable: true },
+    { name: "Región", selector: (row) => row.region?.nombre, sortable: true },
     {
       name: "Activo",
       cell: (props) => <ColActivoTabla activo={props.activo} />,

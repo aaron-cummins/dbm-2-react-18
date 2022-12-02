@@ -40,7 +40,8 @@ import {
   Editor,
   PermisosGlobales,
   Equipo,
-  Flota,
+  Flotas,
+  FlotaLugarTrabajo,
   VersionEquipo,
   Unidad,
   Motor,
@@ -66,7 +67,10 @@ const Rutas = () => {
         <Route path="/cargo" element={<Cargo />}></Route>
         <Route path="/comuna" element={<Comuna />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
-        <Route path="/flota" element={<Flota />}></Route>
+        <Route path="/flotas" element={<Flotas />}></Route>
+        <Route
+          path="/flotalugartrabajo"
+          element={<FlotaLugarTrabajo />}></Route>
         <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>

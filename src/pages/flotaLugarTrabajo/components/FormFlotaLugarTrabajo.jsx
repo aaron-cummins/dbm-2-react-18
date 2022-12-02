@@ -1,64 +1,74 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
 import {
   Alerts,
-  InputText,
   Buttons,
   Checkbox,
   SelectLugarTrabajo,
+  SelectFlota,
 } from "components";
-import { FlotaContext } from "../context/flotaContext";
+import { FlotaLugarTrabajoContext } from "../context/flotaLugarTrabajoContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 
-const FormFlota = () => {
-  const { registrarFlota, flotaActual, actualizarFlota, obtenerFlota } =
-    useContext(FlotaContext);
+const FormFlotaLugarTrabajo = () => {
+  const {
+    registrarFlotaLugarTrabajo,
+    flotaLugarTrabajoActual,
+    actualizarFlotaLugarTrabajo,
+    obtenerFlotaLugarTrabajo,
+  } = useContext(FlotaLugarTrabajoContext);
 
   const { mensaje } = useStateContext();
-  const flotaDefault = useMemo(
+  const flotaLugarTrabajoDefault = useMemo(
     () => ({
       id: 0,
-      nombre: "",
+      flotasId: 0,
       lugarTrabajoId: 0,
       activo: false,
     }),
     []
   );
 
-  const [flota, setFlota] = useState(flotaDefault);
+  const [flotaLugarTrabajo, setFlotaLugarTrabajo] = useState(
+    flotaLugarTrabajoDefault
+  );
 
   useEffect(() => {
-    flotaActual !== null ? setFlota(flotaActual) : setFlota(flotaDefault);
-  }, [flotaActual, flotaDefault]);
+    flotaLugarTrabajoActual !== null
+      ? setFlotaLugarTrabajo(flotaLugarTrabajoActual)
+      : setFlotaLugarTrabajo(flotaLugarTrabajoDefault);
+  }, [flotaLugarTrabajoActual, flotaLugarTrabajoDefault]);
 
   const handleChange = (e) => {
     e.target.name === "activo"
-      ? setFlota({
-          ...flota,
+      ? setFlotaLugarTrabajo({
+          ...flotaLugarTrabajo,
           [e.target.name]: e.target.checked,
         })
-      : setFlota({
-          ...flota,
+      : setFlotaLugarTrabajo({
+          ...flotaLugarTrabajo,
           [e.target.name]: e.target.value,
         });
+
+    console.log(flotaLugarTrabajo);
   };
 
   const limpiaForm = () => {
-    setFlota(flotaDefault);
-    obtenerFlota(null);
+    setFlotaLugarTrabajo(flotaLugarTrabajoDefault);
+    obtenerFlotaLugarTrabajo(null);
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    flotaActual !== null
-      ? actualizarFlota(FlotaAEnviar())
-      : registrarFlota(FlotaAEnviar());
+    flotaLugarTrabajoActual !== null
+      ? actualizarFlotaLugarTrabajo(FlotaAEnviar())
+      : registrarFlotaLugarTrabajo(FlotaAEnviar());
     limpiaForm();
     closeModal();
   };
 
   const FlotaAEnviar = () => {
-    let flotaTmp = { ...flota };
+    let flotaTmp = { ...flotaLugarTrabajo };
     return flotaTmp;
   };
 
@@ -69,13 +79,12 @@ const FormFlota = () => {
       ) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
-          <InputText
-            id="nombre"
-            name="nombre"
-            placeholder="Nombre"
-            label="Nombre"
-            value={flota.nombre}
-            onChangeFN={handleChange}
+          <SelectFlota
+            id="flotasId"
+            name="flotasId"
+            placeholder="Flota"
+            value={flotaLugarTrabajo.flotasId}
+            onChange={handleChange}
             required={true}
           />
         </div>
@@ -84,7 +93,7 @@ const FormFlota = () => {
             id="lugarTrabajoId"
             name="lugarTrabajoId"
             placeholder="Lugar Trabajo"
-            value={flota.lugarTrabajoId}
+            value={flotaLugarTrabajo.lugarTrabajoId}
             onChange={handleChange}
             required={true}
           />
@@ -96,7 +105,7 @@ const FormFlota = () => {
           name="activo"
           label="Activo"
           onChangeFN={handleChange}
-          checked={flota.activo}
+          checked={flotaLugarTrabajo.activo}
         />
       </div>
 
@@ -107,4 +116,4 @@ const FormFlota = () => {
   );
 };
 
-export default FormFlota;
+export default FormFlotaLugarTrabajo;

@@ -33,7 +33,7 @@ export const ComunaContextProvider = (props) => {
   /* OBETENER LISTADO DE COMUNAS */
   const obtenerComunas = async () => {
     try {
-      const resultado = await callEndpoint(getList(urlApi));
+      const resultado = await callEndpoint(getList(`${urlApi}/region`));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,
@@ -71,9 +71,11 @@ export const ComunaContextProvider = (props) => {
   const registrarComuna = async (comuna) => {
     try {
       const resultado = await callEndpoint(postObject(`${urlApi}`, comuna));
+      let resul = resultado.data;
+      resul.region = comuna.region;
       dispatch({
         type: REGISTRAR,
-        payload: resultado.data,
+        payload: resul,
       });
       alerta("success", "Comuna creada con exito!");
     } catch (error) {
@@ -89,9 +91,11 @@ export const ComunaContextProvider = (props) => {
   const actualizarComuna = async (comuna) => {
     try {
       const resultado = await callEndpoint(putObject(`${urlApi}`, comuna));
+      let resul = resultado.data;
+      resul.region = comuna.region;
       dispatch({
         type: ACTUALIZAR,
-        payload: resultado.data,
+        payload: resul,
       });
       alerta("success", "Comuna actualizada con exito!");
     } catch (error) {

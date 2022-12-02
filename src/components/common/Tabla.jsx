@@ -1,13 +1,15 @@
 import DataTable from "react-data-table-component";
 import Checkbox from "@mui/material/Checkbox";
 import { ArrowDownward } from "@mui/icons-material";
-import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { Spinner } from "components";
+//import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 const sortIcon = <ArrowDownward />;
 const selectProps = { indeterminate: (isIndeterminate) => isIndeterminate };
 
 const Tabla = (props) => {
-  const { loading } = useFetchAndLoad();
+  const { cargando } = useStateContext();
 
   const customStyles = {
     rows: {
@@ -31,11 +33,22 @@ const Tabla = (props) => {
     },
   };
 
+  const paginationOptions = {
+    rowsPerPageText: "Filas por página:",
+    rangeSeparatorText: "de",
+    noRowsPerPage: false,
+    selectAllRowsItem: false,
+    selectAllRowsItemText: "Todos",
+  };
+
   return (
     <DataTable
-      progressPending={loading}
+      progressPending={cargando}
+      progressComponent={<Spinner />}
       customStyles={customStyles}
       pagination
+      paginationComponentOptions={paginationOptions}
+      noDataComponent="No se encontraron datos para mostrar"
       selectableRowsComponent={Checkbox}
       selectableRowsComponentProps={selectProps}
       sortIcon={sortIcon}

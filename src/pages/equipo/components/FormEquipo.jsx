@@ -21,7 +21,13 @@ const FormEquipo = () => {
       id: 0,
       nombre: "",
       aplicacionOemId: 0,
+      aplicacionOem: {
+        nombre: "",
+      },
       oemId: 0,
+      oem: {
+        nombre: "",
+      },
       activo: false,
     }),
     []
@@ -38,6 +44,22 @@ const FormEquipo = () => {
       ? setEquipo({
           ...equipo,
           [e.target.name]: e.target.checked,
+        })
+      : e.target.name === "aplicacionOemId"
+      ? setEquipo({
+          ...equipo,
+          aplicacionOemId: e.target.value,
+          aplicacionOem: {
+            nombre: e.target.options[e.target.selectedIndex].text,
+          },
+        })
+      : e.target.name === "oemId"
+      ? setEquipo({
+          ...equipo,
+          oemId: e.target.value,
+          oem: {
+            nombre: e.target.options[e.target.selectedIndex].text,
+          },
         })
       : setEquipo({
           ...equipo,

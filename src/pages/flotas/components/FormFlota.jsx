@@ -1,68 +1,58 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
 import { Alerts, InputText, Buttons, Checkbox } from "components";
-import { ZonaContext } from "../context/zonaContext";
-import { closeModal } from "utilities/Utiles";
-import { SelectPais } from "components";
+import { FlotaContext } from "../context/flotaContext";
 import { useStateContext } from "contexts/ContextProvider";
+import { closeModal } from "utilities/Utiles";
 
-const FormZona = () => {
-  const { registrarZona, zonaActual, actualizarZona, obtenerZona } =
-    useContext(ZonaContext);
+const FormFlota = () => {
+  const { registrarFlota, flotaActual, actualizarFlota, obtenerFlota } =
+    useContext(FlotaContext);
+
   const { mensaje } = useStateContext();
-  const zonaDefault = useMemo(() => {
-    return {
+  const flotaDefault = useMemo(
+    () => ({
       id: 0,
       nombre: "",
-      paisId: 0,
-      pais: {
-        nombre: "",
-      },
       activo: false,
-    };
-  }, []);
+    }),
+    []
+  );
 
-  const [zona, setZona] = useState(zonaDefault);
+  const [flota, setFlota] = useState(flotaDefault);
 
   useEffect(() => {
-    zonaActual ? setZona(zonaActual) : setZona(zonaDefault);
-  }, [zonaActual, zonaDefault]);
+    flotaActual !== null ? setFlota(flotaActual) : setFlota(flotaDefault);
+  }, [flotaActual, flotaDefault]);
 
   const handleChange = (e) => {
     e.target.name === "activo"
-      ? setZona({
-          ...zona,
+      ? setFlota({
+          ...flota,
           [e.target.name]: e.target.checked,
         })
-      : e.target.name === "paisId"
-      ? setZona({
-          ...zona,
-          paisId: e.target.value,
-          pais: {
-            nombre: e.target.options[e.target.selectedIndex].text,
-          },
-        })
-      : setZona({
-          ...zona,
+      : setFlota({
+          ...flota,
           [e.target.name]: e.target.value,
         });
   };
 
   const limpiaForm = () => {
-    setZona(zonaDefault);
-    obtenerZona(null);
+    setFlota(flotaDefault);
+    obtenerFlota(null);
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    zonaActual ? actualizarZona(ZonaAEnviar()) : registrarZona(ZonaAEnviar());
-
+    flotaActual !== null
+      ? actualizarFlota(FlotaAEnviar())
+      : registrarFlota(FlotaAEnviar());
     limpiaForm();
     closeModal();
   };
 
-  const ZonaAEnviar = () => {
-    let zonaTmp = { ...zona };
-    return zonaTmp;
+  const FlotaAEnviar = () => {
+    let flotaTmp = { ...flota };
+    return flotaTmp;
   };
 
   return (
@@ -77,29 +67,19 @@ const FormZona = () => {
             name="nombre"
             placeholder="Nombre"
             label="Nombre"
-            value={zona.nombre}
+            value={flota.nombre}
             onChangeFN={handleChange}
             required={true}
           />
         </div>
-        <div className="form-group mb-4">
-          <SelectPais
-            id="paisId"
-            name="paisId"
-            value={zona.paisId}
-            onChange={handleChange}
-            required={true}
-          />
-        </div>
       </div>
-
-      <div className="form-group gap-4">
+      <div className="form-group form-check mb-6 items-center">
         <Checkbox
           id="activo"
           name="activo"
           label="Activo"
           onChangeFN={handleChange}
-          checked={zona.activo}
+          checked={flota.activo}
         />
       </div>
 
@@ -110,4 +90,4 @@ const FormZona = () => {
   );
 };
 
-export default FormZona;
+export default FormFlota;
