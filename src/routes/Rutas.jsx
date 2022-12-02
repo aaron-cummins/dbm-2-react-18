@@ -13,6 +13,7 @@ import {
   Modulos,
   Pais,
   PostTratamiento,
+  TipoBlock,
   TipoAdmision,
   TipoCombustible,
   TipoEmision,
@@ -89,6 +90,7 @@ const Rutas = () => {
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
         <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
+        <Route path="/TipoBlock" element={<TipoBlock />}></Route>
         <Route path="/usuarios" element={<Usuario />}>
 
           <Route index element={<IndexUsuario />}></Route>
