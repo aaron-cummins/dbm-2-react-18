@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { ModulosContext } from "../context/modulosContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
@@ -17,6 +17,7 @@ const FormModulos = () => {
       icono: "",
       created_at: formatDate(Date(Date.now)),
       updated_at: formatDate(Date(Date.now)),
+      activo: false,
     }),
     []
   );
@@ -28,10 +29,15 @@ const FormModulos = () => {
   }, [modulosActual, modulosDefault]);
 
   const handleChange = (e) => {
-    setModulos({
-      ...modulos,
-      [e.target.name]: e.target.value,
-    });
+    e.target.name === "activo"
+      ? setModulos({
+          ...modulos,
+          [e.target.name]: e.target.checked,
+        })
+      : setModulos({
+          ...modulos,
+          [e.target.name]: e.target.value,
+        });
   };
 
   const limpiaForm = () => {
@@ -95,6 +101,15 @@ const FormModulos = () => {
             value={modulos.icono}
             onChangeFN={handleChange}
             required={true}
+          />
+        </div>
+        <div className="form-group form-check mb-6 items-center">
+          <Checkbox
+            id="activo"
+            name="activo"
+            label="Activo"
+            onChangeFN={handleChange}
+            checked={modulos.activo}
           />
         </div>
       </div>

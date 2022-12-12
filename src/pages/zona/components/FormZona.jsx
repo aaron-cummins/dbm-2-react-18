@@ -39,6 +39,7 @@ const FormZona = () => {
           paisId: e.target.value,
           pais: {
             nombre: e.target.options[e.target.selectedIndex].text,
+            id: e.target.value,
           },
         })
       : setZona({
@@ -62,6 +63,7 @@ const FormZona = () => {
 
   const ZonaAEnviar = () => {
     let zonaTmp = { ...zona };
+    zonaTmp.paisId = document.querySelector("#paisId").value;
     return zonaTmp;
   };
 
@@ -86,7 +88,7 @@ const FormZona = () => {
           <SelectPais
             id="paisId"
             name="paisId"
-            value={zona.paisId}
+            value={zona.pais?.id}
             onChange={handleChange}
             required={true}
           />

@@ -4,6 +4,7 @@ import { CgMenuGridR } from 'react-icons/cg';
 import { BiFoodMenu } from 'react-icons/bi';
 import { GrUserSettings } from 'react-icons/gr';
 import { BsCalendar2Event } from 'react-icons/bs';
+import { TbEngine } from 'react-icons/tb';
 
 
 export const iconModulo = [
@@ -12,5 +13,6 @@ export const iconModulo = [
     { id: 2, nombre: 'cuaderno', icono: <BiFoodMenu /> },
     { id: 3, nombre: 'usuario settings', icono: <GrUserSettings /> },
     { id: 4, nombre: 'calendario', icono: <BsCalendar2Event /> },
+    { id: 5, nombre: 'engine', icono: <TbEngine /> },
 ]
 

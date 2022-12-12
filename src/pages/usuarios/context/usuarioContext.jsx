@@ -38,7 +38,7 @@ export const UsuarioContextProvider = (props) => {
   /* OBETENER LISTADO DE USUARIOS */
   const obtenerUsuariolist = async () => {
     try {
-      const resultado = await callEndpoint(getList(urlApi));
+      const resultado = await callEndpoint(getList(`${urlApi}/cargo`));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,
@@ -55,7 +55,9 @@ export const UsuarioContextProvider = (props) => {
     try {
       let usuarioEncontrada = null;
       if (usuario !== null) {
-        const resultado = await callEndpoint(getByID(urlApi, usuario.id));
+        const resultado = await callEndpoint(
+          getByID(`${urlApi}/cargo`, usuario.id)
+        );
         if (resultado && resultado.data) {
           usuarioEncontrada = resultado.data;
         }

@@ -1,7 +1,7 @@
 import React, { useEffect, useContext } from "react";
 import { TipolugartrabajoContext } from "../context/tipolugartrabajoContext";
 import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipolugarTrabajo = () => {
   const {
@@ -21,6 +21,11 @@ const TablaTipolugarTrabajo = () => {
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Tipo", selector: (row) => row.tipo, sortable: true },
+    {
+      name: "Activo",
+      cell: (props) => <ColActivoTabla activo={props.activo} />,
+      sortable: true,
+    },
     {
       name: "Acciones",
       cell: (props) => (

@@ -23,7 +23,13 @@ const FormFlotaLugarTrabajo = () => {
     () => ({
       id: 0,
       flotasId: 0,
+      flotas: {
+        id: 0,
+      },
       lugarTrabajoId: 0,
+      lugarTrabajo: {
+        id: 0,
+      },
       activo: false,
     }),
     []
@@ -44,6 +50,22 @@ const FormFlotaLugarTrabajo = () => {
       ? setFlotaLugarTrabajo({
           ...flotaLugarTrabajo,
           [e.target.name]: e.target.checked,
+        })
+      : e.target.name === "lugarTrabajoId"
+      ? setFlotaLugarTrabajo({
+          ...flotaLugarTrabajo,
+          lugarTrabajo: {
+            id: e.target.value,
+          },
+          [e.target.name]: e.target.value,
+        })
+      : e.target.name === "flotasId"
+      ? setFlotaLugarTrabajo({
+          ...flotaLugarTrabajo,
+          flotas: {
+            id: e.target.value,
+          },
+          [e.target.name]: e.target.value,
         })
       : setFlotaLugarTrabajo({
           ...flotaLugarTrabajo,
@@ -69,6 +91,8 @@ const FormFlotaLugarTrabajo = () => {
 
   const FlotaAEnviar = () => {
     let flotaTmp = { ...flotaLugarTrabajo };
+    flotaTmp.lugarTrabajoId = document.querySelector("#lugarTrabajoId").value;
+    flotaTmp.flotasId = document.querySelector("#flotasId").value;
     return flotaTmp;
   };
 
@@ -83,7 +107,7 @@ const FormFlotaLugarTrabajo = () => {
             id="flotasId"
             name="flotasId"
             placeholder="Flota"
-            value={flotaLugarTrabajo.flotasId}
+            value={flotaLugarTrabajo.flotas.id}
             onChange={handleChange}
             required={true}
           />
@@ -93,7 +117,7 @@ const FormFlotaLugarTrabajo = () => {
             id="lugarTrabajoId"
             name="lugarTrabajoId"
             placeholder="Lugar Trabajo"
-            value={flotaLugarTrabajo.lugarTrabajoId}
+            value={flotaLugarTrabajo.lugarTrabajo.id}
             onChange={handleChange}
             required={true}
           />

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "components";
+import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { TipolugartrabajoContext } from "../context/tipolugartrabajoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
@@ -31,10 +31,15 @@ const FormTipolugartrabajo = () => {
   }, [tipolugartrabajoActual, tipolugartrabajoDefault]);
 
   const handleChange = (e) => {
-    setTipolugartrabajo({
-      ...tipolugartrabajo,
-      [e.target.name]: e.target.value,
-    });
+    e.target.name === "activo"
+      ? setTipolugartrabajo({
+          ...tipolugartrabajo,
+          [e.target.name]: e.target.checked,
+        })
+      : setTipolugartrabajo({
+          ...tipolugartrabajo,
+          [e.target.name]: e.target.value,
+        });
   };
 
   const limpiaForm = () => {
@@ -78,6 +83,15 @@ const FormTipolugartrabajo = () => {
             value={tipolugartrabajo.tipo}
             onChangeFN={handleChange}
             required={true}
+          />
+        </div>
+        <div className="form-group mb-4">
+          <Checkbox
+            id="activo"
+            name="activo"
+            label="Activo"
+            onChangeFN={handleChange}
+            checked={tipolugartrabajo.activo}
           />
         </div>
       </div>

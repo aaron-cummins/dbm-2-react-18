@@ -41,6 +41,7 @@ const TablaUsuario = () => {
     },
     { name: "Rut", selector: (row) => row.rut },
     { name: "Uid", selector: (row) => row.uid },
+    { name: "Cargo", selector: (row) => row.cargo.nombre },
     { name: "Correo", selector: (row) => row.correo },
     {
       name: "Acciones",
