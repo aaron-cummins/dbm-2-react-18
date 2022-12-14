@@ -14,6 +14,8 @@ import {
   Pais,
   PostTratamiento,
   TipoBlock,
+  EstadoEquipo,
+  EstadoEquipoInstalacion,
   TipoAdmision,
   TipoCombustible,
   TipoEmision,
@@ -91,6 +93,8 @@ const Rutas = () => {
         <Route path="/unidad" element={<Unidad />}></Route>
         <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
         <Route path="/TipoBlock" element={<TipoBlock />}></Route>
+        <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
+        <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
         <Route path="/usuarios" element={<Usuario />}>
 
           <Route index element={<IndexUsuario />}></Route>

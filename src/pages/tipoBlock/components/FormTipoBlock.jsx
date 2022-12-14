@@ -30,18 +30,6 @@ const FormTipoBlock = () => {
       : setTipoBlock(TipoBlockDefault);
   }, [TipoBlockActual, TipoBlockDefault]);
 
-/*  const handleChange = (e) => {
-    e.target.name === "activo" 
-      ? setTipoBlock({
-          ...TipoBlock,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipoBlock({
-          ...TipoBlock,
-          [e.target.name]: e.target.value,
-        });
-  }; */
-
   const handleChange = (e) => {
     if (e.target.name === "activo") {
       setTipoBlock({
