@@ -8,6 +8,7 @@ import { PublicClientApplication, EventType } from "@azure/msal-browser";
 import { MsalProvider } from "@azure/msal-react";
 import { msalConfig } from "./authConfig";
 import { LoginContextProvider } from "./contexts/LoginContext";
+import { SnackbarProvider } from 'notistack'
 
 const msalInstance = new PublicClientApplication(msalConfig);
 
@@ -26,7 +27,9 @@ root.render(
   <ContextProvider>
     <MsalProvider instance={msalInstance}>
       <LoginContextProvider>
-        <App />
+        <SnackbarProvider>
+          <App />
+        </SnackbarProvider>
       </LoginContextProvider>
     </MsalProvider>
   </ContextProvider>

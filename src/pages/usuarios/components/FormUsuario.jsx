@@ -1,22 +1,15 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  SelectCargo,
-  SelectLugarTrabajo,
-} from "components";
+import { Alerts, InputText, Buttons, Checkbox, SelectCargo, SelectLugarTrabajo } from "components";
 import { UsuarioContext } from "../context/usuarioContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useContext } from "react";
+import { useSnackbar } from "notistack";
 
 const FormUsuario = () => {
-  const { registrarUsuario, usuarioActual, actualizarUsuario, obtenerUsuario } =
-    useContext(UsuarioContext);
-  const { mensaje, alerta } = useStateContext();
-
+  const { registrarUsuario, usuarioActual, actualizarUsuario, obtenerUsuario } = useContext(UsuarioContext);
+  const { mensaje } = useStateContext();
+  const { enqenqueueSnackbar } = useSnackbar();
   const usuarioDefault = useMemo(() => {
     return {
       id: 0,
@@ -43,9 +36,7 @@ const FormUsuario = () => {
   //const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
-    usuarioActual !== null
-      ? setUsuario(usuarioActual)
-      : setUsuario(usuarioDefault);
+    usuarioActual !== null ? setUsuario(usuarioActual) : setUsuario(usuarioDefault);
   }, [usuarioActual, usuarioDefault]);
 
   const handleChange = (e) => {
@@ -75,34 +66,26 @@ const FormUsuario = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    if (
-      usuario.apellidos.trim() === "" ||
-      usuario.correo === "" ||
-      usuario.rut === "" ||
-      usuario.uid === ""
-    ) {
+    if (usuario.apellidos.trim() === "" || usuario.correo === "" || usuario.rut === "" || usuario.uid === "") {
       //setMensaje("El Apellido, Correo, Rut y Uid son obligatorios.");
-      alerta("danger", "El Apellido, Correo, Rut y Uid son obligatorios.");
+      enqenqueueSnackbar("El Apellido, Correo, Rut y Uid son obligatorios.", { variant: "error" });
       return;
     }
 
-    usuarioActual !== null
-      ? actualizarUsuario(UsuarioAEnviar())
-      : registrarUsuario(UsuarioAEnviar());
+    usuarioActual !== null ? actualizarUsuario(UsuarioAEnviar()) : registrarUsuario(UsuarioAEnviar());
     limpiaForm();
     closeModal();
   };
 
   const UsuarioAEnviar = () => {
     let usuarioTmp = { ...usuario };
+    usuarioTmp.cargoId = usuario.cargo.id;
     return usuarioTmp;
   };
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
           <InputText
@@ -213,13 +196,7 @@ const FormUsuario = () => {
       </div>
 
       <div className="form-group mb-4">
-        <Checkbox
-          id="activo"
-          name="activo"
-          label="Activo"
-          onChangeFN={handleChange}
-          checked={usuario.activo}
-        />
+        <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={usuario.activo} />
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

@@ -48,7 +48,9 @@ import {
   Unidad,
   Motor,
   PermisosUsuario,
-  IndexUsuario
+  IndexUsuario,
+  TablaUnidad,
+  FormUnidad,
 } from "pages";
 import AuthGuard from "./AuthGuard";
 
@@ -88,11 +90,15 @@ const Rutas = () => {
         <Route path="/tipofiltrado" element={<TipoFiltrado />}></Route>
         <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
-        <Route path="/unidad" element={<Unidad />}></Route>
+        <Route path="/unidad" element={<Unidad />}>
+          <Route index element={<TablaUnidad />}></Route>
+          <Route path="crear" element={<FormUnidad />}></Route>
+          <Route path="editar/:id" element={<FormUnidad />}></Route>
+        </Route>
         <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
         <Route path="/TipoBlock" element={<TipoBlock />}></Route>
-        <Route path="/usuarios" element={<Usuario />}>
 
+        <Route path="/usuarios" element={<Usuario />}>
           <Route index element={<IndexUsuario />}></Route>
           <Route
             path="permisosusuario/:iduser"

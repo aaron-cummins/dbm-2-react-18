@@ -5,6 +5,7 @@ import { GrContactInfo } from "react-icons/gr";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 
 const OpcionesTabla = ({
+  editarNoModal,
   editar,
   FnEditar,
   tooltip,
@@ -19,10 +20,7 @@ const OpcionesTabla = ({
   return (
     <>
       {editar && (
-        <TooltipComponent
-          key={`tooltip-editar`}
-          content="Editar"
-          position="RightCenter">
+        <TooltipComponent key={`tooltip-editar`} content="Editar" position="RightCenter">
           <button
             type="button"
             onClick={() => FnEditar()}
@@ -34,25 +32,24 @@ const OpcionesTabla = ({
         </TooltipComponent>
       )}
 
+      {editarNoModal && (
+        <TooltipComponent key={`tooltip-editar`} content="Editar" position="RightCenter">
+          <button type="button" onClick={() => FnEditar()} className={`${buttonStyle} bg-blue-light-cummins`}>
+            <FaRegEdit />
+          </button>
+        </TooltipComponent>
+      )}
+
       {info && (
-        <TooltipComponent
-          key={`tooltip-info`}
-          content={tooltip}
-          position="RightCenter">
-          <button
-            type="button"
-            onClick={() => FnInfo()}
-            className={`${buttonStyle} bg-yellow-400`}>
+        <TooltipComponent key={`tooltip-info`} content={tooltip} position="RightCenter">
+          <button type="button" onClick={() => FnInfo()} className={`${buttonStyle} bg-yellow-400`}>
             <GrContactInfo />
           </button>
         </TooltipComponent>
       )}
 
       {eliminar && (
-        <button
-          type="button"
-          onClick={() => FnEliminar()}
-          className={`${buttonStyle} bg-red-cummins`}>
+        <button type="button" onClick={() => FnEliminar()} className={`${buttonStyle} bg-red-cummins`}>
           <MdOutlineDelete />
         </button>
       )}

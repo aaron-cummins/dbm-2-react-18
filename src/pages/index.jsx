@@ -44,6 +44,8 @@ export { default as TipoFiltrado } from "./tipoFiltrado/TipoFiltrado";
 export { default as TipoInyeccion } from "./tipoInyeccion/TipoInyeccion";
 export { default as TipoLugarTrabajo } from "./tipoLugarTrabajo/TipoLugarTrabajo";
 export { default as Unidad } from "./unidad/Unidad";
+export { default as FormUnidad } from "./unidad/components/FormUnidad";
+export { default as TablaUnidad } from "./unidad/components/TablaUnidad";
 export { default as Usuario } from "./usuarios/Usuario";
 export { default as IndexUsuario } from "./usuarios/components/IndexUsuario";
 export { default as PermisosUsuario } from "./usuarios/components/PermisosUsuario";
@@ -53,4 +55,3 @@ export { default as VistasGroup } from "./vistasGroup/VistasGroup";
 export { default as Zona } from "./zona/Zona";
 export { default as PostTratamiento } from "./postTratamiento/PostTratamiento";
 export { default as TipoBlock } from "./tipoBlock/TipoBlock";
-

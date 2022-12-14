@@ -22,6 +22,7 @@
     "@syncfusion/ej2-react-richtexteditor": "^19.4.50",
     "@syncfusion/ej2-react-schedule": "^19.4.50",
     "axios": "^0.27.2",
+    "notistack": "^2.0.8",
     "react": "^18.2.0",
     "react-data-table-component": "^7.5.3",
     "react-dom": "^18.2.0",

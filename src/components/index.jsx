@@ -23,12 +23,13 @@ export { default as Checkbox } from "./Forms/Checkbox";
 export { default as InputText } from "./Forms/InputText";
 export { default as Label } from "./Forms/Label";
 
-export { default as ColExperimentalTabla } from "./common/ColExperimentalTabla"; 
+export { default as ColExperimentalTabla } from "./common/ColExperimentalTabla";
 export { default as Alerts } from "./common/Alerts";
 export { default as ColActivoTabla } from "./common/ColActivoTabla";
 export { default as Modal } from "./common/Modal";
 export { default as OpcionesTabla } from "./common/OpcionesTabla";
 export { default as Tabla } from "./common/Tabla";
+export { default as Snackbar } from "./common/Snackbar";
 export { default as Spinner } from "./common/Spinner";
 
 export { default as SelectAplicacion } from "./Selects/SelectAplicacion";

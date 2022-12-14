@@ -3,15 +3,13 @@ import { Alerts, InputText, Buttons, Checkbox } from "components";
 import { AplicacionContext } from "../context/aplicacionContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormAplicacion = () => {
-  const {
-    registrarAplicacion,
-    aplicacionActual,
-    actualizarAplicacion,
-    obtenerAplicacion,
-  } = useContext(AplicacionContext);
-  const { mensaje, alerta } = useStateContext();
+  const { registrarAplicacion, aplicacionActual, actualizarAplicacion, obtenerAplicacion } =
+    useContext(AplicacionContext);
+  const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const aplicacionDefault = useMemo(() => {
     return {
@@ -24,9 +22,7 @@ const FormAplicacion = () => {
   const [aplicacion, setAplicacion] = useState(aplicacionDefault);
 
   useEffect(() => {
-    aplicacionActual !== null
-      ? setAplicacion(aplicacionActual)
-      : setAplicacion(aplicacionDefault);
+    aplicacionActual !== null ? setAplicacion(aplicacionActual) : setAplicacion(aplicacionDefault);
   }, [aplicacionActual, aplicacionDefault]);
 
   const handleChange = (e) => {
@@ -50,13 +46,11 @@ const FormAplicacion = () => {
     e.preventDefault();
 
     if (aplicacion.nombre === "") {
-      alerta("danger", "Debe ingresar un nombre valido");
+      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
       return false;
     }
 
-    aplicacionActual !== null
-      ? actualizarAplicacion(AplicacionAEnviar())
-      : registrarAplicacion(AplicacionAEnviar());
+    aplicacionActual !== null ? actualizarAplicacion(AplicacionAEnviar()) : registrarAplicacion(AplicacionAEnviar());
 
     limpiaForm();
     closeModal();
@@ -69,9 +63,7 @@ const FormAplicacion = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -85,13 +77,7 @@ const FormAplicacion = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox
-            id="activo"
-            name="activo"
-            onChangeFN={handleChange}
-            checked={aplicacion.activo}
-            label="Activo"
-          />
+          <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={aplicacion.activo} label="Activo" />
         </div>
       </div>
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
