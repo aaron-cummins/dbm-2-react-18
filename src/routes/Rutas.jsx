@@ -14,6 +14,8 @@ import {
   Pais,
   PostTratamiento,
   TipoBlock,
+  EstadoEquipo,
+  EstadoEquipoInstalacion,
   TipoAdmision,
   TipoCombustible,
   TipoEmision,
@@ -72,9 +74,7 @@ const Rutas = () => {
         <Route path="/comuna" element={<Comuna />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
         <Route path="/flotas" element={<Flotas />}></Route>
-        <Route
-          path="/flotalugartrabajo"
-          element={<FlotaLugarTrabajo />}></Route>
+        <Route path="/flotalugartrabajo" element={<FlotaLugarTrabajo />}></Route>
         <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>
@@ -97,12 +97,12 @@ const Rutas = () => {
         </Route>
         <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
         <Route path="/TipoBlock" element={<TipoBlock />}></Route>
+        <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
+        <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
 
         <Route path="/usuarios" element={<Usuario />}>
           <Route index element={<IndexUsuario />}></Route>
-          <Route
-            path="permisosusuario/:iduser"
-            element={<PermisosUsuario />}></Route>
+          <Route path="permisosusuario/:iduser" element={<PermisosUsuario />}></Route>
         </Route>
         <Route path="/versionequipo" element={<VersionEquipo />}></Route>
         <Route path="/vistas" element={<Vistas />}></Route>

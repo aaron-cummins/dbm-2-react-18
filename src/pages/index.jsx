@@ -55,3 +55,5 @@ export { default as VistasGroup } from "./vistasGroup/VistasGroup";
 export { default as Zona } from "./zona/Zona";
 export { default as PostTratamiento } from "./postTratamiento/PostTratamiento";
 export { default as TipoBlock } from "./tipoBlock/TipoBlock";
+export { default as EstadoEquipo } from "./estadoEquipo/EstadoEquipo";
+export { default as EstadoEquipoInstalacion } from "./estadoEquipoInstalacion/EstadoEquipoInstalacion";
