@@ -56,6 +56,15 @@ const FormComuna = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    let region = document.querySelector("#regionId");
+
+    console.log(isNaN(region.value));
+
+    if (isNaN(region.value)) {
+      alert("Debe seleccionar una región");
+      return false;
+    }
+
     comunaActual !== null
       ? actualizarComuna(ComunaAEnviar())
       : registrarComuna(ComunaAEnviar());
@@ -65,6 +74,7 @@ const FormComuna = () => {
 
   const ComunaAEnviar = () => {
     let comunaTmp = { ...comuna };
+    comunaTmp.regionId = document.querySelector("#regionId").value;
     return comunaTmp;
   };
 
@@ -90,7 +100,7 @@ const FormComuna = () => {
             id="regionId"
             name="regionId"
             Label="Región"
-            value={comuna.regionId}
+            value={comuna.region.id}
             onChange={handleChange}
             required={true}
           />

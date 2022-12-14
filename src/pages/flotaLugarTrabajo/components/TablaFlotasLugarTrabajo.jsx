@@ -24,10 +24,10 @@ const TablaFlotasLugarTrabajo = () => {
 
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
-    { name: "Flota", selector: (row) => row.flotasId, sortable: true },
+    { name: "Flota", selector: (row) => row.flotas?.nombre, sortable: true },
     {
       name: "Lugar Trabajo",
-      selector: (row) => row.lugarTrabajoId,
+      selector: (row) => row.lugarTrabajo?.nombre,
       sortable: true,
     },
     {

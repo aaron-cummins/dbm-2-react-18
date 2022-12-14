@@ -33,7 +33,7 @@ export const ComunaContextProvider = (props) => {
   /* OBETENER LISTADO DE COMUNAS */
   const obtenerComunas = async () => {
     try {
-      const resultado = await callEndpoint(getList(`${urlApi}/region`));
+      const resultado = await callEndpoint(getList(urlApi));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,

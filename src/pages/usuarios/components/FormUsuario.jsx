@@ -29,6 +29,9 @@ const FormUsuario = () => {
       anexo: "",
       password: "",
       cargoId: 0,
+      cargo: {
+        id: 0,
+      },
       id_lugar_trabajo: 0,
       created_at: Date.now,
       updated_at: Date.now,
@@ -50,6 +53,14 @@ const FormUsuario = () => {
       ? setUsuario({
           ...usuario,
           [e.target.name]: e.target.checked,
+        })
+      : e.target.name === "cargoId"
+      ? setUsuario({
+          ...usuario,
+          cargoId: e.target.value,
+          cargo: {
+            id: e.target.value,
+          },
         })
       : setUsuario({
           ...usuario,
@@ -184,7 +195,7 @@ const FormUsuario = () => {
             id="cargoId"
             name="cargoId"
             placeholder="Cargo"
-            value={usuario.cargoId}
+            value={usuario.cargo.id}
             onChange={handleChange}
             required={true}
           />

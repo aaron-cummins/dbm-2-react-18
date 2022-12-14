@@ -5,7 +5,6 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
-  OBTENER_LISTA_ACTIVAS,
 } from "const/actionTypes";
 import {
   getList,
@@ -36,7 +35,7 @@ export const ZonaContextProvider = (props) => {
   /* OBETENER LISTADO DE ZONAS */
   const obtenerZonalist = async () => {
     try {
-      const resultado = await callEndpoint(getList(`${urlApi}/pais`));
+      const resultado = await callEndpoint(getList(urlApi));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,

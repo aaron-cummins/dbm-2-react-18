@@ -4,7 +4,6 @@ import {
   InputText,
   Buttons,
   Checkbox,
-  SelectRegion,
   SelectComuna,
   SelectTipoLugarTrabajo,
   SelectZona,
@@ -50,10 +49,39 @@ const FormLugarTrabajo = () => {
   }, [lugartrabajoActual, lugarTrabajoDefault]);
 
   const handleChange = (e) => {
-    setLugarTrabajo({
-      ...lugarTrabajo,
-      [e.target.name]: e.target.value,
-    });
+    e.target.name === "activo"
+      ? setLugarTrabajo({
+          ...lugarTrabajo,
+          [e.target.name]: e.target.checked,
+        })
+      : e.target.name === "comunaId"
+      ? setLugarTrabajo({
+          ...lugarTrabajo,
+          comuna: {
+            id: e.target.value,
+          },
+          [e.target.name]: e.target.value,
+        })
+      : e.target.name === "zonaId"
+      ? setLugarTrabajo({
+          ...lugarTrabajo,
+          zona: {
+            id: e.target.value,
+          },
+          [e.target.name]: e.target.value,
+        })
+      : e.target.name === "tipoLugarTrabajoId"
+      ? setLugarTrabajo({
+          ...lugarTrabajo,
+          tipoLugarTrabajo: {
+            id: e.target.value,
+          },
+          [e.target.name]: e.target.value,
+        })
+      : setLugarTrabajo({
+          ...lugarTrabajo,
+          [e.target.name]: e.target.value,
+        });
   };
 
   const limpiaForm = () => {
@@ -73,6 +101,11 @@ const FormLugarTrabajo = () => {
 
   const lugarTrabajoAEnviar = () => {
     let lugarTrabajoTmp = { ...lugarTrabajo };
+    lugarTrabajoTmp.comunaId = document.querySelector("#comunaId").value;
+    lugarTrabajoTmp.zonaId = document.querySelector("#zonaId").value;
+    lugarTrabajoTmp.tipoLugarTrabajoId = document.querySelector(
+      "#tipoLugarTrabajoId"
+    ).value;
     return lugarTrabajoTmp;
   };
 
@@ -156,7 +189,7 @@ const FormLugarTrabajo = () => {
             id="zonaId"
             name="zonaId"
             placeholder="Zona"
-            value={lugarTrabajo.zonaId}
+            value={lugarTrabajo.zona?.id}
             onChange={handleChange}
             required={true}
           />
@@ -166,7 +199,7 @@ const FormLugarTrabajo = () => {
             id="tipoLugarTrabajoId"
             name="tipoLugarTrabajoId"
             placeholder="Tipo Lugar"
-            value={lugarTrabajo.tipoLugarTrabajoId}
+            value={lugarTrabajo.tipoLugarTrabajo?.id}
             onChange={handleChange}
             required={true}
           />
@@ -179,7 +212,7 @@ const FormLugarTrabajo = () => {
             id="comunaId"
             name="comunaId"
             placeholder="Comuna"
-            value={lugarTrabajo.comunaId}
+            value={lugarTrabajo.comuna?.id}
             onChange={handleChange}
           />
         </div>
