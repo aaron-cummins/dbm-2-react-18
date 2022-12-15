@@ -7,21 +7,18 @@ import {
   SelectLugarTrabajo,
   SelectFlota,
   SelectVersionEquipo,
-  Header,
   SelectAplicacionOem,
   SelectOem,
 } from "components";
 import { UnidadContext } from "../context/unidadContext";
-import { formatDateshort } from "utilities/Utiles";
+import { closeModal, formatDateshort } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
 import { useSnackbar } from "notistack";
 
 const FormUnidad = () => {
   const { registrarUnidad, unidadActual, actualizarUnidad, obtenerUnidad } = useContext(UnidadContext);
   const { mensaje } = useStateContext();
-  const navigate = useNavigate();
   const { enqueueSnackbar } = useSnackbar();
 
   const unidadDefault = useMemo(() => {
@@ -46,7 +43,10 @@ const FormUnidad = () => {
       },
       nserieEquipo: "",
       modelo: "",
-      version: "",
+      versionId: 0,
+      version: {
+        id: 0,
+      },
       conversionUnidadId: 0,
       fechaActivacion: "",
       fechaDesactivacion: "",
@@ -100,6 +100,14 @@ const FormUnidad = () => {
             id: e.target.value,
           },
         })
+      : e.target.name === "versionId"
+      ? setUnidad({
+          ...unidad,
+          [e.target.name]: e.target.value,
+          version: {
+            id: e.target.value,
+          },
+        })
       : setUnidad({
           ...unidad,
           [e.target.name]: e.target.value,
@@ -109,14 +117,14 @@ const FormUnidad = () => {
   const limpiaForm = () => {
     setUnidad(unidadDefault);
     obtenerUnidad(null);
-    setTimeout(navigate("/unidad"), 2);
+    closeModal();
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (unidad.lugarTrabajoId === 0) {
       enqueueSnackbar("Debe seleccionar un Lugar de trabajo", { variant: "error" });
-      return;
+      return false;
     }
     if (unidad.flotasId === 0) {
       enqueueSnackbar("Debe seleccionar una flota", { variant: "error" });
@@ -130,6 +138,10 @@ const FormUnidad = () => {
       enqueueSnackbar("Debe seleccionar un Oem", { variant: "error" });
       return;
     }
+    if (unidad.versionId === 0) {
+      enqueueSnackbar("Debe seleccionar una version de equipo", { variant: "error" });
+      return;
+    }
     unidadActual !== null ? actualizarUnidad(UnidadAEnviar()) : registrarUnidad(UnidadAEnviar());
     enqueueSnackbar("Unidad Guardada exitosamente.", { variant: "success" });
     limpiaForm();
@@ -141,13 +153,13 @@ const FormUnidad = () => {
     unidadTmp.lugarTrabajoId = unidad.lugarTrabajo.id;
     unidadTmp.oemId = unidad.oem.id;
     unidadTmp.aplicacionOemId = unidad.aplicacionOem.id;
+    unidadTmp.versionId = unidad.version.id;
     unidadTmp.usuarioId = 1;
     return unidadTmp;
   };
 
   return (
     <>
-      <Header category="Administración" title="Unidad" />
       <form onSubmit={handleOnSubmit}>
         {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
 
@@ -225,10 +237,10 @@ const FormUnidad = () => {
           </div>
           <div className="form-group mb-4">
             <SelectVersionEquipo
-              id="version"
-              name="version"
+              id="versionId"
+              name="versionId"
               placeholder="Versión Equipo"
-              value={unidad.version}
+              value={unidad.version.id}
               onChange={handleChange}
               required={true}
             />
@@ -264,7 +276,7 @@ const FormUnidad = () => {
           </div>
         </div>
         <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
-          <Buttons cancelFN={() => limpiaForm()} NoModal={true} />
+          <Buttons cancelFN={() => limpiaForm()} />
         </div>
       </form>
     </>
