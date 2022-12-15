@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { AplicacionContext } from "../context/aplicacionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaAplicacion = () => {
-  const { aplicacionList, obtenerAplicaciones, obtenerAplicacion } =
-    useContext(AplicacionContext);
-  const { mensaje } = useStateContext();
+  const { aplicacionList, obtenerAplicaciones, obtenerAplicacion } = useContext(AplicacionContext);
 
   const getAplicacion = (props) => obtenerAplicacion(props);
 
@@ -25,21 +22,12 @@ const TablaAplicacion = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getAplicacion(props)}
-          nombreform="aplicacion"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getAplicacion(props)} nombreform="aplicacion" />,
     },
   ];
 
   return (
     <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
       <Tabla columns={columns} data={aplicacionList} />
     </>
   );
