@@ -1,39 +1,41 @@
 import React from "react";
 import { Header, Modal } from "components";
 import { useStateContext } from "contexts/ContextProvider";
-import { TipoInyeccionContextProvider } from "./context/tipoinyeccionContext";
+import { TipoContratoContextProvider } from "./context/TipoContratoContext";
 
-import FormTipoInyeccion from "./components/FormTipoInyeccion";
-import TablaTipoInyeccion from "./components/TablaTipoInyeccion";
+import FormTipoContrato from "./components/FormTipoContrato";
+import TablaTipoContrato from "./components/TablaTipoContrato";
 
-const TipoInyeccion = () => {
+
+const TipoContrato = () => {
   const { currentColor } = useStateContext();
   return (
-    <TipoInyeccionContextProvider>
+    <TipoContratoContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="">
+        <Header category="Administración" title="Tipo Contrato">
           <button
             type="button"
             data-bs-toggle="modal"
-            data-bs-target="#tipoinyeccion-modal"
+            data-bs-target="#tipocontrato-modal"
             style={{
               backgroundColor: currentColor,
               color: "white",
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            Nuevo 
+            {" "}
+            Nuevo Tipo Contrato
           </button>
         </Header>
 
-        <TablaTipoInyeccion />
+        <TablaTipoContrato />
 
-        <Modal ModalTitle="" modalId="tipoinyeccion-modal">
-          <FormTipoInyeccion modalid="#tipoinyeccion-modal" />
+        <Modal ModalTitle="Tipo Contrato" modalId="tipocontrato-modal">
+          <FormTipoContrato />
         </Modal>
       </div>
-    </TipoInyeccionContextProvider>
-  );
-};
+    </TipoContratoContextProvider>
+  )
+}
 
-export default TipoInyeccion;
+export default TipoContrato

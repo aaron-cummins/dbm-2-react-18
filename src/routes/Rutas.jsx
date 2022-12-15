@@ -16,6 +16,12 @@ import {
   TipoBlock,
   EstadoEquipo,
   EstadoEquipoInstalacion,
+  TipoContrato,
+  TipoSalida,
+  MotivoCambio,
+  EstadoMotor,
+  FuenteInformacion,
+  EstadoMotorInstalacion,
   TipoAdmision,
   TipoCombustible,
   TipoEmision,
@@ -99,6 +105,12 @@ const Rutas = () => {
         <Route path="/TipoBlock" element={<TipoBlock />}></Route>
         <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
         <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
+        <Route path="/TipoContrato" element={<TipoContrato />}></Route>
+        <Route path="/TipoSalida" element={<TipoSalida />}></Route>
+        <Route path="/MotivoCambio" element={<MotivoCambio />}></Route>
+        <Route path="/FuenteInformacion" element={<FuenteInformacion />}></Route>
+        <Route path="/EstadoMotorInstalacion" element={<EstadoMotorInstalacion />}></Route>
+        <Route path="/EstadoMotor" element={<EstadoMotor />}></Route>
 
         <Route path="/usuarios" element={<Usuario />}>
           <Route index element={<IndexUsuario />}></Route>
