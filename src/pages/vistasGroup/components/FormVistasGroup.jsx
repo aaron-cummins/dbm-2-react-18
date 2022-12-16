@@ -1,17 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, SelectModulo } from "components";
+import { InputText, Buttons, SelectModulo } from "components";
 import { VistasGroupContext } from "../context/vistasGroupContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormVistasGroup = () => {
-  const {
-    registrarVistasGroup,
-    vistasgroupActual,
-    actualizarVistasGroup,
-    obtenerVistasGroup,
-  } = useContext(VistasGroupContext);
-
+  const { registrarVistasGroup, vistasgroupActual, actualizarVistasGroup, obtenerVistasGroup } =
+    useContext(VistasGroupContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
   const vistasgroupDefault = useMemo(() => {
     return {
@@ -24,9 +21,7 @@ const FormVistasGroup = () => {
   const [vistasgroup, setVistasGroup] = useState(vistasgroupDefault);
 
   useEffect(() => {
-    vistasgroupActual
-      ? setVistasGroup(vistasgroupActual)
-      : setVistasGroup(vistasgroupDefault);
+    vistasgroupActual ? setVistasGroup(vistasgroupActual) : setVistasGroup(vistasgroupDefault);
   }, [vistasgroupActual, vistasgroupDefault]);
 
   const handleChange = (e) => {
@@ -48,9 +43,7 @@ const FormVistasGroup = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    vistasgroupActual
-      ? actualizarVistasGroup(VistasGroupAEnviar())
-      : registrarVistasGroup(VistasGroupAEnviar());
+    vistasgroupActual ? actualizarVistasGroup(VistasGroupAEnviar()) : registrarVistasGroup(VistasGroupAEnviar());
 
     limpiaForm();
     closeModal();
@@ -63,9 +56,7 @@ const FormVistasGroup = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -79,12 +70,7 @@ const FormVistasGroup = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <SelectModulo
-            id="moduloId"
-            name="moduloId"
-            value={vistasgroup.moduloId}
-            onChange={handleChange}
-          />
+          <SelectModulo id="moduloId" name="moduloId" value={vistasgroup.moduloId} onChange={handleChange} />
         </div>
       </div>
 

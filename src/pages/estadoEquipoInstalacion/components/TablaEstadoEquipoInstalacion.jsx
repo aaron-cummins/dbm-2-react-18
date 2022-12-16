@@ -1,12 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { EstadoEquipoInstalacionContext } from "../context/EstadoEquipoInstalacionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaEstadoEquipoInstalacion = () => {
   const { EstadoEquipoInstalacionList, obtenerEstadoEquipoInstalacion, obtenerEstadoEquipoInstalaciones } =
-  useContext(EstadoEquipoInstalacionContext);
-  const { mensaje } = useStateContext();
+    useContext(EstadoEquipoInstalacionContext);
 
   const getEstadoEquipoInstalacion = (props) => {
     obtenerEstadoEquipoInstalacion(props);
@@ -37,14 +35,7 @@ const TablaEstadoEquipoInstalacion = () => {
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={EstadoEquipoInstalacionList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={EstadoEquipoInstalacionList} />;
+};
 
-export default TablaEstadoEquipoInstalacion
+export default TablaEstadoEquipoInstalacion;

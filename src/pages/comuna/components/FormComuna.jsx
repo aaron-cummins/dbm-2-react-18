@@ -1,15 +1,16 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { SelectRegion } from "components";
 import { ComunaContext } from "../context/comunaContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormComuna = () => {
-  const { registrarComuna, comunaActual, actualizarComuna, obtenerComuna } =
-    useContext(ComunaContext);
+  const { registrarComuna, comunaActual, actualizarComuna, obtenerComuna } = useContext(ComunaContext);
 
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const comunaDefault = useMemo(
     () => ({
       id: 0,
@@ -38,7 +39,7 @@ const FormComuna = () => {
       : e.target.name === "regionId"
       ? setComuna({
           ...comuna,
-          regionId: e.target.value,
+          [e.target.name]: e.target.value,
           region: {
             nombre: e.target.options[e.target.selectedIndex].text,
           },
@@ -61,13 +62,11 @@ const FormComuna = () => {
     console.log(isNaN(region.value));
 
     if (isNaN(region.value)) {
-      alert("Debe seleccionar una región");
+      enqueueSnackbar("Debe seleccionar una región", { variant: "error" });
       return false;
     }
 
-    comunaActual !== null
-      ? actualizarComuna(ComunaAEnviar())
-      : registrarComuna(ComunaAEnviar());
+    comunaActual !== null ? actualizarComuna(ComunaAEnviar()) : registrarComuna(ComunaAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -80,9 +79,7 @@ const FormComuna = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -107,13 +104,7 @@ const FormComuna = () => {
         </div>
       </div>
       <div className="form-group form-check mb-6 items-center">
-        <Checkbox
-          id="activo"
-          name="activo"
-          label="Activo"
-          onChangeFN={handleChange}
-          checked={comuna.activo}
-        />
+        <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={comuna.activo} />
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { VersionEquipoContext } from "../context/versionEquipoContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaVersionEquipo = () => {
-  const { versionequipoList, obtenerVersionEquipos, obtenerVersionEquipo } =
-    useContext(VersionEquipoContext);
-  const { mensaje } = useStateContext();
+  const { versionequipoList, obtenerVersionEquipos, obtenerVersionEquipo } = useContext(VersionEquipoContext);
 
   const getVersionEquipo = (props) => obtenerVersionEquipo(props);
 
@@ -26,23 +23,12 @@ const TablaVersionEquipo = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getVersionEquipo(props)}
-          nombreform="versionequipo"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getVersionEquipo(props)} nombreform="versionequipo" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={versionequipoList} />
-    </>
-  );
+  return <Tabla columns={columns} data={versionequipoList} />;
 };
 
 export default TablaVersionEquipo;

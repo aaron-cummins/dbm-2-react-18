@@ -57,7 +57,7 @@ export const ContextProvider = ({ children }) => {
         mensaje: null,
         tipoAlerta: null,
       });
-    }, 5000);
+    }, 1000);
   };
 
   const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });

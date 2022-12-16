@@ -1,25 +1,14 @@
 import { useState, useContext, useMemo, useEffect } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  SelectComuna,
-  SelectTipoLugarTrabajo,
-  SelectZona,
-} from "components";
+import { InputText, Buttons, Checkbox, SelectComuna, SelectTipoLugarTrabajo, SelectZona } from "components";
 import { LugarTrabajoContext } from "../contexts/LugarTrabajoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormLugarTrabajo = () => {
-  const {
-    obtenerLugarTrabajo,
-    lugartrabajoActual,
-    actualizarLugarTrabajo,
-    registrarLugarTrabajo,
-  } = useContext(LugarTrabajoContext);
-
+  const { obtenerLugarTrabajo, lugartrabajoActual, actualizarLugarTrabajo, registrarLugarTrabajo } =
+    useContext(LugarTrabajoContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
 
   const lugarTrabajoDefault = useMemo(() => {
@@ -43,9 +32,7 @@ const FormLugarTrabajo = () => {
   const [lugarTrabajo, setLugarTrabajo] = useState(lugarTrabajoDefault);
 
   useEffect(() => {
-    lugartrabajoActual !== null
-      ? setLugarTrabajo(lugartrabajoActual)
-      : setLugarTrabajo(lugarTrabajoDefault);
+    lugartrabajoActual !== null ? setLugarTrabajo(lugartrabajoActual) : setLugarTrabajo(lugarTrabajoDefault);
   }, [lugartrabajoActual, lugarTrabajoDefault]);
 
   const handleChange = (e) => {
@@ -91,9 +78,7 @@ const FormLugarTrabajo = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    lugartrabajoActual
-      ? actualizarLugarTrabajo(lugarTrabajoAEnviar())
-      : registrarLugarTrabajo(lugarTrabajoAEnviar());
+    lugartrabajoActual ? actualizarLugarTrabajo(lugarTrabajoAEnviar()) : registrarLugarTrabajo(lugarTrabajoAEnviar());
 
     limpiaForm();
     closeModal();
@@ -103,17 +88,13 @@ const FormLugarTrabajo = () => {
     let lugarTrabajoTmp = { ...lugarTrabajo };
     lugarTrabajoTmp.comunaId = document.querySelector("#comunaId").value;
     lugarTrabajoTmp.zonaId = document.querySelector("#zonaId").value;
-    lugarTrabajoTmp.tipoLugarTrabajoId = document.querySelector(
-      "#tipoLugarTrabajoId"
-    ).value;
+    lugarTrabajoTmp.tipoLugarTrabajoId = document.querySelector("#tipoLugarTrabajoId").value;
     return lugarTrabajoTmp;
   };
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-6">
           <InputText
@@ -218,13 +199,7 @@ const FormLugarTrabajo = () => {
         </div>
 
         <div className="form-group mb-6">
-          <Checkbox
-            id="activo"
-            name="activo"
-            onChangeFN={handleChange}
-            checked={lugarTrabajo.activo}
-            label="Activo"
-          />
+          <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={lugarTrabajo.activo} label="Activo" />
         </div>
       </div>
 

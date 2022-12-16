@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { OemContext } from "../context/oemContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormOem = () => {
-  const { registrarOem, oemActual, actualizarOem, obtenerOem } =
-    useContext(OemContext);
+  const { registrarOem, oemActual, actualizarOem, obtenerOem } = useContext(OemContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const oemDefault = useMemo(() => {
     return {
       id: 0,
@@ -42,9 +43,7 @@ const FormOem = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    oemActual !== null
-      ? actualizarOem(OemAEnviar())
-      : registrarOem(OemAEnviar());
+    oemActual !== null ? actualizarOem(OemAEnviar()) : registrarOem(OemAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -56,9 +55,7 @@ const FormOem = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -84,13 +81,7 @@ const FormOem = () => {
         </div>
       </div>
       <div className="form-group form-check mb-6 items-center">
-        <Checkbox
-          id="activo"
-          name="activo"
-          label="Activo"
-          onChangeFN={handleChange}
-          checked={oem.activo}
-        />
+        <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={oem.activo} />
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

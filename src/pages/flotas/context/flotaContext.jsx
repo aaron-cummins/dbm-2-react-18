@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import flotaReducer from "../reducer/flotaReducer.js";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -78,10 +66,7 @@ export const FlotaContextProvider = (props) => {
       alerta("success", "Flota creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear la flota. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear la flota. ${error}`);
     }
   };
 
@@ -96,10 +81,7 @@ export const FlotaContextProvider = (props) => {
       alerta("success", "Flota actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la flota. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar la flota. ${error}`);
     }
   };
 
@@ -114,10 +96,7 @@ export const FlotaContextProvider = (props) => {
       alerta("success", "Flota eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar la flota. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar la flota. ${error}`);
     }
   };
 

@@ -1,20 +1,13 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  SelectAplicacionOem,
-  SelectOem,
-} from "components";
+import { InputText, Buttons, Checkbox, SelectAplicacionOem, SelectOem } from "components";
 import { EquipoContext } from "../context/equipoContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormEquipo = () => {
-  const { registrarEquipo, equipoActual, actualizarEquipo, obtenerEquipo } =
-    useContext(EquipoContext);
-
+  const { registrarEquipo, equipoActual, actualizarEquipo, obtenerEquipo } = useContext(EquipoContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
   const equipoDefault = useMemo(
     () => ({
@@ -74,9 +67,7 @@ const FormEquipo = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    equipoActual !== null
-      ? actualizarEquipo(EquipoAEnviar())
-      : registrarEquipo(EquipoAEnviar());
+    equipoActual !== null ? actualizarEquipo(EquipoAEnviar()) : registrarEquipo(EquipoAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -88,9 +79,7 @@ const FormEquipo = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -115,22 +104,10 @@ const FormEquipo = () => {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-4">
-          <SelectOem
-            id="oemId"
-            name="oemId"
-            value={equipo.oemId}
-            onChange={handleChange}
-            required={true}
-          />
+          <SelectOem id="oemId" name="oemId" value={equipo.oemId} onChange={handleChange} required={true} />
         </div>
         <div className="form-group mb-6">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={equipo.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={equipo.activo} />
         </div>
       </div>
 

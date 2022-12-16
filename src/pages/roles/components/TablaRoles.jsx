@@ -1,13 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { RolesContext } from "../context/rolesContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaRoles = () => {
-  const { rolesList, obtenerRoleslist, obtenerRoles } =
-    useContext(RolesContext);
-  const { mensaje } = useStateContext();
-
+  const { rolesList, obtenerRoleslist, obtenerRoles } = useContext(RolesContext);
   const getRoles = (props) => obtenerRoles(props);
 
   useEffect(() => {
@@ -25,24 +21,11 @@ const TablaRoles = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getRoles(props)}
-          nombreform="roles"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getRoles(props)} nombreform="roles" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={rolesList} />
-    </>
-  );
+  return <Tabla columns={columns} data={rolesList} />;
 };
 
 export default TablaRoles;

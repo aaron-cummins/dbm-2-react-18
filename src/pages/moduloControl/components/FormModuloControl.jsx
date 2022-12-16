@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { ModuloControlContext } from "../context/moduloControlContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormModuloControl = () => {
-  const {
-    registrarModuloControl,
-    modulocontrolActual,
-    actualizarModuloControl,
-    obtenerModuloControl,
-  } = useContext(ModuloControlContext);
+  const { registrarModuloControl, modulocontrolActual, actualizarModuloControl, obtenerModuloControl } =
+    useContext(ModuloControlContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const modulocontrolDefault = useMemo(() => {
     return {
       id: 0,
@@ -24,9 +22,7 @@ const FormModuloControl = () => {
   const [modulocontrol, setModuloControl] = useState(modulocontrolDefault);
 
   useEffect(() => {
-    modulocontrolActual !== null
-      ? setModuloControl(modulocontrolActual)
-      : setModuloControl(modulocontrolDefault);
+    modulocontrolActual !== null ? setModuloControl(modulocontrolActual) : setModuloControl(modulocontrolDefault);
   }, [modulocontrolActual, modulocontrolDefault]);
 
   const handleChange = (e) => {
@@ -62,9 +58,7 @@ const FormModuloControl = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -78,13 +72,7 @@ const FormModuloControl = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={modulocontrol.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={modulocontrol.activo} />
         </div>
       </div>
 

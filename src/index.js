@@ -27,7 +27,7 @@ root.render(
   <ContextProvider>
     <MsalProvider instance={msalInstance}>
       <LoginContextProvider>
-        <SnackbarProvider>
+        <SnackbarProvider maxSnack={2}>
           <App />
         </SnackbarProvider>
       </LoginContextProvider>

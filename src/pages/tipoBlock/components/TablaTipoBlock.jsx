@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoBlockContext } from "../context/TipoBlockContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla, ColExperimentalTabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla, ColExperimentalTabla } from "components";
 
 const TablaTipoBlock = () => {
-  const { TipoBlockList, obtenerTipoBlock, obtenerTipoBlocks } =
-  useContext(TipoBlockContext);
-  const { mensaje } = useStateContext();
+  const { TipoBlockList, obtenerTipoBlock, obtenerTipoBlocks } = useContext(TipoBlockContext);
 
   const getTipoBlock = (props) => {
     obtenerTipoBlock(props);
@@ -32,24 +29,11 @@ const TablaTipoBlock = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoBlock(props)}
-          nombreform="tipoblock"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getTipoBlock(props)} nombreform="tipoblock" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={TipoBlockList} />
-    </>
-  )
-}
+  return <Tabla columns={columns} data={TipoBlockList} />;
+};
 
-export default TablaTipoBlock
+export default TablaTipoBlock;

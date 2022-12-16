@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { Alerts, InputText, Buttons, Checkbox, SelectCargo, SelectLugarTrabajo } from "components";
+import { InputText, Buttons, Checkbox, SelectCargo, SelectLugarTrabajo } from "components";
 import { UsuarioContext } from "../context/usuarioContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
@@ -9,7 +9,7 @@ import { useSnackbar } from "notistack";
 const FormUsuario = () => {
   const { registrarUsuario, usuarioActual, actualizarUsuario, obtenerUsuario } = useContext(UsuarioContext);
   const { mensaje } = useStateContext();
-  const { enqenqueueSnackbar } = useSnackbar();
+  const { enqueueSnackbar } = useSnackbar();
   const usuarioDefault = useMemo(() => {
     return {
       id: 0,
@@ -68,7 +68,7 @@ const FormUsuario = () => {
     e.preventDefault();
     if (usuario.apellidos.trim() === "" || usuario.correo === "" || usuario.rut === "" || usuario.uid === "") {
       //setMensaje("El Apellido, Correo, Rut y Uid son obligatorios.");
-      enqenqueueSnackbar("El Apellido, Correo, Rut y Uid son obligatorios.", { variant: "error" });
+      enqueueSnackbar("El Apellido, Correo, Rut y Uid son obligatorios.", { variant: "error" });
       return;
     }
 
@@ -85,7 +85,7 @@ const FormUsuario = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
           <InputText

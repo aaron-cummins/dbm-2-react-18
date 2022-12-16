@@ -1,19 +1,14 @@
 import React, { useEffect, useContext } from "react";
 import { FlotaLugarTrabajoContext } from "../context/flotaLugarTrabajoContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
 
 const TablaFlotasLugarTrabajo = () => {
-  const {
-    flotaLugarTrabajoList,
-    obtenerFlotasLugarTrabajo,
-    obtenerFlotaLugarTrabajo,
-  } = useContext(FlotaLugarTrabajoContext);
+  const { flotaLugarTrabajoList, obtenerFlotasLugarTrabajo, obtenerFlotaLugarTrabajo } =
+    useContext(FlotaLugarTrabajoContext);
 
   const { obtenerFlotas } = useContext(SelectsContext);
 
-  const { mensaje } = useStateContext();
   const getFlota = (props) => obtenerFlotaLugarTrabajo(props);
 
   useEffect(() => {
@@ -37,24 +32,11 @@ const TablaFlotasLugarTrabajo = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getFlota(props)}
-          nombreform="flotalugartrabajo"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getFlota(props)} nombreform="flotalugartrabajo" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={flotaLugarTrabajoList} />
-    </>
-  );
+  return <Tabla columns={columns} data={flotaLugarTrabajoList} />;
 };
 
 export default TablaFlotasLugarTrabajo;

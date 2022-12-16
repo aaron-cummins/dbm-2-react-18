@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Alerts, Header } from "components";
+import { Header } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
 import { UsuarioContext } from "../context/usuarioContext";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const PermisosUsuario = () => {
-  const { lugarTrabajoList, rolesList, obtenerRol } =
-    useContext(SelectsContext);
+  const { lugarTrabajoList, rolesList, obtenerRol } = useContext(SelectsContext);
   const {
     obtenerUsuario,
     usuarioActual,
@@ -16,9 +16,10 @@ const PermisosUsuario = () => {
     usuarioPermisosList,
     obtenerPermisosUsuariolist,
   } = useContext(UsuarioContext);
+  const { enqueueSnackbar } = useSnackbar();
 
   const [checkedState, setCheckedState] = useState([]);
-  const { mensaje, alerta } = useStateContext();
+  const { mensaje } = useStateContext();
   const parametro = useParams("iduser");
 
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const PermisosUsuario = () => {
   };
   useEffect(() => {
     obtenerPermisosUsuariolist(parametro.iduser);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -52,9 +54,7 @@ const PermisosUsuario = () => {
           lugarTrabajoId: lt.id,
           usuarioId: parametro.iduser,
           rolId: rol.id,
-          activo: !usuarioPermisosList?.find(
-            (item) => rol.id === item.rolId && lt.id === item.lugarTrabajoId
-          )
+          activo: !usuarioPermisosList?.find((item) => rol.id === item.rolId && lt.id === item.lugarTrabajoId)
             ? false
             : true,
         };
@@ -66,9 +66,7 @@ const PermisosUsuario = () => {
   const handleChange = (e) => {
     let c = checkedState.find((item) => item.key === e.target.id);
     c.activo = !c.activo;
-    setCheckedState(
-      checkedState.map((item) => (item.key === e.target.id ? c : item))
-    );
+    setCheckedState(checkedState.map((item) => (item.key === e.target.id ? c : item)));
   };
 
   const handleOnSubmit = (e) => {
@@ -77,8 +75,7 @@ const PermisosUsuario = () => {
     if (permisos !== null) {
       eliminarPermisosUsuario(parametro.iduser);
       registrarPermisosUsuario(permisos);
-    } else
-      alerta("danger", "ocurrio un error al intentar gurdar los permisos.");
+    } else enqueueSnackbar("ocurrio un error al intentar gurdar los permisos.", { variant: "error" });
   };
 
   const PermisosAEnviar = () => {
@@ -106,9 +103,7 @@ const PermisosUsuario = () => {
         <div className="flex-grow border-t"></div>
         <br />
       </div>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 pl-2 border">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -130,9 +125,7 @@ const PermisosUsuario = () => {
 
                 {checkedState?.map((i) =>
                   i.lugarTrabajoId === item.id ? (
-                    <td
-                      className="text-center border"
-                      key={`${item.id}_${i.id}_${i.key}`}>
+                    <td className="text-center border" key={`${item.id}_${i.id}_${i.key}`}>
                       <input
                         key={i.key}
                         type="checkbox"

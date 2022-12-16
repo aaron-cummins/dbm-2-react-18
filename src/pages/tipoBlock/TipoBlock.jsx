@@ -22,7 +22,6 @@ const TipoBlock = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nuevo Tipo Block
           </button>
         </Header>
@@ -34,7 +33,7 @@ const TipoBlock = () => {
         </Modal>
       </div>
     </TipoBlockContextProvider>
-  )
-}
+  );
+};
 
-export default TipoBlock
+export default TipoBlock;

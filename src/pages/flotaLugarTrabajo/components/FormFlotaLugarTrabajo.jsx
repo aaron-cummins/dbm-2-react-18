@@ -1,23 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import {
-  Alerts,
-  Buttons,
-  Checkbox,
-  SelectLugarTrabajo,
-  SelectFlota,
-} from "components";
+import { Buttons, Checkbox, SelectLugarTrabajo, SelectFlota } from "components";
 import { FlotaLugarTrabajoContext } from "../context/flotaLugarTrabajoContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormFlotaLugarTrabajo = () => {
-  const {
-    registrarFlotaLugarTrabajo,
-    flotaLugarTrabajoActual,
-    actualizarFlotaLugarTrabajo,
-    obtenerFlotaLugarTrabajo,
-  } = useContext(FlotaLugarTrabajoContext);
-
+  const { registrarFlotaLugarTrabajo, flotaLugarTrabajoActual, actualizarFlotaLugarTrabajo, obtenerFlotaLugarTrabajo } =
+    useContext(FlotaLugarTrabajoContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
   const flotaLugarTrabajoDefault = useMemo(
     () => ({
@@ -35,9 +26,7 @@ const FormFlotaLugarTrabajo = () => {
     []
   );
 
-  const [flotaLugarTrabajo, setFlotaLugarTrabajo] = useState(
-    flotaLugarTrabajoDefault
-  );
+  const [flotaLugarTrabajo, setFlotaLugarTrabajo] = useState(flotaLugarTrabajoDefault);
 
   useEffect(() => {
     flotaLugarTrabajoActual !== null
@@ -98,9 +87,7 @@ const FormFlotaLugarTrabajo = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <SelectFlota

@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { TipolugartrabajoContext } from "../context/tipolugartrabajoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormTipolugartrabajo = () => {
-  const {
-    registrarTipolugartrabajo,
-    tipolugartrabajoActual,
-    actualizarTipolugartrabajo,
-    obtenerTipolugartrabajo,
-  } = useContext(TipolugartrabajoContext);
-  const { mensaje, alerta } = useStateContext();
+  const { registrarTipolugartrabajo, tipolugartrabajoActual, actualizarTipolugartrabajo, obtenerTipolugartrabajo } =
+    useContext(TipolugartrabajoContext);
+  const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const tipolugartrabajoDefault = useMemo(() => {
     return {
       id: 0,
@@ -20,14 +18,10 @@ const FormTipolugartrabajo = () => {
     };
   }, []);
 
-  const [tipolugartrabajo, setTipolugartrabajo] = useState(
-    tipolugartrabajoDefault
-  );
+  const [tipolugartrabajo, setTipolugartrabajo] = useState(tipolugartrabajoDefault);
 
   useEffect(() => {
-    tipolugartrabajoActual
-      ? setTipolugartrabajo(tipolugartrabajoActual)
-      : setTipolugartrabajo(tipolugartrabajoDefault);
+    tipolugartrabajoActual ? setTipolugartrabajo(tipolugartrabajoActual) : setTipolugartrabajo(tipolugartrabajoDefault);
   }, [tipolugartrabajoActual, tipolugartrabajoDefault]);
 
   const handleChange = (e) => {
@@ -51,7 +45,7 @@ const FormTipolugartrabajo = () => {
     e.preventDefault();
 
     if (tipolugartrabajo.nombre === "") {
-      alerta("danger", "Debe ingresar un nombre valido");
+      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
       return false;
     }
 
@@ -70,9 +64,7 @@ const FormTipolugartrabajo = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText

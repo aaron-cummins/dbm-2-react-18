@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import EstadoEquipoInstalacionReducer from "../reducer/EstadoEquipoInstalacionReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -80,10 +68,7 @@ export const EstadoEquipoInstalacionContextProvider = (props) => {
       alerta("success", "Estado Equipo Instalación creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el Estado Equipo Instalación. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el Estado Equipo Instalación. ${error}`);
     }
   };
 
@@ -98,10 +83,7 @@ export const EstadoEquipoInstalacionContextProvider = (props) => {
       alerta("success", "Estado Equipo Instalación actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el Estado Equipo Instalación. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el Estado Equipo Instalación. ${error}`);
     }
   };
 
@@ -116,10 +98,7 @@ export const EstadoEquipoInstalacionContextProvider = (props) => {
       alerta("success", "Estado Equipo Instalación eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el Estado Equipo Instalación. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el Estado Equipo Instalación. ${error}`);
     }
   };
 
@@ -138,6 +117,6 @@ export const EstadoEquipoInstalacionContextProvider = (props) => {
       {props.children}
     </EstadoEquipoInstalacionContext.Provider>
   );
-}
+};
 
-export default EstadoEquipoInstalacionContext
+export default EstadoEquipoInstalacionContext;

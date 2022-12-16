@@ -1,6 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
 import {
-  Alerts,
   InputText,
   Buttons,
   Checkbox,
@@ -161,8 +160,7 @@ const FormUnidad = () => {
   return (
     <>
       <form onSubmit={handleOnSubmit}>
-        {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
-
+        {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
         <div className="grid grid-cols-2 gap-4">
           <div className="form-group mb-6">
             <SelectLugarTrabajo

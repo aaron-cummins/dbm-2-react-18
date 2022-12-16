@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import equipoReducer from "../reducer/equipoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
@@ -36,9 +24,7 @@ export const EquipoContextProvider = (props) => {
   /* OBETENER LISTADO DE EQUIPOS */
   const obtenerEquipos = async () => {
     try {
-      const resultado = await callEndpoint(
-        getList(`${urlApi}/oemaplicacionoem`)
-      );
+      const resultado = await callEndpoint(getList(urlApi));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,
@@ -83,13 +69,10 @@ export const EquipoContextProvider = (props) => {
         type: REGISTRAR,
         payload: resul,
       });
-      alerta("success", "Región creada con exito!");
+      alerta("success", "Equipo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear la región. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el equipo. ${error}`);
     }
   };
 
@@ -104,13 +87,10 @@ export const EquipoContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resul,
       });
-      alerta("success", "Región actualizada con exito!");
+      alerta("success", "Equipo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la región. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el equipo. ${error}`);
     }
   };
 
@@ -125,10 +105,7 @@ export const EquipoContextProvider = (props) => {
       alerta("success", "Equipo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el equipo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el equipo. ${error}`);
     }
   };
 

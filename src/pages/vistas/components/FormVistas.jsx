@@ -1,19 +1,16 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "components";
+import { InputText, Buttons } from "components";
 import { VistasContext } from "../context/vistasContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import SelectGrupo from "./SelectGrupo";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormVistas = () => {
-  const {
-    registrarVistas,
-    vistasActual,
-    actualizarVistas,
-    obtenerVistasGrouplist,
-    obtenerVistas,
-  } = useContext(VistasContext);
+  const { registrarVistas, vistasActual, actualizarVistas, obtenerVistasGrouplist, obtenerVistas } =
+    useContext(VistasContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const vistasDefault = useMemo(() => {
     return {
       id: 0,
@@ -51,9 +48,7 @@ const FormVistas = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    vistasActual
-      ? actualizarVistas(VistasAEnviar())
-      : registrarVistas(VistasAEnviar());
+    vistasActual ? actualizarVistas(VistasAEnviar()) : registrarVistas(VistasAEnviar());
 
     limpiaForm();
     closeModal();
@@ -66,9 +61,7 @@ const FormVistas = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -83,12 +76,7 @@ const FormVistas = () => {
         </div>
         <div className="form-group mb-4">
           <label className="text-gray-700">Grupo</label>
-          <SelectGrupo
-            id="grupoVistasId"
-            name="grupoVistasId"
-            value={vistas.grupoVistasId}
-            onChange={handleChange}
-          />
+          <SelectGrupo id="grupoVistasId" name="grupoVistasId" value={vistas.grupoVistasId} onChange={handleChange} />
         </div>
       </div>
 

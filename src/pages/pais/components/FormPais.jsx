@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { PaisContext } from "../context/paisContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormPais = () => {
-  const { registrarPais, paisActual, actualizarPais, obtenerPais } =
-    useContext(PaisContext);
+  const { registrarPais, paisActual, actualizarPais, obtenerPais } = useContext(PaisContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const paisDefault = useMemo(() => {
     return {
       id: 0,
@@ -54,9 +55,7 @@ const FormPais = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -82,13 +81,7 @@ const FormPais = () => {
         </div>
       </div>
       <div className="form-group form-check mb-6 items-center">
-        <Checkbox
-          id="activo"
-          name="activo"
-          label="Activo"
-          onChangeFN={handleChange}
-          checked={pais.activo}
-        />
+        <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={pais.activo} />
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

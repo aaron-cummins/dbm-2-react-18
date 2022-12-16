@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { TipoInyeccionContext } from "../context/tipoinyeccionContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormTipoInyeccion = () => {
-  const {
-    registrarTipoInyeccion,
-    tipoinyeccionActual,
-    actualizarTipoInyeccion,
-    obtenerTipoInyeccion,
-  } = useContext(TipoInyeccionContext);
-  const { mensaje, alerta } = useStateContext();
+  const { registrarTipoInyeccion, tipoinyeccionActual, actualizarTipoInyeccion, obtenerTipoInyeccion } =
+    useContext(TipoInyeccionContext);
+  const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const tipoinyeccionDefault = useMemo(() => {
     return {
       id: 0,
@@ -23,9 +21,7 @@ const FormTipoInyeccion = () => {
   const [tipoinyeccion, setTipoInyeccion] = useState(tipoinyeccionDefault);
 
   useEffect(() => {
-    tipoinyeccionActual
-      ? setTipoInyeccion(tipoinyeccionActual)
-      : setTipoInyeccion(tipoinyeccionDefault);
+    tipoinyeccionActual ? setTipoInyeccion(tipoinyeccionActual) : setTipoInyeccion(tipoinyeccionDefault);
   }, [tipoinyeccionActual, tipoinyeccionDefault]);
 
   const handleChange = (e) => {
@@ -49,7 +45,7 @@ const FormTipoInyeccion = () => {
     e.preventDefault();
 
     if (tipoinyeccion.nombre === "") {
-      alerta("danger", "Debe ingresar un nombre valido");
+      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
       return false;
     }
 
@@ -68,9 +64,7 @@ const FormTipoInyeccion = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -84,13 +78,7 @@ const FormTipoInyeccion = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={tipoinyeccion.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={tipoinyeccion.activo} />
         </div>
       </div>
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

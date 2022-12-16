@@ -1,15 +1,12 @@
 import React, { useEffect, useContext } from "react";
 import { UnidadContext } from "../context/unidadContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
 
 const TablaUnidad = () => {
   const { unidadList, obtenerUnidadlist, obtenerUnidad } = useContext(UnidadContext);
-  const { mensaje } = useStateContext();
   const { obtenerFlotas, obtenerVersionEquipos, obtenerLugaresTrabajo, obtenerAplicacionOems, obtenerOems } =
     useContext(SelectsContext);
-
   const getUnidad = (props) => obtenerUnidad(props);
 
   useEffect(() => {
@@ -68,12 +65,7 @@ const TablaUnidad = () => {
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
-      <Tabla columns={columns} data={unidadList} />
-    </>
-  );
+  return <Tabla columns={columns} data={unidadList} />;
 };
 
 export default TablaUnidad;

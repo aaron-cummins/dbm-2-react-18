@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import flotaLugarTrabajoReducer from "../reducer/flotaLugarTrabajoReducer.js";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -80,10 +68,7 @@ export const FlotaLugarTrabajoContextProvider = (props) => {
       alerta("success", "Flota asignada a lugar de trabajo con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar asignar la flota. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar asignar la flota. ${error}`);
     }
   };
 
@@ -98,10 +83,7 @@ export const FlotaLugarTrabajoContextProvider = (props) => {
       alerta("success", "Flota actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la flota. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar la flota. ${error}`);
     }
   };
 
@@ -116,10 +98,7 @@ export const FlotaLugarTrabajoContextProvider = (props) => {
       alerta("success", "Flota eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar la flota. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar la flota. ${error}`);
     }
   };
 

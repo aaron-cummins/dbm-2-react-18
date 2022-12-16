@@ -71,6 +71,8 @@ const Rutas = () => {
         <Route path="/cargo" element={<Cargo />}></Route>
         <Route path="/comuna" element={<Comuna />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
+        <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
+        <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
         <Route path="/flotas" element={<Flotas />}></Route>
         <Route path="/flotalugartrabajo" element={<FlotaLugarTrabajo />}></Route>
         <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
@@ -80,6 +82,7 @@ const Rutas = () => {
         <Route path="/oem" element={<Oem />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
         <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
+        <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
         <Route path="/region" element={<Region />}></Route>
         <Route path="/roles" element={<Roles />}></Route>
         <Route path="/tipoadmision" element={<TipoAdmision />}></Route>
@@ -89,10 +92,7 @@ const Rutas = () => {
         <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
-        <Route path="/posttratamiento" element={<PostTratamiento />}></Route>
         <Route path="/TipoBlock" element={<TipoBlock />}></Route>
-        <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
-        <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
 
         <Route path="/usuarios" element={<Usuario />}>
           <Route index element={<IndexUsuario />}></Route>

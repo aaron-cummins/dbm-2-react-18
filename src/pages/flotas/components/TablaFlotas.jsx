@@ -1,11 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { FlotaContext } from "../context/flotaContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaFlotas = () => {
   const { flotaList, obtenerFlotas, obtenerFlota } = useContext(FlotaContext);
-  const { mensaje } = useStateContext();
   const getFlota = (props) => obtenerFlota(props);
 
   useEffect(() => {
@@ -23,24 +21,11 @@ const TablaFlotas = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getFlota(props)}
-          nombreform="flota"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getFlota(props)} nombreform="flota" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={flotaList} />
-    </>
-  );
+  return <Tabla columns={columns} data={flotaList} />;
 };
 
 export default TablaFlotas;

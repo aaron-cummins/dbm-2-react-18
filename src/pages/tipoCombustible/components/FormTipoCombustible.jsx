@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { TipoCombustibleContext } from "../context/tipocombustibleContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormTipoCombustible = () => {
-  const {
-    registrarTipoCombustible,
-    tipocombustibleActual,
-    actualizarTipoCombustible,
-    obtenerTipoCombustible,
-  } = useContext(TipoCombustibleContext);
-  const { mensaje, alerta } = useStateContext();
+  const { registrarTipoCombustible, tipocombustibleActual, actualizarTipoCombustible, obtenerTipoCombustible } =
+    useContext(TipoCombustibleContext);
+  const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const tipocombustibleDefault = useMemo(() => {
     return {
       id: 0,
@@ -20,14 +18,10 @@ const FormTipoCombustible = () => {
     };
   }, []);
 
-  const [tipocombustible, setTipoCombustible] = useState(
-    tipocombustibleDefault
-  );
+  const [tipocombustible, setTipoCombustible] = useState(tipocombustibleDefault);
 
   useEffect(() => {
-    tipocombustibleActual
-      ? setTipoCombustible(tipocombustibleActual)
-      : setTipoCombustible(tipocombustibleDefault);
+    tipocombustibleActual ? setTipoCombustible(tipocombustibleActual) : setTipoCombustible(tipocombustibleDefault);
   }, [tipocombustibleActual, tipocombustibleDefault]);
 
   const handleChange = (e) => {
@@ -51,7 +45,7 @@ const FormTipoCombustible = () => {
     e.preventDefault();
 
     if (tipocombustible.nombre === "") {
-      alerta("danger", "Debe ingresar un nombre valido");
+      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
       return false;
     }
 
@@ -70,9 +64,7 @@ const FormTipoCombustible = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText

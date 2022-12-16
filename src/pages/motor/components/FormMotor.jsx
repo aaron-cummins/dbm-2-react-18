@@ -1,20 +1,13 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  Label,
-  SelectAplicacion,
-} from "components";
+import { InputText, Buttons, Checkbox, SelectAplicacion } from "components";
 import { MotorContext } from "../context/motorContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormMotor = () => {
-  const { registrarMotor, motorActual, actualizarMotor, obtenerMotor } =
-    useContext(MotorContext);
-
+  const { registrarMotor, motorActual, actualizarMotor, obtenerMotor } = useContext(MotorContext);
+  const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
   const motorDefault = useMemo(
     () => ({
@@ -52,9 +45,7 @@ const FormMotor = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    motorActual !== null
-      ? actualizarMotor(MotorAEnviar())
-      : registrarMotor(MotorAEnviar());
+    motorActual !== null ? actualizarMotor(MotorAEnviar()) : registrarMotor(MotorAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -66,9 +57,7 @@ const FormMotor = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -104,13 +93,7 @@ const FormMotor = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={motor.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={motor.activo} />
         </div>
       </div>
       <div className="form-group form-check mb-6 items-center"></div>

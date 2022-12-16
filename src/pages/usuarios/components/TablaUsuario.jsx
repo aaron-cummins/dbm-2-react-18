@@ -1,18 +1,11 @@
 import React, { useEffect, useContext } from "react";
 import { UsuarioContext } from "../context/usuarioContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
 import { useNavigate } from "react-router-dom";
 
 const TablaUsuario = () => {
-  const {
-    usuarioList,
-    obtenerUsuariolist,
-    obtenerUsuario,
-    obtenerPermisosUsuariolist,
-  } = useContext(UsuarioContext);
-  const { mensaje } = useStateContext();
+  const { usuarioList, obtenerUsuariolist, obtenerUsuario, obtenerPermisosUsuariolist } = useContext(UsuarioContext);
   const { obtenerCargos, obtenerRol } = useContext(SelectsContext);
 
   const navigate = useNavigate();
@@ -44,33 +37,22 @@ const TablaUsuario = () => {
     { name: "Cargo", selector: (row) => row.cargo.nombre },
     { name: "Correo", selector: (row) => row.correo },
     {
+      name: "Activo",
+      cell: (props) => <ColActivoTabla activo={props.activo} />,
+      sortable: true,
+    },
+    {
       name: "Acciones",
       cell: (props) => (
         <>
-          <OpcionesTabla
-            editar={true}
-            FnEditar={() => getUsuario(props)}
-            nombreform="usuario"
-          />
-          <OpcionesTabla
-            info={true}
-            tooltip="Permisos"
-            FnInfo={() => getUsuarioPermisos(props)}
-            nombreform="usuario"
-          />
+          <OpcionesTabla editar={true} FnEditar={() => getUsuario(props)} nombreform="usuario" />
+          <OpcionesTabla info={true} tooltip="Permisos" FnInfo={() => getUsuarioPermisos(props)} nombreform="usuario" />
         </>
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={usuarioList} />
-    </>
-  );
+  return <Tabla columns={columns} data={usuarioList} />;
 };
 
 export default TablaUsuario;

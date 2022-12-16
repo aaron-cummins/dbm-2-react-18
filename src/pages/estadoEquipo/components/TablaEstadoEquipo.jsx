@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { EstadoEquipoContext } from "../context/EstadoEquipoContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaEstadoEquipo = () => {
-  const { EstadoEquipoList, obtenerEstadoEquipo, obtenerEstadoEquipos } =
-  useContext(EstadoEquipoContext);
-  const { mensaje } = useStateContext();
+  const { EstadoEquipoList, obtenerEstadoEquipo, obtenerEstadoEquipos } = useContext(EstadoEquipoContext);
 
   const getEstadoEquipo = (props) => {
     obtenerEstadoEquipo(props);
@@ -28,23 +25,12 @@ const TablaEstadoEquipo = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getEstadoEquipo(props)}
-          nombreform="estadoequipo"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getEstadoEquipo(props)} nombreform="estadoequipo" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={EstadoEquipoList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={EstadoEquipoList} />;
+};
 
-export default TablaEstadoEquipo
+export default TablaEstadoEquipo;

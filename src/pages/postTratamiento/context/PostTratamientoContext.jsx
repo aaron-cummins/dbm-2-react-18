@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import PostTratamientoReducer from "../reducer/PostTratamientoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -80,10 +68,7 @@ export const PostTratamientoContextProvider = (props) => {
       alerta("success", "Post tratamiento creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el Post tratamiento. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el Post tratamiento. ${error}`);
     }
   };
 
@@ -98,10 +83,7 @@ export const PostTratamientoContextProvider = (props) => {
       alerta("success", "Post tratamiento actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el Post tratamiento. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el Post tratamiento. ${error}`);
     }
   };
 
@@ -116,10 +98,7 @@ export const PostTratamientoContextProvider = (props) => {
       alerta("success", "Post tratamiento eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el Post tratamiento. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el Post tratamiento. ${error}`);
     }
   };
 
@@ -138,6 +117,6 @@ export const PostTratamientoContextProvider = (props) => {
       {props.children}
     </PostTratamientoContext.Provider>
   );
-}
+};
 
-export default PostTratamientoContext
+export default PostTratamientoContext;

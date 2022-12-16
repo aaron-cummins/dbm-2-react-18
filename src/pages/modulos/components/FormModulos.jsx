@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { ModulosContext } from "../context/modulosContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormModulos = () => {
-  const { registrarModulos, modulosActual, actualizarModulos, obtenerModulos } =
-    useContext(ModulosContext);
+  const { registrarModulos, modulosActual, actualizarModulos, obtenerModulos } = useContext(ModulosContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const modulosDefault = useMemo(
     () => ({
       id: 0,
@@ -47,9 +48,7 @@ const FormModulos = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    modulosActual
-      ? actualizarModulos(ModulosAEnviar())
-      : registrarModulos(ModulosAEnviar());
+    modulosActual ? actualizarModulos(ModulosAEnviar()) : registrarModulos(ModulosAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -64,9 +63,7 @@ const FormModulos = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -104,13 +101,7 @@ const FormModulos = () => {
           />
         </div>
         <div className="form-group form-check mb-6 items-center">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={modulos.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={modulos.activo} />
         </div>
       </div>
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

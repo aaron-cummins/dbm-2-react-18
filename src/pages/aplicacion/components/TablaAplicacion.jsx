@@ -26,11 +26,7 @@ const TablaAplicacion = () => {
     },
   ];
 
-  return (
-    <>
-      <Tabla columns={columns} data={aplicacionList} />
-    </>
-  );
+  return <Tabla columns={columns} data={aplicacionList} />;
 };
 
 export default TablaAplicacion;

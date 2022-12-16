@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Header, Modal } from "components";
 import { useStateContext } from "contexts/ContextProvider";
 

@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { VistasContext } from "../context/vistasContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { OpcionesTabla, Tabla } from "components";
 
 const TablaVistas = () => {
-  const { vistasList, obtenerVistas, obtenerVistaslist } =
-    useContext(VistasContext);
-  const { mensaje } = useStateContext();
+  const { vistasList, obtenerVistas, obtenerVistaslist } = useContext(VistasContext);
   const getVistas = (props) => obtenerVistas(props);
 
   useEffect(() => {
@@ -20,27 +17,11 @@ const TablaVistas = () => {
     { name: "Accion", selector: (row) => row.accion, sortable: true },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getVistas(props)}
-          nombreform="vistas"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getVistas(props)} nombreform="vistas" />,
     },
   ];
 
-  return (
-    <>
-      <div>
-        {mensaje.mensaje ? (
-          <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-        ) : null}
-
-        <Tabla columns={columns} data={vistasList} />
-      </div>
-    </>
-  );
+  return <Tabla columns={columns} data={vistasList} />;
 };
 
 export default TablaVistas;

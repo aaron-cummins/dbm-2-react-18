@@ -1,15 +1,12 @@
 import React, { useEffect, useContext } from "react";
 import { VistasGroupContext } from "../context/vistasGroupContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { OpcionesTabla, Tabla } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
 
 const TablaVistasGroup = () => {
-  const { vistasgroupList, obtenerVistasGrouplist, obtenerVistasGroup } =
-    useContext(VistasGroupContext);
+  const { vistasgroupList, obtenerVistasGrouplist, obtenerVistasGroup } = useContext(VistasGroupContext);
 
   const { obtenerModulos } = useContext(SelectsContext);
-  const { mensaje } = useStateContext();
 
   const getVistasGroup = (props) => obtenerVistasGroup(props);
 
@@ -25,24 +22,11 @@ const TablaVistasGroup = () => {
     { name: "Modulo (id)", selector: (row) => row.id_modulo, sortable: true },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getVistasGroup(props)}
-          nombreform="vistasgroup"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getVistasGroup(props)} nombreform="vistasgroup" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla data={vistasgroupList} columns={columns} />
-    </>
-  );
+  return <Tabla data={vistasgroupList} columns={columns} />;
 };
 
 export default TablaVistasGroup;

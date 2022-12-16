@@ -6,7 +6,6 @@ import { PostTratamientoContextProvider } from "./context/PostTratamientoContext
 import FormPostTratamiento from "./components/FormPostTratamiento";
 import TablaPostTratamiento from "./components/TablaPostTratamiento";
 
-
 const PostTratamiento = () => {
   const { currentColor } = useStateContext();
   return (
@@ -23,7 +22,6 @@ const PostTratamiento = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nuevo Post Tratamiento
           </button>
         </Header>
@@ -35,7 +33,7 @@ const PostTratamiento = () => {
         </Modal>
       </div>
     </PostTratamientoContextProvider>
-  )
-}
+  );
+};
 
-export default PostTratamiento
+export default PostTratamiento;

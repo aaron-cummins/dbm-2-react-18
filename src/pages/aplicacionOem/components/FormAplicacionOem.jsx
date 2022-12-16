@@ -1,17 +1,15 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { AplicacionOemContext } from "../context/aplicacionOemContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
 
 const FormAplicacionOem = () => {
-  const {
-    aplicacionOemActual,
-    registrarAplicacionOem,
-    actualizarAplicacionOem,
-    obtenerAplicacionOem,
-  } = useContext(AplicacionOemContext);
+  const { aplicacionOemActual, registrarAplicacionOem, actualizarAplicacionOem, obtenerAplicacionOem } =
+    useContext(AplicacionOemContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
 
   const aplicacionoemDefault = useMemo(
     () => ({
@@ -24,9 +22,7 @@ const FormAplicacionOem = () => {
   const [aplicacionoem, setAplicacionOem] = useState(aplicacionoemDefault);
 
   useEffect(() => {
-    aplicacionOemActual
-      ? setAplicacionOem(aplicacionOemActual)
-      : setAplicacionOem(aplicacionoemDefault);
+    aplicacionOemActual ? setAplicacionOem(aplicacionOemActual) : setAplicacionOem(aplicacionoemDefault);
   }, [aplicacionOemActual, aplicacionoemDefault]);
 
   const handleChange = (e) => {
@@ -63,9 +59,7 @@ const FormAplicacionOem = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -79,13 +73,7 @@ const FormAplicacionOem = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={aplicacionoem.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={aplicacionoem.activo} />
         </div>
       </div>
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

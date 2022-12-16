@@ -1,13 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { RolesContext } from "../context/rolesContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
 
 const FormRoles = () => {
-  const { registrarRoles, rolesActual, actualizarRoles, obtenerRoles } =
-    useContext(RolesContext);
+  const { registrarRoles, rolesActual, actualizarRoles, obtenerRoles } = useContext(RolesContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
   const rolesDefault = useMemo(() => {
     return {
       id: 0,
@@ -44,9 +45,7 @@ const FormRoles = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    rolesActual !== null
-      ? actualizarRoles(RolesAEnviar())
-      : registrarRoles(RolesAEnviar());
+    rolesActual !== null ? actualizarRoles(RolesAEnviar()) : registrarRoles(RolesAEnviar());
     limpiaForm();
     closeModal();
   };
@@ -61,9 +60,7 @@ const FormRoles = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid gap-4">
         <div className="form-group">
           <InputText
@@ -77,13 +74,7 @@ const FormRoles = () => {
           />
         </div>
         <div className="form-group form-check mb-6 items-center">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={roles.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={roles.activo} />
         </div>
       </div>
 

@@ -22,7 +22,6 @@ const EstadoEquipoInstalacion = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nuevo Estado Equipo Instalación
           </button>
         </Header>
@@ -34,7 +33,7 @@ const EstadoEquipoInstalacion = () => {
         </Modal>
       </div>
     </EstadoEquipoInstalacionContextProvider>
-  )
-}
+  );
+};
 
-export default EstadoEquipoInstalacion
+export default EstadoEquipoInstalacion;

@@ -29,9 +29,7 @@ const FlotaLugarTrabajo = () => {
 
         <TablaFlotasLugarTrabajo />
 
-        <Modal
-          ModalTitle="Flota - Lugar de Trabajo"
-          modalId="flotalugartrabajo-modal">
+        <Modal ModalTitle="Flota - Lugar de Trabajo" modalId="flotalugartrabajo-modal">
           <FormFlotaLugarTrabajo />
         </Modal>
       </div>

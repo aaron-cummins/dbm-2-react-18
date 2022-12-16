@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { PostTratamientoContext } from "../context/PostTratamientoContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaPostTratamiento = () => {
-  const { PostTratamientoList, obtenerPostTratamiento, obtenerPostTratamientos } =
-  useContext(PostTratamientoContext);
-  const { mensaje } = useStateContext();
+  const { PostTratamientoList, obtenerPostTratamiento, obtenerPostTratamientos } = useContext(PostTratamientoContext);
 
   const getPostTratamiento = (props) => {
     obtenerPostTratamiento(props);
@@ -28,23 +25,12 @@ const TablaPostTratamiento = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getPostTratamiento(props)}
-          nombreform="posttratamiento"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getPostTratamiento(props)} nombreform="posttratamiento" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={PostTratamientoList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={PostTratamientoList} />;
+};
 
-export default TablaPostTratamiento
+export default TablaPostTratamiento;

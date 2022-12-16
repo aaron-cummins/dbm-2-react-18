@@ -1,18 +1,6 @@
 import React, { createContext, useReducer, useState } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import lugartrabajoReducer from "../reducer/lugarTrabajoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -86,10 +74,7 @@ export const LugarTrabajoContextProvider = (props) => {
       alerta("success", "Lugar de Trabajo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el lugar de trabajo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el lugar de trabajo. ${error}`);
     }
   };
 
@@ -104,10 +89,7 @@ export const LugarTrabajoContextProvider = (props) => {
       alerta("success", "Lugar de Trabajo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el lugar trabajo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el lugar trabajo. ${error}`);
     }
   };
 
@@ -122,10 +104,7 @@ export const LugarTrabajoContextProvider = (props) => {
       alerta("success", "Lugar de Trabajo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el lugar de trabajo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el lugar de trabajo. ${error}`);
     }
   };
 
