@@ -16,6 +16,12 @@ import {
   TipoBlock,
   EstadoEquipo,
   EstadoEquipoInstalacion,
+  TipoContrato,
+  TipoSalida,
+  MotivoCambio,
+  EstadoMotor,
+  FuenteInformacion,
+  EstadoMotorInstalacion,
   TipoAdmision,
   TipoCombustible,
   TipoEmision,
@@ -73,12 +79,16 @@ const Rutas = () => {
         <Route path="/equipo" element={<Equipo />}></Route>
         <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
         <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
+        <Route path="/EstadoMotorInstalacion" element={<EstadoMotorInstalacion />}></Route>
+        <Route path="/EstadoMotor" element={<EstadoMotor />}></Route>
         <Route path="/flotas" element={<Flotas />}></Route>
         <Route path="/flotalugartrabajo" element={<FlotaLugarTrabajo />}></Route>
+        <Route path="/FuenteInformacion" element={<FuenteInformacion />}></Route>
         <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>
         <Route path="/motor" element={<Motor />}></Route>
+        <Route path="/MotivoCambio" element={<MotivoCambio />}></Route>
         <Route path="/oem" element={<Oem />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
         <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
@@ -93,7 +103,8 @@ const Rutas = () => {
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
         <Route path="/TipoBlock" element={<TipoBlock />}></Route>
-
+        <Route path="/TipoContrato" element={<TipoContrato />}></Route>
+        <Route path="/TipoSalida" element={<TipoSalida />}></Route>
         <Route path="/usuarios" element={<Usuario />}>
           <Route index element={<IndexUsuario />}></Route>
           <Route path="permisosusuario/:iduser" element={<PermisosUsuario />}></Route>
