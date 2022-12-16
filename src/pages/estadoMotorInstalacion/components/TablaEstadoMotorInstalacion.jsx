@@ -1,12 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { EstadoMotorInstalacionContext } from "../context/EstadoMotorInstalacionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaEstadoMotorInstalacion = () => {
   const { EstadoMotorInstalacionList, obtenerEstadoMotorInstalacion, obtenerEstadoMotorInstalaciones } =
-  useContext(EstadoMotorInstalacionContext);
-  const { mensaje } = useStateContext();
+    useContext(EstadoMotorInstalacionContext);
 
   const getEstadoMotorInstalacion = (props) => {
     obtenerEstadoMotorInstalacion(props);
@@ -37,14 +35,7 @@ const TablaEstadoMotorInstalacion = () => {
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={EstadoMotorInstalacionList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={EstadoMotorInstalacionList} />;
+};
 
-export default TablaEstadoMotorInstalacion
+export default TablaEstadoMotorInstalacion;

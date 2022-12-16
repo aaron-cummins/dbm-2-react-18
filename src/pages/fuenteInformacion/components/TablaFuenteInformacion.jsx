@@ -1,12 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { FuenteInformacionContext } from "../context/FuenteInformacionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaFuenteInformacion = () => {
   const { FuenteInformacionList, obtenerFuenteInformacion, obtenerFuenteInformaciones } =
-  useContext(FuenteInformacionContext);
-  const { mensaje } = useStateContext();
+    useContext(FuenteInformacionContext);
 
   const getFuenteInformacion = (props) => {
     obtenerFuenteInformacion(props);
@@ -28,23 +26,12 @@ const TablaFuenteInformacion = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getFuenteInformacion(props)}
-          nombreform="fuenteinformacion"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getFuenteInformacion(props)} nombreform="fuenteinformacion" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={FuenteInformacionList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={FuenteInformacionList} />;
+};
 
-export default TablaFuenteInformacion
+export default TablaFuenteInformacion;

@@ -6,7 +6,6 @@ import { EstadoMotorInstalacionContextProvider } from "./context/EstadoMotorInst
 import FormEstadoMotorInstalacion from "./components/FormEstadoMotorInstalacion";
 import TablaEstadoMotorInstalacion from "./components/TablaEstadoMotorInstalacion";
 
-
 const EstadoMotorInstalacion = () => {
   const { currentColor } = useStateContext();
   return (
@@ -23,7 +22,6 @@ const EstadoMotorInstalacion = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nuevo Estado Motor Instalación
           </button>
         </Header>
@@ -35,7 +33,7 @@ const EstadoMotorInstalacion = () => {
         </Modal>
       </div>
     </EstadoMotorInstalacionContextProvider>
-  )
-}
+  );
+};
 
-export default EstadoMotorInstalacion
+export default EstadoMotorInstalacion;

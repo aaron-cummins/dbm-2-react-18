@@ -6,7 +6,6 @@ import { MotivoCambioContextProvider } from "./context/MotivoCambioContext";
 import FormMotivoCambio from "./components/FormMotivoCambio";
 import TablaMotivoCambio from "./components/TablaMotivoCambio";
 
-
 const MotivoCambio = () => {
   const { currentColor } = useStateContext();
   return (
@@ -23,7 +22,6 @@ const MotivoCambio = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nuevo Motivo Cambio
           </button>
         </Header>
@@ -35,7 +33,7 @@ const MotivoCambio = () => {
         </Modal>
       </div>
     </MotivoCambioContextProvider>
-  )
-}
+  );
+};
 
-export default MotivoCambio
+export default MotivoCambio;

@@ -6,7 +6,6 @@ import { FuenteInformacionContextProvider } from "./context/FuenteInformacionCon
 import FormFuenteInformacion from "./components/FormFuenteInformacion";
 import TablaFuenteInformacion from "./components/TablaFuenteInformacion";
 
-
 const FuenteInformacion = () => {
   const { currentColor } = useStateContext();
   return (
@@ -23,7 +22,6 @@ const FuenteInformacion = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nueva Fuente Información
           </button>
         </Header>
@@ -35,7 +33,7 @@ const FuenteInformacion = () => {
         </Modal>
       </div>
     </FuenteInformacionContextProvider>
-  )
-}
+  );
+};
 
-export default FuenteInformacion
+export default FuenteInformacion;

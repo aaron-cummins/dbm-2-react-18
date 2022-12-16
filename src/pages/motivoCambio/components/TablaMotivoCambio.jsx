@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { MotivoCambioContext } from "../context/MotivoCambioContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaMotivoCambio = () => {
-  const { MotivoCambioList, obtenerMotivoCambio, obtenerMotivoCambios } =
-  useContext(MotivoCambioContext);
-  const { mensaje } = useStateContext();
+  const { MotivoCambioList, obtenerMotivoCambio, obtenerMotivoCambios } = useContext(MotivoCambioContext);
 
   const getMotivoCambio = (props) => {
     obtenerMotivoCambio(props);
@@ -28,23 +25,12 @@ const TablaMotivoCambio = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getMotivoCambio(props)}
-          nombreform="motivocambio"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getMotivoCambio(props)} nombreform="motivocambio" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={MotivoCambioList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={MotivoCambioList} />;
+};
 
-export default TablaMotivoCambio
+export default TablaMotivoCambio;

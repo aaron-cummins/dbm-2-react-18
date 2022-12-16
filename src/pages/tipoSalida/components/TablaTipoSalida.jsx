@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoSalidaContext } from "../context/TipoSalidaContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoSalida = () => {
-  const { TipoSalidaList, obtenerTipoSalida, obtenerTipoSalidas } =
-  useContext(TipoSalidaContext);
-  const { mensaje } = useStateContext();
+  const { TipoSalidaList, obtenerTipoSalida, obtenerTipoSalidas } = useContext(TipoSalidaContext);
 
   const getTipoSalida = (props) => {
     obtenerTipoSalida(props);
@@ -27,24 +24,11 @@ const TablaTipoSalida = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoSalida(props)}
-          nombreform="tiposalida"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getTipoSalida(props)} nombreform="tiposalida" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={TipoSalidaList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={TipoSalidaList} />;
+};
 
-export default TablaTipoSalida
+export default TablaTipoSalida;

@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import EstadoMotorReducer from "../reducer/EstadoMotorReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -80,10 +68,7 @@ export const EstadoMotorContextProvider = (props) => {
       alerta("success", "Estado Motor creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el Estado Motor. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el Estado Motor. ${error}`);
     }
   };
 
@@ -98,10 +83,7 @@ export const EstadoMotorContextProvider = (props) => {
       alerta("success", "Estado Motor actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el Estado Motor. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el Estado Motor. ${error}`);
     }
   };
 
@@ -116,10 +98,7 @@ export const EstadoMotorContextProvider = (props) => {
       alerta("success", "Estado Motor eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el Estado Motor. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el Estado Motor. ${error}`);
     }
   };
 
@@ -138,6 +117,6 @@ export const EstadoMotorContextProvider = (props) => {
       {props.children}
     </EstadoMotorContext.Provider>
   );
-}
+};
 
-export default EstadoMotorContext
+export default EstadoMotorContext;

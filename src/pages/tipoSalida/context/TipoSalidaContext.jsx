@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import TipoSalidaReducer from "../reducer/TipoSalidaReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -80,10 +68,7 @@ export const TipoSalidaContextProvider = (props) => {
       alerta("success", "Tipo Salida creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el Tipo Salida. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el Tipo Salida. ${error}`);
     }
   };
 
@@ -98,10 +83,7 @@ export const TipoSalidaContextProvider = (props) => {
       alerta("success", "Tipo Salida actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el Tipo Salida. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el Tipo Salida. ${error}`);
     }
   };
 
@@ -116,10 +98,7 @@ export const TipoSalidaContextProvider = (props) => {
       alerta("success", "Tipo Salida eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el Tipo Salida. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el Tipo Salida. ${error}`);
     }
   };
 
@@ -138,6 +117,6 @@ export const TipoSalidaContextProvider = (props) => {
       {props.children}
     </TipoSalidaContext.Provider>
   );
-}
+};
 
-export default TipoSalidaContext
+export default TipoSalidaContext;

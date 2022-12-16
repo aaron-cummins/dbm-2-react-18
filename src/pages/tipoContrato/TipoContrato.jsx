@@ -6,7 +6,6 @@ import { TipoContratoContextProvider } from "./context/TipoContratoContext";
 import FormTipoContrato from "./components/FormTipoContrato";
 import TablaTipoContrato from "./components/TablaTipoContrato";
 
-
 const TipoContrato = () => {
   const { currentColor } = useStateContext();
   return (
@@ -23,7 +22,6 @@ const TipoContrato = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nuevo Tipo Contrato
           </button>
         </Header>
@@ -35,7 +33,7 @@ const TipoContrato = () => {
         </Modal>
       </div>
     </TipoContratoContextProvider>
-  )
-}
+  );
+};
 
-export default TipoContrato
+export default TipoContrato;

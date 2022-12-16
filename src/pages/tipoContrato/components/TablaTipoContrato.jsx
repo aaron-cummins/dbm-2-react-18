@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoContratoContext } from "../context/TipoContratoContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoContrato = () => {
-  const { TipoContratoList, obtenerTipoContrato, obtenerTipoContratos } =
-  useContext(TipoContratoContext);
-  const { mensaje } = useStateContext();
+  const { TipoContratoList, obtenerTipoContrato, obtenerTipoContratos } = useContext(TipoContratoContext);
 
   const getTipoContrato = (props) => {
     obtenerTipoContrato(props);
@@ -28,23 +25,12 @@ const TablaTipoContrato = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoContrato(props)}
-          nombreform="tipocontrato"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getTipoContrato(props)} nombreform="tipocontrato" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={TipoContratoList} />
-    </>
-  );
-}
+  return <Tabla columns={columns} data={TipoContratoList} />;
+};
 
-export default TablaTipoContrato
+export default TablaTipoContrato;
