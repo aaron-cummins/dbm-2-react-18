@@ -37,13 +37,17 @@ export { default as SelectAplicacionOem } from "./Selects/SelectAplicacionOem";
 export { default as SelectCargo } from "./Selects/SelectCargo";
 export { default as SelectComuna } from "./Selects/SelectComuna";
 export { default as SelectFlota } from "./Selects/SelectFlota";
+export { default as SelectFlotaLugarTrabajo } from "./Selects/SelectFlotaLugarTrabajo";
 export { default as SelectModulo } from "./Selects/SelectModulo";
+export { default as SelectMonitoreoFiltro } from "./Selects/SelectMonitoreoFiltro";
+export { default as SelectMonitoreoMotor } from "./Selects/SelectMonitoreoMotor";
 export { default as SelectOem } from "./Selects/SelectOem";
 export { default as SelectLugarTrabajo } from "./Selects/SelectLugarTrabajo";
 export { default as SelectPais } from "./Selects/SelectPais";
 export { default as SelectRegion } from "./Selects/SelectRegion";
 export { default as SelectRol } from "./Selects/SelectRol";
 export { default as SelectTipoLugarTrabajo } from "./Selects/SelectTipoLugarTrabajo";
+export { default as SelectTipoContrato } from "./Selects/SelectTipoContrato";
 export { default as SelectVersionEquipo } from "./Selects/SelectVersionEquipo";
 export { default as SelectZona } from "./Selects/SelectZona";
 // eslint-disable-next-line import/no-cycle

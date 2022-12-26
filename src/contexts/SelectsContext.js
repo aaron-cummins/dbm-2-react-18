@@ -5,6 +5,7 @@ import {
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
   OBTENER_LISTA_FLOTAS,
+  OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_MODULOS,
   OBTENER_LISTA_OEM,
@@ -12,10 +13,13 @@ import {
   OBTENER_LISTA_REGIONES,
   OBTENER_LISTA_ROLES,
   OBTENER_LISTA_TIPO_LUGAR_TRABAJO,
+  OBTENER_LISTA_TIPO_CONTRATOS,
   OBTENER_LISTA_VERSION_EQUIPO,
   OBTENER_LISTA_ZONAS,
+  OBTENER_LISTA_MONITOREO_FILTRO,
+  OBTENER_LISTA_MONITOREO_MOTOR,
 } from "const/actionTypes";
-import { getList } from "services/genericService";
+import { getByID, getList } from "services/genericService";
 import selectsReducer from "reducer/selectsReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
@@ -24,20 +28,24 @@ export const SelectsContext = createContext();
 export const SelectsContextProvider = (props) => {
   const { callEndpoint } = useFetchAndLoad();
   const initialState = {
-    lugarTrabajoList: [],
-    zonaList: [],
-    tipoLugarTrabajoList: [],
-    regionListActiva: [],
-    comunaList: [],
-    paisList: [],
-    modulosList: [],
-    rolesList: [],
-    cargosList: [],
+    aplicacionesList: [],
     aplicacionOemsList: [],
-    oemsList: [],
-    versionEquiposList: [],
+    cargosList: [],
+    comunaList: [],
     flotasList: [],
-    aplicacionesList: []
+    flotasLugarTrabajoList: [],
+    lugarTrabajoList: [],
+    modulosList: [],
+    monitoreoMotorList: [],
+    monitoreoFiltroList: [],
+    oemsList: [],
+    paisList: [],
+    regionListActiva: [],
+    rolesList: [],
+    tipoLugarTrabajoList: [],
+    tipoContratoList: [],
+    versionEquiposList: [],
+    zonaList: [],
   };
 
   const [state, dispatch] = useReducer(selectsReducer, initialState);
@@ -237,7 +245,6 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
-  
   /* OBETENER LISTADO DE Aplicacion OEM */
   const obtenerVersionEquipos = async () => {
     try {
@@ -253,8 +260,8 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
-   /* OBETENER LISTADO DE Aplicacion */
-   const obtenerAplicaciones = async () => {
+  /* OBETENER LISTADO DE Aplicacion */
+  const obtenerAplicaciones = async () => {
     try {
       const resultado = await callEndpoint(getList("aplicacion"));
       if (resultado && resultado.data) {
@@ -268,39 +275,106 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBETENER LISTADO DE Aplicacion */
+  const obtenerTipoContrato = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipocontrato"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_CONTRATOS,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Monitoreo Motor */
+  const obtenerMonitoreoMotor = async () => {
+    try {
+      const resultado = await callEndpoint(getList("monitoreomotor"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_MONITOREO_MOTOR,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Monitoreo Filtro */
+  const obtenerMonitoreoFiltro = async () => {
+    try {
+      const resultado = await callEndpoint(getList("monitoreofiltro"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_MONITOREO_FILTRO,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Flotas Lugar trabajo */
+  const obtenerFlotasLugarTrabajo = async (id) => {
+    try {
+      const resultado = await callEndpoint(getByID("flotalugartrabajo/filtro", id));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
-        lugarTrabajoList: state.lugarTrabajoList,
-        zonaList: state.zonaList,
-        tipoLugarTrabajoList: state.tipoLugarTrabajoList,
-        regionList: state.regionListActiva,
-        comunaList: state.comunaList,
-        paisList: state.paisList,
-        modulosList: state.modulosList,
-        rolesList: state.rolesList,
-        cargosList: state.cargosList,
         aplicacionOemsList: state.aplicacionOemsList,
-        oemsList: state.oemsList,
-        versionEquiposList: state.versionEquiposList,
-        flotasList: state.flotasList,
         aplicacionesList: state.aplicacionesList,
+        cargosList: state.cargosList,
+        comunaList: state.comunaList,
+        flotasList: state.flotasList,
+        flotasLugarTrabajoList: state.flotasLugarTrabajoList,
+        lugarTrabajoList: state.lugarTrabajoList,
+        modulosList: state.modulosList,
+        monitoreoFiltroList: state.monitoreoFiltroList,
+        monitoreoMotorList: state.monitoreoMotorList,
+        oemsList: state.oemsList,
+        paisList: state.paisList,
+        regionList: state.regionListActiva,
+        rolesList: state.rolesList,
+        tipoLugarTrabajoList: state.tipoLugarTrabajoList,
+        tipoContratoList: state.tipoContratoList,
+        versionEquiposList: state.versionEquiposList,
+        zonaList: state.zonaList,
 
         obtenerAplicaciones,
         obtenerAplicacionOems,
         obtenerCargos,
         obtenerComunas,
+        obtenerFlotas,
+        obtenerFlotasLugarTrabajo,
         obtenerModulos,
+        obtenerMonitoreoFiltro,
+        obtenerMonitoreoMotor,
         obtenerOems,
         obtenerLugaresTrabajo,
         obtenerPais,
         obtenerRegiones,
         obtenerRol,
         obtenerTipoLugarTrabajo,
+        obtenerTipoContrato,
+        obtenerVersionEquipos,
         obtenerZonas,
-        obtenerFlotas,
-        obtenerVersionEquipos
-        
       }}>
       {props.children}
     </SelectsContext.Provider>

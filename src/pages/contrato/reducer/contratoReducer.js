@@ -5,29 +5,29 @@ export default (state, action) => {
     case OBTENER_LISTA:
       return {
         ...state,
-        permisoGlobalList: action.payload,
+        contratoList: action.payload,
       };
     case REGISTRAR:
       return {
         ...state,
-        permisoGlobalList: action.payload,
+        contratoList: [...state.contratoList, action.payload],
       };
     case OBTENER:
       return {
         ...state,
-        permisoGlobalActual: action.payload,
+        contratoActual: action.payload,
       };
     case ACTUALIZAR:
       return {
         ...state,
-        permisoGlobalList: state.permisoGlobalList.map((permisoGlobal) =>
-          permisoGlobal.id === action.payload.id ? action.payload : permisoGlobal
+        contratoList: state.contratoList.map((contrato) =>
+          contrato.id === action.payload.id ? action.payload : contrato
         ),
       };
     case ELIMINAR:
       return {
         ...state,
-        permisoGlobalList: state.permisoGlobalList.filter((permisoGlobal) => permisoGlobal.id !== action.payload),
+        contratoList: state.contratoList.filter((contrato) => contrato.id !== action.payload),
       };
     default:
       return state;

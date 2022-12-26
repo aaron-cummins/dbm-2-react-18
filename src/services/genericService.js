@@ -25,3 +25,8 @@ export const deleteObject = (url, id) => {
     const controller = loadAbortAxios();
     return { call: AxiosInstance.delete(`${url}/${id}`, { signal: controller.signal}), controller };
 }
+
+export const deleteAllObject = (url) => {
+    const controller = loadAbortAxios();
+    return { call: AxiosInstance.delete(`${url}`, { signal: controller.signal}), controller };
+}

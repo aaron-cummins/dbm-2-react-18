@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject, deleteAllObject } from "services/genericService";
 import permisosGlobalesReducer from "../reducer/permisosGlobalesReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -76,33 +64,34 @@ export const PermisosGlobalesContextProvider = (props) => {
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "permisoGlobal creado con exito!");
+      alerta("success", "permiso global creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el permisoGlobal. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el permiso global. ${error}`);
     }
   };
 
   /* REGISTRAR permisoGlobal listado */
   const registrarPermisoGlobalList = async (permisoGloballist) => {
     try {
+      let rsltdo = [];
+      console.log(permisoGloballist);
+
+      await eliminarPermisoGlobalesAll();
+
       for (const permi of permisoGloballist) {
         const resultado = await callEndpoint(postObject(urlApi, permi));
-        dispatch({
-          type: REGISTRAR,
-          payload: resultado.data,
-        });
+        rsltdo.push(resultado.data);
       }
-      alerta("success", "permisoGlobal creado con exito!");
+
+      dispatch({
+        type: REGISTRAR,
+        payload: rsltdo,
+      });
+      alerta("success", "permiso global creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el permisoGlobal. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el permiso global. ${error}`);
     }
   };
 
@@ -115,13 +104,10 @@ export const PermisosGlobalesContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "permisoGlobal actualizado con exito!");
+      alerta("success", "permiso global actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el permisoGlobal. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el permiso global. ${error}`);
     }
   };
 
@@ -133,13 +119,20 @@ export const PermisosGlobalesContextProvider = (props) => {
         type: ELIMINAR,
         payload: id,
       });
-      alerta("success", "permisoGlobal eliminado con exito!");
+      alerta("success", "permiso global eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el permisoGlobal. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el permiso global. ${error}`);
+    }
+  };
+
+  const eliminarPermisoGlobalesAll = async () => {
+    try {
+      await callEndpoint(deleteAllObject(`${urlApi}/delall`));
+      alerta("success", "permisoGlobal eliminados con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta("error", `'Ocurrió un error al intentar eliminar los permisos globales. ${error}`);
     }
   };
 

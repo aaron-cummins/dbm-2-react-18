@@ -2,143 +2,74 @@ import React, { useEffect, useContext, useState } from "react";
 import { PermisosGlobalesContext } from "../context/permisosGlobalesContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { SelectsContext } from "contexts/SelectsContext";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { useSnackbar } from "notistack";
 
 const TablaPermisoGlobal = () => {
-  const {
-    permisoGlobalList,
-    obtenerPermisosGlobales,
-    obtenerPermisoGlobal,
-    registrarPermisoGlobalList,
-  } = useContext(PermisosGlobalesContext);
-  const { obtenerModulos, obtenerRol, rolesList, modulosList } =
-    useContext(SelectsContext);
+  const { permisoGlobalList, obtenerPermisosGlobales, registrarPermisoGlobalList } =
+    useContext(PermisosGlobalesContext);
+  const { obtenerModulos, obtenerRol, rolesList, modulosList } = useContext(SelectsContext);
   const { mensaje } = useStateContext();
-
+  const { enqueueSnackbar } = useSnackbar();
   const [checkedState, setCheckedState] = useState([]);
 
   //const [permisosGlobales, SetPermisosGlobales] = useState([]);
 
-  const getPermisoGlobal = (props) => {
-    obtenerPermisoGlobal(props);
-  };
-
   useEffect(() => {
     obtenerPermisosGlobales();
-    obtenerModulos();
-    obtenerRol();
-    //setCheckedState([]);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
-    handleCheckbox();
+    setCheckedState([]);
+
+    obtenerModulos();
+    obtenerRol();
+
+    return handleCheckbox();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [rolesList]);
+  }, [permisoGlobalList]);
 
   const handleCheckbox = () => {
     modulosList.forEach((mod) => {
       rolesList.forEach((rol) => {
+        let pg = permisoGlobalList.find((item) => (rol.id === item.rolId && mod.id === item.moduloId ? item.id : 0));
+
         const m = {
           key: `${rol.id}_${mod.id}`,
-          id: !permisoGlobalList.map((item) =>
-            rol.id === item.rolId && mod.id === item.moduloId ? item.id : 0
-          ),
+          id: pg ? pg.id : 0,
           moduloId: mod.id,
           rolId: rol.id,
-          activo: !permisoGlobalList.find(
-            (item) => rol.id === item.rolId && mod.id === item.moduloId
-          )
-            ? false
-            : true,
+          activo: !permisoGlobalList.find((item) => rol.id === item.rolId && mod.id === item.moduloId) ? false : true,
         };
 
-        checkedState.push(m);
-        let checkedStateNew = [...new Set(checkedState)];
-        setCheckedState(checkedStateNew);
+        setCheckedState((checkedState) => [...checkedState, m]);
       });
     });
   };
 
-  /*const handleCheckbox = () => {
-    modulosList.forEach((mod) => {
-      setCheckedState([
-        ...checkedState,
-        rolesList.map((rol) => ({
-          key: `${rol.id}_${mod.id}`,
-          id: 0,
-          moduloId: mod.id,
-          rolId: rol.id,
-          activo: !permisoGlobalList.find(
-            (item) => rol.id === item.rolId && mod.id === item.moduloId
-          )
-            ? false
-            : true,
-        })),
-      ]);
-    });
-  };*/
-
-  const columns = [
-    { name: "Id", selector: (row) => row.id, sortable: true },
-    { name: "Rol", selector: (row) => row.rolId, sortable: true },
-    { name: "Módulo", selector: (row) => row.moduloId, sortable: true },
-    {
-      name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getPermisoGlobal(props)}
-          nombreform="PermisoGlobal"
-        />
-      ),
-    },
-  ];
-
   const handleChange = (e) => {
-    //if (e.target.checked) {
-    //let perm = e.target.id.split("_");
     let c = checkedState.find((item) => item.key === e.target.id);
     c.activo = !c.activo;
-
-    setCheckedState(
-      checkedState.map((item) => (item.key === e.target.id ? c : item))
-    );
-    //if (permisosGlobales.find((item) => item.key === e.target.id)) return;
-
-    /*const newPermiso = {
-        key: e.target.id,
-        id: 0,
-        moduloId: perm[1],
-        rolId: perm[0],
-      };*/
-
-    //SetPermisosGlobales([...permisosGlobales, newPermiso]);
-    //} else {
-    //checkedState.find((item) =>
-    //  item.key === e.target.id ? (item.activo = false) : null
-    //);
-    /*SetPermisosGlobales(
-        permisosGlobales.filter((permiso) => permiso.key !== e.target.id)
-      );*/
-    //}
+    setCheckedState(checkedState.map((item) => (item.key === e.target.id ? c : item)));
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
     registrarPermisoGlobalList(PermisoGlobalAEnviar());
+
+    return obtenerPermisosGlobales();
   };
 
   const PermisoGlobalAEnviar = () => {
     let PermisoGlobalTmp = [];
 
-    PermisoGlobalTmp = checkedState.map((item) => {
+    checkedState.forEach((item) => {
       if (item.activo === true) {
-        return {
-          id: 0,
+        PermisoGlobalTmp.push({
+          id: item.id,
           moduloId: item.moduloId,
           rolId: item.rolId,
-        };
+        });
       }
     });
 
@@ -147,14 +78,7 @@ const TablaPermisoGlobal = () => {
 
   return (
     <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={permisoGlobalList} />
-
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="overflow-x-auto relative shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left text-gray-500 dark:text-gray-400 pl-2 border">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
@@ -176,9 +100,7 @@ const TablaPermisoGlobal = () => {
 
                 {checkedState?.map((i) =>
                   i.moduloId === item.id ? (
-                    <td
-                      className="text-center border"
-                      key={`${item.id}_${i.rolId}`}>
+                    <td className="text-center border" key={`${item.id}_${i.rolId}`}>
                       <input
                         key={i.key}
                         type="checkbox"

@@ -57,8 +57,11 @@ import {
   Motor,
   PermisosUsuario,
   IndexUsuario,
+  MonitoreoFiltro,
+  Contrato,
 } from "pages";
 import AuthGuard from "./AuthGuard";
+import { MonitoreoMotor } from "../pages";
 
 const Rutas = () => {
   return (
@@ -76,19 +79,22 @@ const Rutas = () => {
         <Route path="/aplicacionoem" element={<AplicacionOem />}></Route>
         <Route path="/cargo" element={<Cargo />}></Route>
         <Route path="/comuna" element={<Comuna />}></Route>
+        <Route path="/contrato" element={<Contrato />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
-        <Route path="/EstadoEquipo" element={<EstadoEquipo />}></Route>
-        <Route path="/EstadoEquipoInstalacion" element={<EstadoEquipoInstalacion />}></Route>
-        <Route path="/EstadoMotorInstalacion" element={<EstadoMotorInstalacion />}></Route>
-        <Route path="/EstadoMotor" element={<EstadoMotor />}></Route>
+        <Route path="/estadoequipo" element={<EstadoEquipo />}></Route>
+        <Route path="/estadoequipoinstalacion" element={<EstadoEquipoInstalacion />}></Route>
+        <Route path="/estadomotorinstalacion" element={<EstadoMotorInstalacion />}></Route>
+        <Route path="/estadomotor" element={<EstadoMotor />}></Route>
         <Route path="/flotas" element={<Flotas />}></Route>
         <Route path="/flotalugartrabajo" element={<FlotaLugarTrabajo />}></Route>
-        <Route path="/FuenteInformacion" element={<FuenteInformacion />}></Route>
+        <Route path="/fuenteinformacion" element={<FuenteInformacion />}></Route>
         <Route path="/lugardetrabajo" element={<LugarTrabajo />}></Route>
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>
         <Route path="/motor" element={<Motor />}></Route>
-        <Route path="/MotivoCambio" element={<MotivoCambio />}></Route>
+        <Route path="/motivovambio" element={<MotivoCambio />}></Route>
+        <Route path="/monitoreofiltro" element={<MonitoreoFiltro />}></Route>
+        <Route path="/monitoreomotor" element={<MonitoreoMotor />}></Route>
         <Route path="/oem" element={<Oem />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
         <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
@@ -102,9 +108,9 @@ const Rutas = () => {
         <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
-        <Route path="/TipoBlock" element={<TipoBlock />}></Route>
-        <Route path="/TipoContrato" element={<TipoContrato />}></Route>
-        <Route path="/TipoSalida" element={<TipoSalida />}></Route>
+        <Route path="/tipoblock" element={<TipoBlock />}></Route>
+        <Route path="/tipocontrato" element={<TipoContrato />}></Route>
+        <Route path="/tiposalida" element={<TipoSalida />}></Route>
         <Route path="/usuarios" element={<Usuario />}>
           <Route index element={<IndexUsuario />}></Route>
           <Route path="permisosusuario/:iduser" element={<PermisosUsuario />}></Route>
