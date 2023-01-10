@@ -2,24 +2,24 @@ import { useContext } from "react";
 import { SelectsContext } from "contexts/SelectsContext";
 import Label from "../Forms/Label";
 
-const SelectFlota = (props) => {
-  const { flotasList, styleSetect, styleErrorSelect } = useContext(SelectsContext);
+const SelectFuenteInformacion = (props) => {
+  const { fuenteInformacionList, styleSetect, styleErrorSelect } = useContext(SelectsContext);
 
   return (
     <>
-      <Label>Flota {props.required ? <b className="text-red-500"> * </b> : ""}</Label>
+      <Label>Fuente de información {props.required ? <b className="text-red-500"> * </b> : ""}</Label>
       <select
         className={`${styleSetect} ${props.error ? "border border-red-500" : ""}`}
         id={props.id}
         name={props.name}
         value={props.value}
         onChange={props.onChange}
-        aria-label="Select Flota"
+        aria-label="Select FuenteInformacion"
         required={props.required}>
         <option defaultValue="00" key="00">
-          Seleccione una Flota
+          Seleccione una fuente de información
         </option>
-        {flotasList.map((item) => (
+        {fuenteInformacionList.map((item) => (
           <option key={item.id} value={item.id}>
             {item.nombre}
           </option>
@@ -30,4 +30,4 @@ const SelectFlota = (props) => {
   );
 };
 
-export default SelectFlota;
+export default SelectFuenteInformacion;

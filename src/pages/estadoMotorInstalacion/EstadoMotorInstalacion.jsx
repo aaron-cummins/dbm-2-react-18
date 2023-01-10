@@ -11,7 +11,7 @@ const EstadoMotorInstalacion = () => {
   return (
     <EstadoMotorInstalacionContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="Estado Motor Instalación">
+        <Header category="Administración" title="Estado motor instalación">
           <button
             type="button"
             data-bs-toggle="modal"

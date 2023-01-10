@@ -3,7 +3,10 @@ import {
   OBTENER_LISTA_APLICACION_OEM,
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
+  OBTENER_LISTA_CONVERSION_LUGAR_TRABAJO,
+  OBTENER_LISTA_CONVERSION_FLOTA,
   OBTENER_LISTA_FLOTAS,
+  OBTENER_LISTA_FUENTE_INFORMACION,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_MODULOS,
   OBTENER_LISTA_OEM,
@@ -61,6 +64,11 @@ export default (state, action) => {
         ...state,
         tipoLugarTrabajoList: action.payload,
       };
+    case OBTENER_LISTA_CONVERSION_LUGAR_TRABAJO:
+      return {
+        ...state,
+        conversionLugarTrabajoList: action.payload,
+      };
     case OBTENER_LISTA_COMUNAS:
       return {
         ...state,
@@ -108,6 +116,16 @@ export default (state, action) => {
       return {
         ...state,
         flotasList: action.payload,
+      };
+    case OBTENER_LISTA_FUENTE_INFORMACION:
+      return {
+        ...state,
+        fuenteInformacionList: action.payload,
+      };
+    case OBTENER_LISTA_CONVERSION_FLOTA:
+      return {
+        ...state,
+        conversionFlotaList: action.payload,
       };
     case OBTENER_LISTA_VERSION_EQUIPO:
       return {

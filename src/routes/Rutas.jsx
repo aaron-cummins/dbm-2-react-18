@@ -5,6 +5,9 @@ import {
   LugarTrabajo,
   Region,
   Comuna,
+  ConversionFlotas,
+  ConversionLugarTrabajo,
+  ConversionUnidad,
   Oem,
   AplicacionOem,
   Cargo,
@@ -83,6 +86,9 @@ const Rutas = () => {
         <Route path="/cargo" element={<Cargo />}></Route>
         <Route path="/comuna" element={<Comuna />}></Route>
         <Route path="/contrato" element={<Contrato />}></Route>
+        <Route path="/conversionflotas" element={<ConversionFlotas />}></Route>
+        <Route path="/conversionlugartrabajo" element={<ConversionLugarTrabajo />}></Route>
+        <Route path="/conversionunidad" element={<ConversionUnidad />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
         <Route path="/esn" element={<Esn />}></Route>
         <Route path="/estadoequipo" element={<EstadoEquipo />}></Route>
@@ -96,7 +102,7 @@ const Rutas = () => {
         <Route path="/modulocontrol" element={<ModuloControl />}></Route>
         <Route path="/modulos" element={<Modulos />}></Route>
         <Route path="/motor" element={<Motor />}></Route>
-        <Route path="/motivovambio" element={<MotivoCambio />}></Route>
+        <Route path="/motivocambio" element={<MotivoCambio />}></Route>
         <Route path="/monitoreofiltro" element={<MonitoreoFiltro />}></Route>
         <Route path="/monitoreomotor" element={<MonitoreoMotor />}></Route>
         <Route path="/montajemotor" element={<MontajeMotor />}></Route>

@@ -5,8 +5,11 @@ import {
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
   OBTENER_LISTA_ESN,
+  OBTENER_LISTA_CONVERSION_LUGAR_TRABAJO,
+  OBTENER_LISTA_CONVERSION_FLOTA,
   OBTENER_LISTA_FLOTAS,
   OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
+  OBTENER_LISTA_FUENTE_INFORMACION,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_LUGAR_TRABAJO_USUARIO,
   OBTENER_LISTA_MODULOS,
@@ -49,8 +52,11 @@ export const SelectsContextProvider = (props) => {
     cargosList: [],
     comunaList: [],
     esnList: [],
+    conversionLugarTrabajoList: [],
+    conversionFlotaList: [],
     flotasList: [],
     flotasLugarTrabajoList: [],
+    fuenteInformacionList: [],
     lugarTrabajoList: [],
     lugarTrabajoUsuarioList: [],
     motoresList: [],
@@ -377,13 +383,31 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
-  /* OBETENER LISTADO DE unidades por flota */
+  /* OBETENER LISTADO DE unidades por ID flota o Listado completo*/
   const obtenerUnidades = async (id) => {
     try {
-      const resultado = await callEndpoint(getByID("unidad/filtro", id));
+      let resultado;
+      if (id) resultado = await callEndpoint(getByID("unidad/filtro", id));
+      else resultado = await callEndpoint(getList("unidad"));
+
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA_UNIDADES,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE FUENTE DE INFORMACION */
+  const obtenerFuenteInformacion = async () => {
+    try {
+      const resultado = await callEndpoint(getList("fuenteinformacion"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_FUENTE_INFORMACION,
           payload: resultado.data,
         });
       }
@@ -399,6 +423,21 @@ export const SelectsContextProvider = (props) => {
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA_ESN,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE CONVERSION FLOTA */
+  const obtenerConversionFlota = async () => {
+    try {
+      const resultado = await callEndpoint(getList("conversionflotas"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_CONVERSION_FLOTA,
           payload: resultado.data,
         });
       }
@@ -542,6 +581,21 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBTENER LISTADO DE CONVERSION LUGAR TRABAJO*/
+  const obtenerConversionLugarTrabajo = async () => {
+    try {
+      const resultado = await callEndpoint(getList("conversionlugartrabajo"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_CONVERSION_LUGAR_TRABAJO,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -550,8 +604,11 @@ export const SelectsContextProvider = (props) => {
         cargosList: state.cargosList,
         comunaList: state.comunaList,
         esnList: state.esnList,
+        conversionLugarTrabajoList: state.conversionLugarTrabajoList,
+        conversionFlotaList: state.conversionFlotaList,
         flotasList: state.flotasList,
         flotasLugarTrabajoList: state.flotasLugarTrabajoList,
+        fuenteInformacionList: state.fuenteInformacionList,
         lugarTrabajoList: state.lugarTrabajoList,
         lugarTrabajoUsuarioList: state.lugarTrabajoUsuarioList,
         motoresList: state.motoresList,
@@ -584,9 +641,12 @@ export const SelectsContextProvider = (props) => {
         obtenerCargos,
         obtenerComunas,
         obtenerEsn,
+        obtenerMotores,
+        obtenerConversionLugarTrabajo,
+        obtenerConversionFlota,
         obtenerFlotas,
         obtenerFlotasLugarTrabajo,
-        obtenerMotores,
+        obtenerFuenteInformacion,
         obtenerModulos,
         obtenerModuloControl,
         obtenerMonitoreoFiltro,

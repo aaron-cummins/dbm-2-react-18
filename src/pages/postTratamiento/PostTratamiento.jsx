@@ -11,7 +11,7 @@ const PostTratamiento = () => {
   return (
     <PostTratamientoContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="Post Tratamiento">
+        <Header category="Administración" title="Post tratamiento">
           <button
             type="button"
             data-bs-toggle="modal"

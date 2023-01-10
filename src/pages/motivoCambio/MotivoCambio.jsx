@@ -11,7 +11,7 @@ const MotivoCambio = () => {
   return (
     <MotivoCambioContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="Motivo Cambio">
+        <Header category="Administración" title="Motivo cambio">
           <button
             type="button"
             data-bs-toggle="modal"
