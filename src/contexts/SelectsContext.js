@@ -4,8 +4,11 @@ import {
   OBTENER_LISTA_APLICACION_OEM,
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
+  OBTENER_LISTA_CONVERSION_LUGAR_TRABAJO,
+  OBTENER_LISTA_CONVERSION_FLOTA,
   OBTENER_LISTA_FLOTAS,
   OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
+  OBTENER_LISTA_FUENTE_INFORMACION,
   OBTENER_LISTA_LUGAR_TRABAJO,
   OBTENER_LISTA_MODULOS,
   OBTENER_LISTA_OEM,
@@ -14,7 +17,8 @@ import {
   OBTENER_LISTA_ROLES,
   OBTENER_LISTA_TIPO_LUGAR_TRABAJO,
   OBTENER_LISTA_TIPO_CONTRATOS,
-  OBTENER_LISTA_VERSION_EQUIPO,
+  OBTENER_LISTA_UNIDAD,
+  OBTENER_LISTA_VERSION_EQUIPO, 
   OBTENER_LISTA_ZONAS,
   OBTENER_LISTA_MONITOREO_FILTRO,
   OBTENER_LISTA_MONITOREO_MOTOR,
@@ -32,8 +36,11 @@ export const SelectsContextProvider = (props) => {
     aplicacionOemsList: [],
     cargosList: [],
     comunaList: [],
+    conversionLugarTrabajoList: [],
+    conversionFlotaList: [],
     flotasList: [],
     flotasLugarTrabajoList: [],
+    fuenteInformacionList: [],
     lugarTrabajoList: [],
     modulosList: [],
     monitoreoMotorList: [],
@@ -44,6 +51,7 @@ export const SelectsContextProvider = (props) => {
     rolesList: [],
     tipoLugarTrabajoList: [],
     tipoContratoList: [],
+    unidadList: [],
     versionEquiposList: [],
     zonaList: [],
   };
@@ -335,6 +343,66 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBTENER LISTADO DE FUENTE DE INFORMACION */
+  const obtenerFuenteInformacion = async () => {
+    try {
+      const resultado = await callEndpoint(getList("fuenteinformacion"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_FUENTE_INFORMACION,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE CONVERSION FLOTA */
+  const obtenerConversionFlota = async () => {
+    try {
+      const resultado = await callEndpoint(getList("conversionflotas"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_CONVERSION_FLOTA,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE UNIDAD */
+  const obtenerUnidad = async () => {
+    try {
+      const resultado = await callEndpoint(getList("unidad"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_UNIDAD,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE CONVERSION LUGAR TRABAJO*/
+  const obtenerConversionLugarTrabajo = async () => {
+    try {
+      const resultado = await callEndpoint(getList("conversionlugartrabajo"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_CONVERSION_LUGAR_TRABAJO,
+          payload: resultado.data,
+        });
+      } 
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -342,8 +410,11 @@ export const SelectsContextProvider = (props) => {
         aplicacionesList: state.aplicacionesList,
         cargosList: state.cargosList,
         comunaList: state.comunaList,
+        conversionLugarTrabajoList: state.conversionLugarTrabajoList,
+        conversionFlotaList: state.conversionFlotaList,
         flotasList: state.flotasList,
         flotasLugarTrabajoList: state.flotasLugarTrabajoList,
+        fuenteInformacionList: state.fuenteInformacionList,
         lugarTrabajoList: state.lugarTrabajoList,
         modulosList: state.modulosList,
         monitoreoFiltroList: state.monitoreoFiltroList,
@@ -354,6 +425,7 @@ export const SelectsContextProvider = (props) => {
         rolesList: state.rolesList,
         tipoLugarTrabajoList: state.tipoLugarTrabajoList,
         tipoContratoList: state.tipoContratoList,
+        unidadList: state.unidadList,
         versionEquiposList: state.versionEquiposList,
         zonaList: state.zonaList,
 
@@ -361,8 +433,11 @@ export const SelectsContextProvider = (props) => {
         obtenerAplicacionOems,
         obtenerCargos,
         obtenerComunas,
+        obtenerConversionLugarTrabajo,
+        obtenerConversionFlota,
         obtenerFlotas,
         obtenerFlotasLugarTrabajo,
+        obtenerFuenteInformacion,
         obtenerModulos,
         obtenerMonitoreoFiltro,
         obtenerMonitoreoMotor,
@@ -373,6 +448,7 @@ export const SelectsContextProvider = (props) => {
         obtenerRol,
         obtenerTipoLugarTrabajo,
         obtenerTipoContrato,
+        obtenerUnidad,
         obtenerVersionEquipos,
         obtenerZonas,
       }}>

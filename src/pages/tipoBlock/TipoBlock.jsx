@@ -11,7 +11,7 @@ const TipoBlock = () => {
   return (
     <TipoBlockContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="Tipo Block">
+        <Header category="Administración" title="Tipo block">
           <button
             type="button"
             data-bs-toggle="modal"
