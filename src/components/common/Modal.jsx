@@ -22,7 +22,7 @@ const Modal = (props) => {
             <button
               type="button"
               id="cerrar_modal_"
-              cstyle={{ color: "rgb(153, 171, 180)", borderRadius: "50%" }}
+              style={{ color: "rgb(153, 171, 180)", borderRadius: "50%" }}
               className="text-2xl p-3 hover:drop-shadow-xl hover:bg-light-gray hover:rounded-full hover:text-white"
               data-bs-dismiss="modal"
               aria-label="Close">

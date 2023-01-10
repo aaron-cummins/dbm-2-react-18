@@ -59,6 +59,9 @@ import {
   IndexUsuario,
   MonitoreoFiltro,
   Contrato,
+  MontajeMotor,
+  Esn,
+  VersionMotor,
 } from "pages";
 import AuthGuard from "./AuthGuard";
 import { MonitoreoMotor } from "../pages";
@@ -81,6 +84,7 @@ const Rutas = () => {
         <Route path="/comuna" element={<Comuna />}></Route>
         <Route path="/contrato" element={<Contrato />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
+        <Route path="/esn" element={<Esn />}></Route>
         <Route path="/estadoequipo" element={<EstadoEquipo />}></Route>
         <Route path="/estadoequipoinstalacion" element={<EstadoEquipoInstalacion />}></Route>
         <Route path="/estadomotorinstalacion" element={<EstadoMotorInstalacion />}></Route>
@@ -95,6 +99,7 @@ const Rutas = () => {
         <Route path="/motivovambio" element={<MotivoCambio />}></Route>
         <Route path="/monitoreofiltro" element={<MonitoreoFiltro />}></Route>
         <Route path="/monitoreomotor" element={<MonitoreoMotor />}></Route>
+        <Route path="/montajemotor" element={<MontajeMotor />}></Route>
         <Route path="/oem" element={<Oem />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
         <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>
@@ -116,6 +121,7 @@ const Rutas = () => {
           <Route path="permisosusuario/:iduser" element={<PermisosUsuario />}></Route>
         </Route>
         <Route path="/versionequipo" element={<VersionEquipo />}></Route>
+        <Route path="/versionMotor" element={<VersionMotor />}></Route>
         <Route path="/vistas" element={<Vistas />}></Route>
         <Route path="/vistasgroup" element={<VistasGroup />}></Route>
         <Route path="/zona" element={<Zona />}></Route>

@@ -11,7 +11,7 @@ const TipoInyeccion = () => {
   return (
     <TipoInyeccionContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="">
+        <Header category="Administración" title="Tipo Inyeccion">
           <button
             type="button"
             data-bs-toggle="modal"
@@ -22,7 +22,7 @@ const TipoInyeccion = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            Nuevo 
+            Nuevo Tipo de inyección
           </button>
         </Header>
 

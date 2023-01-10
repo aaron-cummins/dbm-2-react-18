@@ -4,9 +4,11 @@ import {
   OBTENER_LISTA_APLICACION_OEM,
   OBTENER_LISTA_CARGOS,
   OBTENER_LISTA_COMUNAS,
+  OBTENER_LISTA_ESN,
   OBTENER_LISTA_FLOTAS,
   OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
   OBTENER_LISTA_LUGAR_TRABAJO,
+  OBTENER_LISTA_LUGAR_TRABAJO_USUARIO,
   OBTENER_LISTA_MODULOS,
   OBTENER_LISTA_OEM,
   OBTENER_LISTA_PAISES,
@@ -18,6 +20,16 @@ import {
   OBTENER_LISTA_ZONAS,
   OBTENER_LISTA_MONITOREO_FILTRO,
   OBTENER_LISTA_MONITOREO_MOTOR,
+  OBTENER_LISTA_UNIDADES,
+  OBTENER_LISTA_TIPO_ADMISION,
+  OBTENER_LISTA_TIPO_BLOCK,
+  OBTENER_LISTA_TIPO_COMBUSTIBLE,
+  OBTENER_LISTA_TIPO_EMISION,
+  OBTENER_LISTA_TIPO_FILTRADO,
+  OBTENER_LISTA_TIPO_INYECCION,
+  OBTENER_LISTA_MODULO_CONTROL,
+  OBTENER_LISTA_POST_TRATAMIENTO,
+  OBTENER_LISTA_MOTOR,
 } from "const/actionTypes";
 import { getByID, getList } from "services/genericService";
 import selectsReducer from "reducer/selectsReducer";
@@ -26,24 +38,40 @@ import useFetchAndLoad from "hooks/useFetchAndLoad";
 export const SelectsContext = createContext();
 
 export const SelectsContextProvider = (props) => {
+  const styleSetect =
+    "form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none";
+  const styleErrorSelect = "flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1";
+
   const { callEndpoint } = useFetchAndLoad();
   const initialState = {
     aplicacionesList: [],
     aplicacionOemsList: [],
     cargosList: [],
     comunaList: [],
+    esnList: [],
     flotasList: [],
     flotasLugarTrabajoList: [],
     lugarTrabajoList: [],
+    lugarTrabajoUsuarioList: [],
+    motoresList: [],
     modulosList: [],
+    moduloControlList: [],
     monitoreoMotorList: [],
     monitoreoFiltroList: [],
     oemsList: [],
     paisList: [],
+    postTratamientoList: [],
     regionListActiva: [],
     rolesList: [],
+    tipoAdmisionList: [],
+    tipoBlockList: [],
+    tipoCombustibleList: [],
+    tipoEmisionList: [],
+    tipoFiltradoList: [],
+    tipoInyeccionList: [],
     tipoLugarTrabajoList: [],
     tipoContratoList: [],
+    unidadesList: [],
     versionEquiposList: [],
     zonaList: [],
   };
@@ -148,6 +176,20 @@ export const SelectsContextProvider = (props) => {
         dispatch({
           type: OBTENER_LISTA_LUGAR_TRABAJO,
           payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Lugar de trabajo */
+  const obtenerLugaresTrabajoUsuario = async (lugaresTrabajo_usuario) => {
+    try {
+      if (lugaresTrabajo_usuario.length > 0) {
+        dispatch({
+          type: OBTENER_LISTA_LUGAR_TRABAJO_USUARIO,
+          payload: lugaresTrabajo_usuario,
         });
       }
     } catch (error) {
@@ -335,6 +377,171 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBETENER LISTADO DE unidades por flota */
+  const obtenerUnidades = async (id) => {
+    try {
+      const resultado = await callEndpoint(getByID("unidad/filtro", id));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_UNIDADES,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE ESN */
+  const obtenerEsn = async () => {
+    try {
+      const resultado = await callEndpoint(getList("esn"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_ESN,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE MOTOR */
+  const obtenerMotores = async () => {
+    try {
+      const resultado = await callEndpoint(getList("motor"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_MOTOR,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE MODULO CONTROL */
+  const obtenerModuloControl = async () => {
+    try {
+      const resultado = await callEndpoint(getList("modulocontrol"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_MODULO_CONTROL,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Tipo Admision */
+  const obtenerTipoAdmision = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipoadmision"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_ADMISION,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Tipo Block */
+  const obtenerTipoBlock = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipoblock"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_BLOCK,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Tipo Combustible */
+  const obtenerTipoCombustible = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipocombustible"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_COMBUSTIBLE,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Tipo Emision */
+  const obtenerTipoEmision = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipoemision"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_EMISION,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Tipo Filtrado */
+  const obtenerTipoFiltrado = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipofiltrado"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_FILTRADO,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Tipo Inyeccion */
+  const obtenerTipoInyeccion = async () => {
+    try {
+      const resultado = await callEndpoint(getList("tipoinyeccion"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_TIPO_INYECCION,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBETENER LISTADO DE Post Tratamiento */
+  const obtenerPostTratamiento = async () => {
+    try {
+      const resultado = await callEndpoint(getList("posttratamiento"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_POST_TRATAMIENTO,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -342,37 +549,64 @@ export const SelectsContextProvider = (props) => {
         aplicacionesList: state.aplicacionesList,
         cargosList: state.cargosList,
         comunaList: state.comunaList,
+        esnList: state.esnList,
         flotasList: state.flotasList,
         flotasLugarTrabajoList: state.flotasLugarTrabajoList,
         lugarTrabajoList: state.lugarTrabajoList,
+        lugarTrabajoUsuarioList: state.lugarTrabajoUsuarioList,
+        motoresList: state.motoresList,
         modulosList: state.modulosList,
+        moduloControlList: state.moduloControlList,
         monitoreoFiltroList: state.monitoreoFiltroList,
         monitoreoMotorList: state.monitoreoMotorList,
         oemsList: state.oemsList,
         paisList: state.paisList,
+        postTratamientoList: state.postTratamientoList,
         regionList: state.regionListActiva,
         rolesList: state.rolesList,
+        tipoAdmisionList: state.tipoAdmisionList,
+        tipoBlockList: state.tipoBlockList,
+        tipoCombustibleList: state.tipoCombustibleList,
+        tipoEmisionList: state.tipoEmisionList,
+        tipoFiltradoList: state.tipoFiltradoList,
+        tipoInyeccionList: state.tipoInyeccionList,
         tipoLugarTrabajoList: state.tipoLugarTrabajoList,
         tipoContratoList: state.tipoContratoList,
+        unidadesList: state.unidadesList,
         versionEquiposList: state.versionEquiposList,
         zonaList: state.zonaList,
+
+        styleSetect,
+        styleErrorSelect,
 
         obtenerAplicaciones,
         obtenerAplicacionOems,
         obtenerCargos,
         obtenerComunas,
+        obtenerEsn,
         obtenerFlotas,
         obtenerFlotasLugarTrabajo,
+        obtenerMotores,
         obtenerModulos,
+        obtenerModuloControl,
         obtenerMonitoreoFiltro,
         obtenerMonitoreoMotor,
         obtenerOems,
         obtenerLugaresTrabajo,
+        obtenerLugaresTrabajoUsuario,
         obtenerPais,
+        obtenerPostTratamiento,
         obtenerRegiones,
         obtenerRol,
+        obtenerTipoAdmision,
+        obtenerTipoBlock,
+        obtenerTipoCombustible,
+        obtenerTipoEmision,
+        obtenerTipoFiltrado,
+        obtenerTipoInyeccion,
         obtenerTipoLugarTrabajo,
         obtenerTipoContrato,
+        obtenerUnidades,
         obtenerVersionEquipos,
         obtenerZonas,
       }}>

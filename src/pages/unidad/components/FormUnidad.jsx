@@ -4,32 +4,31 @@ import {
   Buttons,
   Checkbox,
   SelectLugarTrabajo,
-  SelectFlota,
   SelectVersionEquipo,
   SelectAplicacionOem,
   SelectOem,
+  SelectFlotaLugarTrabajo,
 } from "components";
 import { UnidadContext } from "../context/unidadContext";
 import { closeModal, formatDateshort } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
 import { useContext } from "react";
 import { useSnackbar } from "notistack";
 
 const FormUnidad = () => {
   const { registrarUnidad, unidadActual, actualizarUnidad, obtenerUnidad } = useContext(UnidadContext);
   const { mensaje } = useStateContext();
+  const { obtenerFlotasLugarTrabajo } = useContext(SelectsContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const unidadDefault = useMemo(() => {
     return {
       id: 0,
       nombre: "",
-      flotasId: 0,
-      flotas: {
-        id: 0,
-      },
       lugarTrabajoId: 0,
-      lugarTrabajo: {
+      flotaLugarTrabajoId: 0,
+      flotaLugarTrabajo: {
         id: 0,
       },
       oemId: 0,
@@ -58,28 +57,29 @@ const FormUnidad = () => {
   //const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
-    unidadActual !== null ? setUnidad(unidadActual) : setUnidad(unidadDefault);
+    if (unidadActual !== null) {
+      setUnidad(unidadActual);
+      obtenerFlotasLugarTrabajo(unidadActual.flotaLugarTrabajo.lugarTrabajo?.id);
+    } else setUnidad(unidadDefault);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unidadActual, unidadDefault]);
 
   const handleChange = (e) => {
+    if (e.target.name === "lugarTrabajoId") {
+      obtenerFlotasLugarTrabajo(e.target.value);
+      setUnidad({ ...unidad, [e.target.name]: e.target.value });
+    }
+
     e.target.name === "activo"
       ? setUnidad({
           ...unidad,
           [e.target.name]: e.target.checked,
         })
-      : e.target.name === "flotasId"
+      : e.target.name === "flotaLugarTrabajoId"
       ? setUnidad({
           ...unidad,
           [e.target.name]: e.target.value,
-          flotas: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "lugarTrabajoId"
-      ? setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.value,
-          lugarTrabajo: {
+          flotaLugarTrabajo: {
             id: e.target.value,
           },
         })
@@ -125,7 +125,7 @@ const FormUnidad = () => {
       enqueueSnackbar("Debe seleccionar un Lugar de trabajo", { variant: "error" });
       return false;
     }
-    if (unidad.flotasId === 0) {
+    if (unidad.flotaLugarTrabajoId === 0) {
       enqueueSnackbar("Debe seleccionar una flota", { variant: "error" });
       return;
     }
@@ -148,8 +148,7 @@ const FormUnidad = () => {
 
   const UnidadAEnviar = () => {
     let unidadTmp = { ...unidad };
-    unidadTmp.flotasId = unidad.flotas.id;
-    unidadTmp.lugarTrabajoId = unidad.lugarTrabajo.id;
+    unidadTmp.flotaLugarTrabajoId = unidad.flotaLugarTrabajo.id;
     unidadTmp.oemId = unidad.oem.id;
     unidadTmp.aplicacionOemId = unidad.aplicacionOem.id;
     unidadTmp.versionId = unidad.version.id;
@@ -162,22 +161,22 @@ const FormUnidad = () => {
       <form onSubmit={handleOnSubmit}>
         {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
         <div className="grid grid-cols-2 gap-4">
-          <div className="form-group mb-6">
+          <div className="form-group mb-2">
             <SelectLugarTrabajo
               id="lugarTrabajoId"
               name="lugarTrabajoId"
               placeholder="Lugar Trabajo"
-              value={unidad.lugarTrabajo?.id}
+              value={unidad.flotaLugarTrabajo.lugarTrabajo?.id}
               onChange={handleChange}
               required={true}
             />
           </div>
-          <div className="form-group mb-6">
-            <SelectFlota
-              id="flotasId"
-              name="flotasId"
+          <div className="form-group mb-2">
+            <SelectFlotaLugarTrabajo
+              id="flotaLugarTrabajoId"
+              name="flotaLugarTrabajoId"
               placeholder="Flota"
-              value={unidad.flotas?.id}
+              value={unidad.flotaLugarTrabajo?.id}
               onChange={handleChange}
               required={true}
             />

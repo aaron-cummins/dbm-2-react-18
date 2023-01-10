@@ -3,14 +3,13 @@ import { SelectsContext } from "contexts/SelectsContext";
 import Label from "../Forms/Label";
 
 const SelectFlotaLugarTrabajo = (props) => {
-  const { flotasLugarTrabajoList } = useContext(SelectsContext);
+  const { flotasLugarTrabajoList, styleSetect, styleErrorSelect } = useContext(SelectsContext);
 
   return (
     <>
       <Label>Flota {props.required ? <b className="text-red-500"> * </b> : ""}</Label>
       <select
-        className="form-select appearance-none block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding bg-no-repeat border border-solid border-gray-300
-                    rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        className={`${styleSetect} ${props.error ? "border border-red-500" : ""}`}
         id={props.id}
         name={props.name}
         value={props.value}
@@ -26,6 +25,7 @@ const SelectFlotaLugarTrabajo = (props) => {
           </option>
         ))}
       </select>
+      {props.error ? <span className={styleErrorSelect}>{props.error}</span> : null}
     </>
   );
 };

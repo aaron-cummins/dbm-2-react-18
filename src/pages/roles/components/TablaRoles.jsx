@@ -25,7 +25,7 @@ const TablaRoles = () => {
     },
   ];
 
-  return <Tabla columns={columns} data={rolesList} />;
+  return <Tabla columns={columns} data={rolesList} title={"Listado de Roles"} />;
 };
 
 export default TablaRoles;

@@ -25,12 +25,12 @@ const TablaUnidad = () => {
     { name: "Id", selector: (row) => row.id, sortable: true },
     {
       name: "L. trabajo",
-      selector: (row) => row.lugarTrabajo?.nombre,
+      selector: (row) => row.flotaLugarTrabajo.lugarTrabajo?.nombre,
       sortable: true,
     },
     {
       name: "Flota",
-      selector: (row) => row.flotas?.nombre,
+      selector: (row) => row.flotaLugarTrabajo.flotas?.nombre,
       sortable: true,
     },
     {

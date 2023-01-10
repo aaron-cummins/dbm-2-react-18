@@ -17,14 +17,33 @@ import {
   OBTENER_LISTA_MONITOREO_FILTRO,
   OBTENER_LISTA_MONITOREO_MOTOR,
   OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
+  OBTENER_LISTA_UNIDADES,
+  OBTENER_LISTA_LUGAR_TRABAJO_USUARIO,
+  OBTENER_LISTA_ESN,
+  OBTENER_LISTA_TIPO_ADMISION,
+  OBTENER_LISTA_TIPO_BLOCK,
+  OBTENER_LISTA_TIPO_COMBUSTIBLE,
+  OBTENER_LISTA_TIPO_EMISION,
+  OBTENER_LISTA_TIPO_FILTRADO,
+  OBTENER_LISTA_TIPO_INYECCION,
+  OBTENER_LISTA_MOTOR,
+  OBTENER_LISTA_MODULO_CONTROL,
+  OBTENER_LISTA_POST_TRATAMIENTO,
 } from "../const/actionTypes";
 
+//import/no-anonymous-default-export
 export default (state, action) => {
   switch (action.type) {
     case OBTENER_LISTA_LUGAR_TRABAJO:
       return {
         ...state,
         lugarTrabajoList: action.payload,
+      };
+
+    case OBTENER_LISTA_LUGAR_TRABAJO_USUARIO:
+      return {
+        ...state,
+        lugarTrabajoUsuarioList: action.payload,
       };
     case OBTENER_LISTA_REGIONES:
       return {
@@ -118,8 +137,72 @@ export default (state, action) => {
         ...state,
         flotasLugarTrabajoList: action.payload,
       };
+    case OBTENER_LISTA_UNIDADES:
+      return {
+        ...state,
+        unidadesList: action.payload,
+      };
+
+    case OBTENER_LISTA_ESN:
+      return {
+        ...state,
+        esnList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_ADMISION:
+      return {
+        ...state,
+        tipoAdmisionList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_BLOCK:
+      return {
+        ...state,
+        tipoBlockList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_COMBUSTIBLE:
+      return {
+        ...state,
+        tipoCombustibleList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_EMISION:
+      return {
+        ...state,
+        tipoEmisionList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_FILTRADO:
+      return {
+        ...state,
+        tipoFiltradoList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_INYECCION:
+      return {
+        ...state,
+        tipoInyeccionList: action.payload,
+      };
+
+    case OBTENER_LISTA_MOTOR:
+      return {
+        ...state,
+        motoresList: action.payload,
+      };
+
+    case OBTENER_LISTA_MODULO_CONTROL:
+      return {
+        ...state,
+        moduloControlList: action.payload,
+      };
+
+    case OBTENER_LISTA_POST_TRATAMIENTO:
+      return {
+        ...state,
+        postTratamientoList: action.payload,
+      };
     default:
       return state;
   }
-  //import/no-anonymous-default-export
 };

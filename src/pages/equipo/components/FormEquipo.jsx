@@ -106,7 +106,7 @@ const FormEquipo = () => {
         <div className="form-group mb-4">
           <SelectOem id="oemId" name="oemId" value={equipo.oemId} onChange={handleChange} required={true} />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={equipo.activo} />
         </div>
       </div>

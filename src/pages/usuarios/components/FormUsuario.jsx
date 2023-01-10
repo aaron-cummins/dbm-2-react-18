@@ -87,7 +87,7 @@ const FormUsuario = () => {
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="nombres"
             name="nombres"
@@ -98,7 +98,7 @@ const FormUsuario = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="apellidos"
             name="apellidos"
@@ -112,7 +112,7 @@ const FormUsuario = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="rut"
             name="rut"
@@ -123,7 +123,7 @@ const FormUsuario = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="uid"
             name="uid"
@@ -136,7 +136,7 @@ const FormUsuario = () => {
         </div>
       </div>
 
-      <div className="form-group mb-6">
+      <div className="form-group mb-2">
         <InputText
           type="email"
           id="correo"
@@ -150,7 +150,7 @@ const FormUsuario = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="telefono"
             name="telefono"
@@ -160,7 +160,7 @@ const FormUsuario = () => {
             onChangeFN={handleChange}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="anexo"
             name="anexo"
@@ -173,7 +173,7 @@ const FormUsuario = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectCargo
             id="cargoId"
             name="cargoId"
@@ -183,7 +183,7 @@ const FormUsuario = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectLugarTrabajo
             id="id_lugar_trabajo"
             name="id_lugar_trabajo"
@@ -195,7 +195,7 @@ const FormUsuario = () => {
         </div>
       </div>
 
-      <div className="form-group mb-4">
+      <div className="form-group mb-2">
         <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={usuario.activo} />
       </div>
 

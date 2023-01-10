@@ -5,22 +5,35 @@ import { TooltipComponent } from "@syncfusion/ej2-react-popups";
 import { Navbar, Footer, Sidebar, ThemeSettings, Rutas } from "components";
 import { useStateContext } from "contexts/ContextProvider";
 import { SelectsContext } from "contexts/SelectsContext";
+import { getUsuarioLugaresTrabajoList } from "utilities/Login_utiles";
 import LoadPage from "pages/utiles/LoadPage";
 
 const Layout = () => {
-  const {
-    activeMenu,
-    themeSettings,
-    setThemeSettings,
-    currentColor,
-    currentMode,
-  } = useStateContext();
-  const { obtenerLugaresTrabajo } = useContext(SelectsContext);
+  const { activeMenu, themeSettings, setThemeSettings, currentColor, currentMode } = useStateContext();
+  const { obtenerLugaresTrabajo, obtenerLugaresTrabajoUsuario, lugarTrabajoList } = useContext(SelectsContext);
 
   useEffect(() => {
     obtenerLugaresTrabajo();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  useEffect(() => {
+    let LTrabajoUser = getUsuarioLugaresTrabajoList();
+    let lug_trabajos = [];
+
+    if (lugarTrabajoList.length > 0) {
+      LTrabajoUser.LugarTrabajo.forEach((item) => {
+        lug_trabajos.push(
+          lugarTrabajoList?.find((obj) => {
+            return obj.id === item.lugar_trabajo_id ? obj : null;
+          })
+        );
+      });
+    }
+
+    obtenerLugaresTrabajoUsuario([...new Set(lug_trabajos)]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lugarTrabajoList]);
 
   return (
     <div className={currentMode === "Dark" ? "dark" : ""}>

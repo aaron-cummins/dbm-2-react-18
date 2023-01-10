@@ -20,40 +20,47 @@ const FormAplicacion = () => {
   }, []);
 
   const [aplicacion, setAplicacion] = useState(aplicacionDefault);
+  const [error, setError] = useState({});
 
   useEffect(() => {
     aplicacionActual !== null ? setAplicacion(aplicacionActual) : setAplicacion(aplicacionDefault);
   }, [aplicacionActual, aplicacionDefault]);
 
+  const validaciones = () => {
+    let error = {};
+    if (!aplicacion.nombre.trim()) error.nombre = "Nombre Requerido";
+
+    return error;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setAplicacion({
-          ...aplicacion,
-          [e.target.name]: e.target.checked,
-        })
-      : setAplicacion({
-          ...aplicacion,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    type === "checkbox"
+      ? setAplicacion({ ...aplicacion, [name]: checked })
+      : setAplicacion({ ...aplicacion, [name]: value });
+
+    setError(validaciones());
   };
 
   const limpiaForm = () => {
     setAplicacion(aplicacionDefault);
     obtenerAplicacion(null);
+    setError({});
   };
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    setError(validaciones(aplicacion));
 
-    if (aplicacion.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (Object.keys(error).length === 0) {
+      aplicacionActual !== null ? actualizarAplicacion(AplicacionAEnviar()) : registrarAplicacion(AplicacionAEnviar());
+      limpiaForm();
+      closeModal();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    aplicacionActual !== null ? actualizarAplicacion(AplicacionAEnviar()) : registrarAplicacion(AplicacionAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
   const AplicacionAEnviar = () => {
@@ -73,7 +80,9 @@ const FormAplicacion = () => {
             label="Nombre"
             value={aplicacion.nombre}
             onChangeFN={handleChange}
-            required={true}
+            onBlur={handleChange}
+            //required={true}
+            error={error?.nombre}
           />
         </div>
         <div className="form-group mb-4">

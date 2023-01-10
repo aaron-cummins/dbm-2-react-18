@@ -139,7 +139,7 @@ const FormContrato = () => {
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="nombre"
             name="nombre"
@@ -150,7 +150,7 @@ const FormContrato = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectTipoContrato
             id="tipoContratoId"
             name="tipoContratoId"
@@ -163,7 +163,7 @@ const FormContrato = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectLugarTrabajo
             id="lt"
             name="lt"
@@ -173,7 +173,7 @@ const FormContrato = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectFlotaLugarTrabajo
             id="flotasLugarTrabajoId"
             name="flotasLugarTrabajoId"
@@ -186,7 +186,7 @@ const FormContrato = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             type="date"
             id="fechaInicio"
@@ -198,7 +198,7 @@ const FormContrato = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="duracion"
             name="duracion"
@@ -211,7 +211,7 @@ const FormContrato = () => {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             type="date"
             id="fechaCobro"
@@ -223,7 +223,7 @@ const FormContrato = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <Checkbox
             id="accesoPool"
             name="accesoPool"
@@ -234,7 +234,7 @@ const FormContrato = () => {
         </div>
       </div>
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectMonitoreoFiltro
             id="monitoreoFiltroId"
             name="monitoreoFiltroId"
@@ -245,7 +245,7 @@ const FormContrato = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectMonitoreoMotor
             id="monitoreoMotorId"
             name="monitoreoMotorId"

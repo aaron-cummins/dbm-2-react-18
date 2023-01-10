@@ -96,7 +96,7 @@ const FormLugarTrabajo = () => {
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-3 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="nombre"
             name="nombre"
@@ -131,7 +131,7 @@ const FormLugarTrabajo = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="longitud"
             name="longitud"
@@ -141,7 +141,7 @@ const FormLugarTrabajo = () => {
             onChangeFN={handleChange}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="latitud"
             name="latitud"
@@ -153,7 +153,7 @@ const FormLugarTrabajo = () => {
         </div>
       </div>
 
-      <div className="form-group mb-6">
+      <div className="form-group mb-2">
         <InputText
           id="direccion"
           name="direccion"
@@ -165,7 +165,7 @@ const FormLugarTrabajo = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectZona
             id="zonaId"
             name="zonaId"
@@ -175,7 +175,7 @@ const FormLugarTrabajo = () => {
             required={true}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectTipoLugarTrabajo
             id="tipoLugarTrabajoId"
             name="tipoLugarTrabajoId"
@@ -188,7 +188,7 @@ const FormLugarTrabajo = () => {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <SelectComuna
             id="comunaId"
             name="comunaId"
@@ -198,7 +198,7 @@ const FormLugarTrabajo = () => {
           />
         </div>
 
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={lugarTrabajo.activo} label="Activo" />
         </div>
       </div>

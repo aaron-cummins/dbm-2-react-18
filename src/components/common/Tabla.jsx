@@ -19,16 +19,17 @@ const Tabla = (props) => {
     },
     headCells: {
       style: {
-        paddingLeft: "8px", // override the cell padding for head cells
-        paddingRight: "8px",
+        paddingLeft: "16px", // override the cell padding for head cells
+        paddingRight: "16px",
         background: "#fafafa",
         fontSize: "20x",
+        fontWeight: 900,
       },
     },
     cells: {
       style: {
-        paddingLeft: "8px", // override the cell padding for data cells
-        paddingRight: "8px",
+        paddingLeft: "16px", // override the cell padding for data cells
+        paddingRight: "16px",
       },
     },
   };
@@ -42,19 +43,24 @@ const Tabla = (props) => {
   };
 
   return (
-    <DataTable
-      progressPending={cargando}
-      progressComponent={<Spinner />}
-      customStyles={customStyles}
-      pagination
-      paginationComponentOptions={paginationOptions}
-      noDataComponent="No se encontraron datos para mostrar"
-      selectableRowsComponent={Checkbox}
-      selectableRowsComponentProps={selectProps}
-      sortIcon={sortIcon}
-      dense
-      {...props}
-    />
+    <>
+      <div className="mb-5 border-solid border-1">
+        <DataTable
+          progressPending={cargando}
+          progressComponent={<Spinner />}
+          customStyles={customStyles}
+          pagination
+          paginationComponentOptions={paginationOptions}
+          noDataComponent="No se encontraron datos para mostrar"
+          selectableRowsComponent={Checkbox}
+          selectableRowsComponentProps={selectProps}
+          paginationRowsPerPageOptions={[10, 25, 30, 50]}
+          sortIcon={sortIcon}
+          dense
+          {...props}
+        />
+      </div>
+    </>
   );
 };
 
