@@ -2,26 +2,26 @@ import { useContext } from "react";
 import { SelectsContext } from "contexts/SelectsContext";
 import Label from "../Forms/Label";
 
-const SelectVersionEquipo = (props) => {
-  const { versionEquiposList, styleSetect, styleErrorSelect } = useContext(SelectsContext);
+const SelectVersionMotor = (props) => {
+  const { versionMotorList, styleSetect, styleErrorSelect } = useContext(SelectsContext);
 
   return (
     <>
-      <Label>Versión Equipo {props.required ? <b className="text-red-500"> * </b> : ""}</Label>
+      <Label>Versión Motor {props.required ? <b className="text-red-500"> * </b> : ""}</Label>
       <select
         className={`${styleSetect} ${props.error ? "border border-red-500" : ""}`}
         id={props.id}
         name={props.name}
         value={props.value}
         onChange={props.onChange}
-        aria-label="Select versión Equipo"
+        aria-label="Select versión Motor"
         required={props.required}>
         <option defaultValue="00" key="00">
-          Seleccione una versión Equipo
+          Seleccione una versión Motor
         </option>
-        {versionEquiposList.map((item) => (
+        {versionMotorList.map((item) => (
           <option key={item.id} value={item.id}>
-            {item.version}
+            {item.nombreComercial}
           </option>
         ))}
       </select>
@@ -30,4 +30,4 @@ const SelectVersionEquipo = (props) => {
   );
 };
 
-export default SelectVersionEquipo;
+export default SelectVersionMotor;

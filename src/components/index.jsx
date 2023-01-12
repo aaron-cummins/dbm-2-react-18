@@ -64,5 +64,6 @@ export { default as SelectTipoLugarTrabajo } from "./Selects/SelectTipoLugarTrab
 export { default as SelectTipoContrato } from "./Selects/SelectTipoContrato";
 export { default as SelectUnidad } from "./Selects/SelectUnidad";
 export { default as SelectVersionEquipo } from "./Selects/SelectVersionEquipo";
+export { default as SelectVersionMotor } from "./Selects/SelectVersionMotor";
 export { default as SelectZona } from "./Selects/SelectZona";
 // eslint-disable-next-line import/no-cycle

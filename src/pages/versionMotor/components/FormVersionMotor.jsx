@@ -24,6 +24,7 @@ const FormVersionMotor = () => {
     useContext(VersionMotorContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const versionmotorDefault = useMemo(() => {
     return {
@@ -73,30 +74,33 @@ const FormVersionMotor = () => {
   }, []);
 
   const [versionmotor, setVersionMotor] = useState(versionmotorDefault);
-  const [error, setError] = useState({});
-  const { validarTexto, validarSelect } = useValidacionForm();
 
   useEffect(() => {
     versionmotorActual !== null ? setVersionMotor(versionmotorActual) : setVersionMotor(versionmotorDefault);
   }, [versionmotorActual, versionmotorDefault]);
 
   const validaciones = () => {
-    let error = {};
+    let valida = true;
 
-    if (validarTexto(versionmotor.nombreComercial)) error.nombreComercial = "Nombre comercial requerido";
-    if (validarTexto(versionmotor.nombreServicio)) error.nombreServicio = "Nombre de Servicio requerido";
-    if (validarSelect(versionmotor.motor)) error.motorId = "Debe seleccionar un motor";
-    if (validarSelect(versionmotor.tipoAdmision)) error.tipoAdmisionId = "Debe seleccionar un Tipo de Admisión";
-    if (validarSelect(versionmotor.tipoBlock)) error.tipoBlockId = "Debe seleccionar un Tipo de Block";
-    if (validarSelect(versionmotor.moduloControl)) error.moduloControlId = "Debe seleccionar un módulo de control";
-    if (validarSelect(versionmotor.tipoCombustible))
-      error.tipoCombustibleId = "Debe seleccionar un tipo de combustible";
-    if (validarSelect(versionmotor.tipoEmision)) error.tipoEmisionId = "Debe seleccionar un tipo de emisión";
-    if (validarSelect(versionmotor.tipoFiltrado)) error.tipoFiltradoId = "Debe seleccionar un tipo de filtrado";
-    if (validarSelect(versionmotor.tipoInyeccion)) error.tipoInyeccionId = "Debe seleccionar un tipo de Inyección";
-    if (validarSelect(versionmotor.posttratamiento)) error.postTratamientoId = "Debe seleccionar un Post Tratamiento";
-    setError(error);
-    return error;
+    if (validarTexto("nombreComercial", versionmotor.nombreComercial, "Nombre comercial requerido")) valida = false;
+    if (validarTexto("nombreServicio", versionmotor.nombreServicio, "Nombre de Servicio requerido")) valida = false;
+    if (validarSelect("motorId", versionmotor.motor, "Debe seleccionar un motor")) valida = false;
+    if (validarSelect("tipoAdmisionId", versionmotor.tipoAdmision, "Debe seleccionar un Tipo de Admisión"))
+      valida = false;
+    if (validarSelect("tipoBlockId", versionmotor.tipoBlock, "Debe seleccionar un Tipo de Block")) valida = false;
+    if (validarSelect("moduloControlId", versionmotor.moduloControl, "Debe seleccionar un módulo de control"))
+      valida = false;
+    if (validarSelect("tipoCombustibleId", versionmotor.tipoCombustible, "Debe seleccionar un tipo de combustible"))
+      valida = false;
+    if (validarSelect("tipoEmisionId", versionmotor.tipoEmision, "Debe seleccionar un tipo de emisión")) valida = false;
+    if (validarSelect("tipoFiltradoId", versionmotor.tipoFiltrado, "Debe seleccionar un tipo de filtrado"))
+      valida = false;
+    if (validarSelect("tipoInyeccionId", versionmotor.tipoInyeccion, "Debe seleccionar un tipo de Inyección"))
+      valida = false;
+    if (validarSelect("postTratamientoId", versionmotor.posttratamiento, "Debe seleccionar un Post Tratamiento"))
+      valida = false;
+
+    return valida;
   };
 
   const handleChange = (e) => {
@@ -113,24 +117,25 @@ const FormVersionMotor = () => {
     else if (name === "tipoInyeccionId") setVersionMotor({ ...versionmotor, tipoInyeccion: { id: value } });
     else if (name === "postTratamientoId") setVersionMotor({ ...versionmotor, posttratamiento: { id: value } });
     else setVersionMotor({ ...versionmotor, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setVersionMotor(versionmotorDefault);
     obtenerVersionMotor(null);
-    setError({});
+    setError([]);
   };
 
   const handleOnSubmit = async (e) => {
     e.preventDefault();
-    const validado = validaciones();
-    if (Object.keys(validado).length === 0) {
+    if (validaciones()) {
       versionmotorActual !== null
         ? actualizarVersionMotor(VersionMotorAEnviar())
         : registrarVersionMotor(VersionMotorAEnviar());
-
-      limpiaForm();
       closeModal();
+      limpiaForm();
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
@@ -165,8 +170,8 @@ const FormVersionMotor = () => {
             label="Nombre Comercial"
             value={versionmotor.nombreComercial}
             onChangeFN={handleChange}
-            required={true}
-            error={error.nombreComercial}
+            //required={true}
+            error={error?.nombreComercial}
           />
         </div>
         <div className="form-group mb-2">
@@ -192,7 +197,7 @@ const FormVersionMotor = () => {
             value={versionmotor.motor?.id}
             onChange={handleChange}
             required={true}
-            error={error.motorId}
+            error={error?.motorId}
           />
         </div>
         <div className="form-group mb-2">

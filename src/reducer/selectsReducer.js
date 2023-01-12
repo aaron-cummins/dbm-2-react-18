@@ -32,6 +32,7 @@ import {
   OBTENER_LISTA_MOTOR,
   OBTENER_LISTA_MODULO_CONTROL,
   OBTENER_LISTA_POST_TRATAMIENTO,
+  OBTENER_LISTA_VERSION_MOTOR,
 } from "../const/actionTypes";
 
 //import/no-anonymous-default-export
@@ -219,6 +220,12 @@ export default (state, action) => {
       return {
         ...state,
         postTratamientoList: action.payload,
+      };
+
+    case OBTENER_LISTA_VERSION_MOTOR:
+      return {
+        ...state,
+        versionMotorList: action.payload,
       };
     default:
       return state;

@@ -33,6 +33,7 @@ import {
   OBTENER_LISTA_MODULO_CONTROL,
   OBTENER_LISTA_POST_TRATAMIENTO,
   OBTENER_LISTA_MOTOR,
+  OBTENER_LISTA_VERSION_MOTOR,
 } from "const/actionTypes";
 import { getByID, getList } from "services/genericService";
 import selectsReducer from "reducer/selectsReducer";
@@ -79,6 +80,7 @@ export const SelectsContextProvider = (props) => {
     tipoContratoList: [],
     unidadesList: [],
     versionEquiposList: [],
+    versionMotorList: [],
     zonaList: [],
   };
 
@@ -596,6 +598,21 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBETENER LISTADO DE Version motor */
+  const obtenerVersionMotor = async () => {
+    try {
+      const resultado = await callEndpoint(getList("versionmotor"));
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_VERSION_MOTOR,
+          payload: resultado.data,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
@@ -631,6 +648,7 @@ export const SelectsContextProvider = (props) => {
         tipoContratoList: state.tipoContratoList,
         unidadesList: state.unidadesList,
         versionEquiposList: state.versionEquiposList,
+        versionMotorList: state.versionMotorList,
         zonaList: state.zonaList,
 
         styleSetect,
@@ -668,6 +686,7 @@ export const SelectsContextProvider = (props) => {
         obtenerTipoContrato,
         obtenerUnidades,
         obtenerVersionEquipos,
+        obtenerVersionMotor,
         obtenerZonas,
       }}>
       {props.children}
