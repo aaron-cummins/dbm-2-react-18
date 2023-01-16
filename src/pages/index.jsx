@@ -29,6 +29,9 @@ export { default as ConversionLugarTrabajo } from "./conversionLugarTrabajo/Conv
 export { default as ConversionUnidad } from "./conversionUnidad/ConversionUnidad";
 export { default as Comuna } from "./comuna/Comuna";
 export { default as Equipo } from "./equipo/Equipo";
+export { default as Eemm } from "./eemm/Eemm";
+export { default as IndexEemm } from "./eemm/components/IndexEemm";
+export { default as MontajeMotor } from "./eemm/components/MontajeMotor";
 export { default as Esn } from "./esn/Esn";
 export { default as EstadoMotorInstalacion } from "./estadoMotorInstalacion/EstadoMotorInstalacion";
 export { default as EstadoMotor } from "./estadoMotor/EstadoMotor";
@@ -45,7 +48,7 @@ export { default as Motor } from "./motor/Motor";
 export { default as MotivoCambio } from "./motivoCambio/MotivoCambio";
 export { default as MonitoreoFiltro } from "./monitoreoFiltro/MonitoreoFiltro";
 export { default as MonitoreoMotor } from "./monitoreoMotor/MonitoreoMotor";
-export { default as MontajeMotor } from "./montajeMotor/MontajeMotor";
+//export { default as MontajeMotor } from "./montajeMotor/MontajeMotor";
 export { default as Oem } from "./oem/Oem";
 export { default as Pais } from "./pais/Pais";
 export { default as PermisosGlobales } from "./permisosGlobales/PermisosGlobales";

@@ -34,6 +34,9 @@ import {
   OBTENER_LISTA_POST_TRATAMIENTO,
   OBTENER_LISTA_MOTOR,
   OBTENER_LISTA_VERSION_MOTOR,
+  OBTENER_LISTA_ESTADO_EQUIPO_INSTALACION,
+  OBTENER_LISTA_ESTADO_MOTOR_INSTALACION,
+  OBTENER_LISTA_ESTADO_EQUIPO,
 } from "const/actionTypes";
 import { getByID, getList } from "services/genericService";
 import selectsReducer from "reducer/selectsReducer";
@@ -53,6 +56,10 @@ export const SelectsContextProvider = (props) => {
     cargosList: [],
     comunaList: [],
     esnList: [],
+    estadoEquipoList: [],
+    estadoMotorList: [],
+    estadoEquipoInstalacionList: [],
+    estadoMotorInstalacionList: [],
     conversionLugarTrabajoList: [],
     conversionFlotaList: [],
     flotasList: [],
@@ -300,9 +307,14 @@ export const SelectsContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList("versionequipo"));
       if (resultado && resultado.data) {
+        let versionEquipoActivos = [];
+        resultado.data.forEach((item) => {
+          item.activo && versionEquipoActivos.push({ id: item.id, nombre: item.version });
+        });
+
         dispatch({
           type: OBTENER_LISTA_VERSION_EQUIPO,
-          payload: resultado.data,
+          payload: versionEquipoActivos,
         });
       }
     } catch (error) {
@@ -374,10 +386,16 @@ export const SelectsContextProvider = (props) => {
   const obtenerFlotasLugarTrabajo = async (id) => {
     try {
       const resultado = await callEndpoint(getByID("flotalugartrabajo/filtro", id));
+
+      let flotas_lugar_trabajo_Activas = [];
+      resultado.data.forEach((item) => {
+        item.activo && flotas_lugar_trabajo_Activas.push({ id: item.id, nombre: item.flotas?.nombre });
+      });
+
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA_FLOTAS_LUGAR_TRABAJO,
-          payload: resultado.data,
+          payload: flotas_lugar_trabajo_Activas,
         });
       }
     } catch (error) {
@@ -392,12 +410,29 @@ export const SelectsContextProvider = (props) => {
       if (id) resultado = await callEndpoint(getByID("unidad/filtro", id));
       else resultado = await callEndpoint(getList("unidad"));
 
+      let unidadesActivas = [];
+      resultado.data.forEach((item) => {
+        item.activo && unidadesActivas.push(item);
+      });
+
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA_UNIDADES,
-          payload: resultado.data,
+          payload: unidadesActivas,
         });
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* Limpiar LISTADO DE unidades */
+  const limpiarUnidades = async () => {
+    try {
+      dispatch({
+        type: OBTENER_LISTA_UNIDADES,
+        payload: [],
+      });
     } catch (error) {
       console.log(error);
     }
@@ -423,11 +458,28 @@ export const SelectsContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList("esn"));
       if (resultado && resultado.data) {
+        let esnActivos = [];
+        resultado.data.forEach((item) => {
+          item.activo && esnActivos.push({ id: item.id, nombre: item.esn });
+        });
+
         dispatch({
           type: OBTENER_LISTA_ESN,
-          payload: resultado.data,
+          payload: esnActivos,
         });
       }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* Limpiar LISTADO DE ESN */
+  const limpiarEsn = async () => {
+    try {
+      dispatch({
+        type: OBTENER_LISTA_ESN,
+        payload: [],
+      });
     } catch (error) {
       console.log(error);
     }
@@ -603,9 +655,100 @@ export const SelectsContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList("versionmotor"));
       if (resultado && resultado.data) {
+        let versionMotorActivos = [];
+        resultado.data.forEach((item) => {
+          item.activo && versionMotorActivos.push({ id: item.id, nombre: item.nombreComercial });
+        });
+
         dispatch({
           type: OBTENER_LISTA_VERSION_MOTOR,
-          payload: resultado.data,
+          payload: versionMotorActivos,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE ESTADO EQUIPO INSTALACION */
+  const obtenerEstadoEquipoInstalaciones = async () => {
+    try {
+      const resultado = await callEndpoint(getList("estadoequipoinstalacion"));
+
+      let estadosActivos = [];
+      resultado.data.forEach((item) => {
+        item.activo && estadosActivos.push(item);
+      });
+
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_ESTADO_EQUIPO_INSTALACION,
+          payload: estadosActivos,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE ESTADO MOTOR INSTALACION */
+  const obtenerEstadoMotorInstalaciones = async () => {
+    try {
+      const resultado = await callEndpoint(getList("estadomotorinstalacion"));
+
+      let estadosActivos = [];
+      resultado.data.forEach((item) => {
+        item.activo && estadosActivos.push(item);
+      });
+
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_ESTADO_MOTOR_INSTALACION,
+          payload: estadosActivos,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE ESTADO EQUIPO */
+  const obtenerEstadoEquipo = async () => {
+    try {
+      const resultado = await callEndpoint(getList("estadoequipo"));
+
+      let estadosActivos = [];
+      resultado.data.forEach((item) => {
+        item.activo && estadosActivos.push(item);
+      });
+
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_ESTADO_EQUIPO,
+          payload: estadosActivos,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE ESTADO MOTOR */
+  const obtenerEstadoMotor = async (montaje = true) => {
+    try {
+      const resultado = montaje
+        ? await callEndpoint(getList("estadomotor/montaje"))
+        : await callEndpoint(getList("estadomotor/desmontaje"));
+
+      let estadosActivos = [];
+      resultado.data.forEach((item) => {
+        item.activo && estadosActivos.push(item);
+      });
+
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_ESTADO_MOTOR_INSTALACION,
+          payload: estadosActivos,
         });
       }
     } catch (error) {
@@ -620,6 +763,10 @@ export const SelectsContextProvider = (props) => {
         aplicacionesList: state.aplicacionesList,
         cargosList: state.cargosList,
         comunaList: state.comunaList,
+        estadoEquipoList: state.estadoEquipoList,
+        estadoMotorList: state.estadoMotorList,
+        estadoEquipoInstalacionList: state.estadoEquipoInstalacionList,
+        estadoMotorInstalacionList: state.estadoMotorInstalacionList,
         esnList: state.esnList,
         conversionLugarTrabajoList: state.conversionLugarTrabajoList,
         conversionFlotaList: state.conversionFlotaList,
@@ -654,11 +801,18 @@ export const SelectsContextProvider = (props) => {
         styleSetect,
         styleErrorSelect,
 
+        limpiarEsn,
+        limpiarUnidades,
+
         obtenerAplicaciones,
         obtenerAplicacionOems,
         obtenerCargos,
         obtenerComunas,
         obtenerEsn,
+        obtenerEstadoEquipo,
+        obtenerEstadoMotor,
+        obtenerEstadoEquipoInstalaciones,
+        obtenerEstadoMotorInstalaciones,
         obtenerMotores,
         obtenerConversionLugarTrabajo,
         obtenerConversionFlota,

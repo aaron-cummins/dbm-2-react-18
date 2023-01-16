@@ -1,14 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  InputText,
-  Buttons,
-  Checkbox,
-  SelectLugarTrabajo,
-  SelectVersionEquipo,
-  SelectAplicacionOem,
-  SelectOem,
-  SelectFlotaLugarTrabajo,
-} from "components";
+import { InputText, Buttons, Checkbox, Select } from "components";
 import { UnidadContext } from "../context/unidadContext";
 import { closeModal, formatDateshort } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
@@ -19,7 +10,14 @@ import { useSnackbar } from "notistack";
 const FormUnidad = () => {
   const { registrarUnidad, unidadActual, actualizarUnidad, obtenerUnidad } = useContext(UnidadContext);
   const { mensaje } = useStateContext();
-  const { obtenerFlotasLugarTrabajo } = useContext(SelectsContext);
+  const {
+    obtenerFlotasLugarTrabajo,
+    aplicacionOemsList,
+    lugarTrabajoUsuarioList,
+    oemsList,
+    versionEquiposList,
+    flotasLugarTrabajoList,
+  } = useContext(SelectsContext);
   const { enqueueSnackbar } = useSnackbar();
 
   const unidadDefault = useMemo(() => {
@@ -162,20 +160,24 @@ const FormUnidad = () => {
         {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
         <div className="grid grid-cols-2 gap-4">
           <div className="form-group mb-2">
-            <SelectLugarTrabajo
+            <Select
               id="lugarTrabajoId"
               name="lugarTrabajoId"
               placeholder="Lugar Trabajo"
+              label="Lugar trabajo"
+              list={lugarTrabajoUsuarioList}
               value={unidad.flotaLugarTrabajo.lugarTrabajo?.id}
               onChange={handleChange}
               required={true}
             />
           </div>
           <div className="form-group mb-2">
-            <SelectFlotaLugarTrabajo
+            <Select
               id="flotaLugarTrabajoId"
               name="flotaLugarTrabajoId"
               placeholder="Flota"
+              label="Flota"
+              list={flotasLugarTrabajoList}
               value={unidad.flotaLugarTrabajo?.id}
               onChange={handleChange}
               required={true}
@@ -221,22 +223,34 @@ const FormUnidad = () => {
 
         <div className="grid grid-cols-3 gap-4">
           <div className="form-group mb-4">
-            <SelectAplicacionOem
+            <Select
               id="aplicacionOemId"
               name="aplicacionOemId"
+              label="Aplicación OEM"
+              list={aplicacionOemsList}
               value={unidad.aplicacionOem?.id}
               onChange={handleChange}
               required={true}
             />
           </div>
           <div className="form-group mb-4">
-            <SelectOem id="oemId" name="oemId" value={unidad.oem?.id} onChange={handleChange} required={true} />
+            <Select
+              id="oemId"
+              name="oemId"
+              label="OEM"
+              list={oemsList}
+              value={unidad.oem?.id}
+              onChange={handleChange}
+              required={true}
+            />
           </div>
           <div className="form-group mb-4">
-            <SelectVersionEquipo
+            <Select
               id="versionId"
               name="versionId"
               placeholder="Versión Equipo"
+              label="Versión Equipo"
+              list={versionEquiposList}
               value={unidad.version.id}
               onChange={handleChange}
               required={true}

@@ -65,9 +65,11 @@ import {
   MontajeMotor,
   Esn,
   VersionMotor,
+  Eemm,
+  IndexEemm,
+  MonitoreoMotor,
 } from "pages";
 import AuthGuard from "./AuthGuard";
-import { MonitoreoMotor } from "../pages";
 
 const Rutas = () => {
   return (
@@ -90,6 +92,10 @@ const Rutas = () => {
         <Route path="/conversionlugartrabajo" element={<ConversionLugarTrabajo />}></Route>
         <Route path="/conversionunidad" element={<ConversionUnidad />}></Route>
         <Route path="/equipo" element={<Equipo />}></Route>
+        <Route path="/eemm" element={<Eemm />}>
+          <Route index element={<IndexEemm />}></Route>
+          <Route path="montaje" element={<MontajeMotor />}></Route>
+        </Route>
         <Route path="/esn" element={<Esn />}></Route>
         <Route path="/estadoequipo" element={<EstadoEquipo />}></Route>
         <Route path="/estadoequipoinstalacion" element={<EstadoEquipoInstalacion />}></Route>
@@ -105,7 +111,7 @@ const Rutas = () => {
         <Route path="/motivocambio" element={<MotivoCambio />}></Route>
         <Route path="/monitoreofiltro" element={<MonitoreoFiltro />}></Route>
         <Route path="/monitoreomotor" element={<MonitoreoMotor />}></Route>
-        <Route path="/montajemotor" element={<MontajeMotor />}></Route>
+
         <Route path="/oem" element={<Oem />}></Route>
         <Route path="/pais" element={<Pais />}></Route>
         <Route path="/permisosglobales" element={<PermisosGlobales />}></Route>

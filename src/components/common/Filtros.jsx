@@ -1,13 +1,16 @@
 import React from "react";
 import { FiFilter } from "react-icons/fi";
 import { useStateContext } from "contexts/ContextProvider";
+import { FaUserCog } from "react-icons/fa";
 
 const Filtros = (props) => {
   const { currentColor } = useStateContext();
   return (
     <div className="mb-5 border-solid border-1">
       <div className="flex justify-between items-center gap-2 mb-1 pl-2 pr-2 bg-gray-50 ">
-        <p className="text-lg text-gray-00">Filtro</p>
+        <p className="text-sm text-gray-00 uppercase font-semibold inline-flex items-center gap-2">
+          <FaUserCog /> Filtro
+        </p>
         <p>
           <FiFilter />
         </p>

@@ -33,6 +33,10 @@ import {
   OBTENER_LISTA_MODULO_CONTROL,
   OBTENER_LISTA_POST_TRATAMIENTO,
   OBTENER_LISTA_VERSION_MOTOR,
+  OBTENER_LISTA_ESTADO_EQUIPO_INSTALACION,
+  OBTENER_LISTA_ESTADO_MOTOR_INSTALACION,
+  OBTENER_LISTA_ESTADO_EQUIPO,
+  OBTENER_LISTA_ESTADO_MOTOR,
 } from "../const/actionTypes";
 
 //import/no-anonymous-default-export
@@ -226,6 +230,30 @@ export default (state, action) => {
       return {
         ...state,
         versionMotorList: action.payload,
+      };
+
+    case OBTENER_LISTA_ESTADO_EQUIPO_INSTALACION:
+      return {
+        ...state,
+        estadoEquipoInstalacionList: action.payload,
+      };
+
+    case OBTENER_LISTA_ESTADO_MOTOR_INSTALACION:
+      return {
+        ...state,
+        estadoMotorInstalacionList: action.payload,
+      };
+
+    case OBTENER_LISTA_ESTADO_EQUIPO:
+      return {
+        ...state,
+        estadoEquipoList: action.payload,
+      };
+
+    case OBTENER_LISTA_ESTADO_MOTOR:
+      return {
+        ...state,
+        estadoMotorList: action.payload,
       };
     default:
       return state;
