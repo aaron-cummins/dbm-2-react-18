@@ -4,12 +4,15 @@ import { TipolugartrabajoContext } from "../context/tipolugartrabajoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipolugartrabajo = () => {
   const { registrarTipolugartrabajo, tipolugartrabajoActual, actualizarTipolugartrabajo, obtenerTipolugartrabajo } =
     useContext(TipolugartrabajoContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const tipolugartrabajoDefault = useMemo(() => {
     return {
       id: 0,
@@ -24,37 +27,42 @@ const FormTipolugartrabajo = () => {
     tipolugartrabajoActual ? setTipolugartrabajo(tipolugartrabajoActual) : setTipolugartrabajo(tipolugartrabajoDefault);
   }, [tipolugartrabajoActual, tipolugartrabajoDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", tipolugartrabajo.tipo, "Nombre de tipo lugar trabajo requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setTipolugartrabajo({
-          ...tipolugartrabajo,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipolugartrabajo({
-          ...tipolugartrabajo,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipolugartrabajo({ ...tipolugartrabajo, [name]: checked });
+    else setTipolugartrabajo({ ...tipolugartrabajo, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipolugartrabajo(tipolugartrabajoDefault);
     obtenerTipolugartrabajo(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (tipolugartrabajo.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (validaciones()) {
+      tipolugartrabajoActual !== null
+        ? actualizarTipolugartrabajo(TipolugartrabajoAEnviar())
+        : registrarTipolugartrabajo(TipolugartrabajoAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    tipolugartrabajoActual
-      ? actualizarTipolugartrabajo(TipolugartrabajoAEnviar())
-      : registrarTipolugartrabajo(TipolugartrabajoAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
   const TipolugartrabajoAEnviar = () => {
@@ -75,6 +83,7 @@ const FormTipolugartrabajo = () => {
             value={tipolugartrabajo.tipo}
             onChangeFN={handleChange}
             required={true}
+            error={error.tipo}
           />
         </div>
         <div className="form-group mb-4">

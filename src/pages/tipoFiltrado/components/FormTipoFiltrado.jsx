@@ -4,12 +4,14 @@ import { TipoFiltradoContext } from "../context/tipofiltradoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipoFiltrado = () => {
   const { registrarTipoFiltrado, tipofiltradoActual, actualizarTipoFiltrado, obtenerTipoFiltrado } =
     useContext(TipoFiltradoContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const tipofiltradoDefault = useMemo(() => {
     return {
@@ -25,35 +27,42 @@ const FormTipoFiltrado = () => {
     tipofiltradoActual ? setTipoFiltrado(tipofiltradoActual) : setTipoFiltrado(tipofiltradoDefault);
   }, [tipofiltradoActual, tipofiltradoDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", tipofiltrado.nombre, "Nombre de tipo filtrado requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setTipoFiltrado({
-          ...tipofiltrado,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipoFiltrado({
-          ...tipofiltrado,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipoFiltrado({ ...tipofiltrado, [name]: checked });
+    else setTipoFiltrado({ ...tipofiltrado, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipoFiltrado(tipofiltradoDefault);
     obtenerTipoFiltrado(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (tipofiltrado.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (validaciones()) {
+      tipofiltradoActual !== null
+        ? actualizarTipoFiltrado(TipoFiltradoAEnviar())
+        : registrarTipoFiltrado(TipoFiltradoAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    tipofiltradoActual ? actualizarTipoFiltrado(TipoFiltradoAEnviar()) : registrarTipoFiltrado(TipoFiltradoAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
   const TipoFiltradoAEnviar = () => {
@@ -74,6 +83,7 @@ const FormTipoFiltrado = () => {
             value={tipofiltrado.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

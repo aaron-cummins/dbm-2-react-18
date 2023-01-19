@@ -4,11 +4,14 @@ import { TipoBlockContext } from "../context/TipoBlockContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipoBlock = () => {
   const { TipoBlockActual, registrarTipoBlock, actualizarTipoBlock, obtenerTipoBlock } = useContext(TipoBlockContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const TipoBlockDefault = useMemo(
     () => ({
       id: 0,
@@ -24,36 +27,42 @@ const FormTipoBlock = () => {
     TipoBlockActual ? setTipoBlock(TipoBlockActual) : setTipoBlock(TipoBlockDefault);
   }, [TipoBlockActual, TipoBlockDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", TipoBlock.nombre, "Nombre de tipo block requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    if (e.target.name === "activo") {
-      setTipoBlock({
-        ...TipoBlock,
-        [e.target.name]: e.target.checked,
-      });
-    } else if (e.target.name === "experimental") {
-      setTipoBlock({
-        ...TipoBlock,
-        [e.target.name]: e.target.checked,
-      });
-    } else {
-      setTipoBlock({
-        ...TipoBlock,
-        [e.target.name]: e.target.value,
-      });
-    }
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipoBlock({ ...TipoBlock, [name]: checked });
+    else setTipoBlock({ ...TipoBlock, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipoBlock(TipoBlockDefault);
     obtenerTipoBlock(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    TipoBlockActual ? actualizarTipoBlock(TipoBlockEnviar()) : registrarTipoBlock(TipoBlockEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      TipoBlockActual !== null
+        ? actualizarTipoBlock(TipoBlockEnviar())
+        : registrarTipoBlock(TipoBlockEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const TipoBlockEnviar = () => {
@@ -74,6 +83,7 @@ const FormTipoBlock = () => {
             value={TipoBlock.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

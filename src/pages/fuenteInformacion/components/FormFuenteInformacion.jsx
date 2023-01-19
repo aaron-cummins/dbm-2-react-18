@@ -4,12 +4,14 @@ import { FuenteInformacionContext } from "../context/FuenteInformacionContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormFuenteInformacion = () => {
   const { FuenteInformacionActual, registrarFuenteInformacion, actualizarFuenteInformacion, obtenerFuenteInformacion } =
     useContext(FuenteInformacionContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const FuenteInformacionDefault = useMemo(
     () => ({
@@ -27,31 +29,42 @@ const FormFuenteInformacion = () => {
       : setFuenteInformacion(FuenteInformacionDefault);
   }, [FuenteInformacionActual, FuenteInformacionDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", FuenteInformacion.nombre, "Nombre de la fuente de información requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setFuenteInformacion({
-          ...FuenteInformacion,
-          [e.target.name]: e.target.checked,
-        })
-      : setFuenteInformacion({
-          ...FuenteInformacion,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setFuenteInformacion({ ...FuenteInformacion, [name]: checked });
+    else setFuenteInformacion({ ...FuenteInformacion, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setFuenteInformacion(FuenteInformacionDefault);
     obtenerFuenteInformacion(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    FuenteInformacionActual
-      ? actualizarFuenteInformacion(FuenteInformacionEnviar())
-      : registrarFuenteInformacion(FuenteInformacionEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      FuenteInformacionActual !== null
+        ? actualizarFuenteInformacion(FuenteInformacionEnviar())
+        : registrarFuenteInformacion(FuenteInformacionEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const FuenteInformacionEnviar = () => {
@@ -66,12 +79,13 @@ const FormFuenteInformacion = () => {
         <div className="form-group mb-8">
           <InputText
             id="nombre"
-            name="nombre"
+            name="nombre" 
             placeholder="Nombre"
             label="Nombre"
             value={FuenteInformacion.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

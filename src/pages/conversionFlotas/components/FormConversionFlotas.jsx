@@ -1,15 +1,23 @@
 import { useState, useContext, useMemo, useEffect } from "react";
-import { InputText, Buttons, Checkbox, SelectFlota, SelectFuenteInformacion, SelectConversionLugarTrabajo } from "components";
+import { InputText, Buttons, Checkbox, Select} from "components";
 import { ConversionFlotasContext } from "../context/ConversionFlotasContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormConversionFlotas = () => {
   const { obtenerConversionFlotas, ConversionFlotasActual, actualizarConversionFlotas, registrarConversionFlotas } =
     useContext(ConversionFlotasContext);
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
+  const {
+    flotasList,
+    conversionLugarTrabajoList,
+    fuenteInformacionList,
+  } = useContext(SelectsContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const ConversionFlotasDefault = useMemo(() => {
     return {
@@ -37,54 +45,50 @@ const FormConversionFlotas = () => {
   useEffect(() => {
     ConversionFlotasActual !== null ? setConversionFlotas(ConversionFlotasActual) : setConversionFlotas(ConversionFlotasDefault);
   }, [ConversionFlotasActual, ConversionFlotasDefault]);
+ 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", ConversionFlotas.nombre, "Nombre conversión de flotas requerido")) valida = false;
+    if (validarTexto("abreviacion", ConversionFlotas.abreviacion, "Abreviación de conversión de flotas requerida")) valida = false;
+    if (validarSelect("flotasId", ConversionFlotas.flotas, "Debe seleccionar una flota")) valida = false;
+    if (validarSelect("fuenteInformacionId", ConversionFlotas.fuenteInformacion, "Debe seleccionar una fuente de información")) valida = false;
+    if (validarSelect("conversionLugarTrabajoId", ConversionFlotas.conversionLugarTrabajo, "Debe seleccionar una conversión lugar de trabajo")) valida = false;
+  
+    return valida;
+  };
 
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setConversionFlotas({
-          ...ConversionFlotas,
-          [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "flotasId"
-      ? setConversionFlotas({
-          ...ConversionFlotas,
-          flotas: {
-            id: e.target.value,
-          },
-          [e.target.name]: e.target.value,
-        })
-      : e.target.name === "fuenteInformacionId"
-      ? setConversionFlotas({
-          ...ConversionFlotas,
-          fuenteInformacion: {
-            id: e.target.value,
-          },
-          [e.target.name]: e.target.value,
-        })
-      : e.target.name === "conversionLugarTrabajoId"
-        ? setConversionFlotas({
-            ...ConversionFlotas,
-            conversionLugarTrabajo: {
-              id: e.target.value,
-            },
-            [e.target.name]: e.target.value,
-          })
-      : setConversionFlotas({
-          ...ConversionFlotas,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setConversionFlotas({ ...ConversionFlotas, [name]: checked });
+    else if (name === "flotasId") setConversionFlotas({ ...ConversionFlotas, flotas: { id: value }, [name]: value });
+    else if (name === "fuenteInformacionId") setConversionFlotas({ ...ConversionFlotas, fuenteInformacion: { id: value }});
+    else if (name === "conversionLugarTrabajoId") setConversionFlotas({ ...ConversionFlotas, conversionLugarTrabajo: { id: value }});
+    else setConversionFlotas({ ...ConversionFlotas, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setConversionFlotas(ConversionFlotasDefault);
     obtenerConversionFlotas(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    ConversionFlotasActual ? actualizarConversionFlotas(ConversionFlotasEnviar()) : registrarConversionFlotas(ConversionFlotasEnviar());
-
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      ConversionFlotasActual !== null
+        ? actualizarConversionFlotas(ConversionFlotasEnviar())
+        : registrarConversionFlotas(ConversionFlotasEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const ConversionFlotasEnviar = () => {
@@ -108,6 +112,7 @@ const FormConversionFlotas = () => {
             value={ConversionFlotas.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-3">
@@ -119,42 +124,52 @@ const FormConversionFlotas = () => {
             value={ConversionFlotas.abreviacion}
             onChangeFN={handleChange}
             required={true}
+            error={error.abreviacion}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
-          <SelectFlota
+          <Select
             id="flotasId"
             name="flotasId"
             placeholder="flota"
             value={ConversionFlotas.flotas?.id}
             onChange={handleChange}
+            label="Flota"
+            list={flotasList}
             required={true}
+            error={error.flotasId}
           />
         </div>
         <div className="form-group mb-6">
-          <SelectFuenteInformacion
+          <Select
             id="fuenteInformacionId"
             name="fuenteInformacionId"
             placeholder="fuente de informacion"
             value={ConversionFlotas.fuenteInformacion?.id}
             onChange={handleChange}
+            label="Fuente informacion"
+            list={fuenteInformacionList}
             required={true}
+            error={error.fuenteInformacionId}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
-          <SelectConversionLugarTrabajo
+          <Select
             id="conversionLugarTrabajoId"
             name="conversionLugarTrabajoId"
             placeholder="Conversión lugar de trabajo"
             value={ConversionFlotas.conversionLugarTrabajo?.id}
             onChange={handleChange}
+            label="Conversión lugar trabajo"
+            list={conversionLugarTrabajoList}
             required={true}
+            error={error.conversionLugarTrabajoId}
           />
         </div>
         <div className="form-group mb-6">

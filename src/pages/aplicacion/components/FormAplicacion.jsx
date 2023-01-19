@@ -4,12 +4,14 @@ import { AplicacionContext } from "../context/aplicacionContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormAplicacion = () => {
   const { registrarAplicacion, aplicacionActual, actualizarAplicacion, obtenerAplicacion } =
     useContext(AplicacionContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const aplicacionDefault = useMemo(() => {
     return {
@@ -20,27 +22,27 @@ const FormAplicacion = () => {
   }, []);
 
   const [aplicacion, setAplicacion] = useState(aplicacionDefault);
-  const [error, setError] = useState({});
 
   useEffect(() => {
     aplicacionActual !== null ? setAplicacion(aplicacionActual) : setAplicacion(aplicacionDefault);
   }, [aplicacionActual, aplicacionDefault]);
 
   const validaciones = () => {
-    let error = {};
-    if (!aplicacion.nombre.trim()) error.nombre = "Nombre Requerido";
+    let valida = true;
 
-    return error;
+    if (validarTexto("nombre", aplicacion.nombre, "Nombre requerido")) valida = false;
+  
+    return valida;
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    type === "checkbox"
-      ? setAplicacion({ ...aplicacion, [name]: checked })
-      : setAplicacion({ ...aplicacion, [name]: value });
+    if (type === "checkbox") setAplicacion({ ...aplicacion, [name]: checked });
+    else setAplicacion({ ...aplicacion, [name]: value });
 
-    setError(validaciones());
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
@@ -49,21 +51,21 @@ const FormAplicacion = () => {
     setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    setError(validaciones(aplicacion));
-
-    if (Object.keys(error).length === 0) {
-      aplicacionActual !== null ? actualizarAplicacion(AplicacionAEnviar()) : registrarAplicacion(AplicacionAEnviar());
-      limpiaForm();
+    if (validaciones()) {
+      aplicacionActual !== null
+        ? actualizarAplicacion(AplicacionEnviar())
+        : registrarAplicacion(AplicacionEnviar());
       closeModal();
+      limpiaForm();
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
   };
 
-  const AplicacionAEnviar = () => {
+  const AplicacionEnviar = () => {
     let aplicacionTmp = { ...aplicacion };
     return aplicacionTmp;
   };
@@ -81,7 +83,7 @@ const FormAplicacion = () => {
             value={aplicacion.nombre}
             onChangeFN={handleChange}
             onBlur={handleChange}
-            //required={true}
+            required={true}
             error={error?.nombre}
           />
         </div>

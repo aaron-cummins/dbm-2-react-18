@@ -4,12 +4,15 @@ import { TipoEmisionContext } from "../context/tipoemisionContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipoEmision = () => {
   const { registrarTipoEmision, tipoemisionActual, actualizarTipoEmision, obtenerTipoEmision } =
     useContext(TipoEmisionContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const tipoemisionDefault = useMemo(() => {
     return {
       id: 0,
@@ -24,35 +27,42 @@ const FormTipoEmision = () => {
     tipoemisionActual ? setTipoEmision(tipoemisionActual) : setTipoEmision(tipoemisionDefault);
   }, [tipoemisionActual, tipoemisionDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", tipoemision.nombre, "Nombre de tipo emisión requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setTipoEmision({
-          ...tipoemision,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipoEmision({
-          ...tipoemision,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipoEmision({ ...tipoemision, [name]: checked });
+    else setTipoEmision({ ...tipoemision, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipoEmision(tipoemisionDefault);
     obtenerTipoEmision(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (tipoemision.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (validaciones()) {
+      tipoemisionActual !== null
+        ? actualizarTipoEmision(TipoEmisionAEnviar())
+        : registrarTipoEmision(TipoEmisionAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    tipoemisionActual ? actualizarTipoEmision(TipoEmisionAEnviar()) : registrarTipoEmision(TipoEmisionAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
   const TipoEmisionAEnviar = () => {
@@ -73,6 +83,7 @@ const FormTipoEmision = () => {
             value={tipoemision.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

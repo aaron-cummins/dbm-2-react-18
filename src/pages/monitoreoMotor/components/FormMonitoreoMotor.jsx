@@ -4,12 +4,14 @@ import { MonitoreoMotorContext } from "../context/monitoreoMotorContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormMonitoreoMotor = () => {
   const { registrarMonitoreoMotor, monitoreomotorActual, actualizarMonitoreoMotor, obtenerMonitoreoMotor } =
     useContext(MonitoreoMotorContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const monitoreomotorDefault = useMemo(() => {
     return {
@@ -25,40 +27,45 @@ const FormMonitoreoMotor = () => {
     monitoreomotorActual !== null ? setMonitoreoMotor(monitoreomotorActual) : setMonitoreoMotor(monitoreomotorDefault);
   }, [monitoreomotorActual, monitoreomotorDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", monitoreomotor.nombre, "Nombre de monitoreo motor requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setMonitoreoMotor({
-          ...monitoreomotor,
-          [e.target.name]: e.target.checked,
-        })
-      : setMonitoreoMotor({
-          ...monitoreomotor,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setMonitoreoMotor({ ...monitoreomotor, [name]: checked });
+    else setMonitoreoMotor({ ...monitoreomotor, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setMonitoreoMotor(monitoreomotorDefault);
     obtenerMonitoreoMotor(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (monitoreomotor.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (validaciones()) {
+      monitoreomotorActual !== null
+        ? actualizarMonitoreoMotor(MonitoreoMotorEnviar())
+        : registrarMonitoreoMotor(MonitoreoMotorEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    monitoreomotorActual !== null
-      ? actualizarMonitoreoMotor(MonitoreoMotorAEnviar())
-      : registrarMonitoreoMotor(MonitoreoMotorAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
-  const MonitoreoMotorAEnviar = () => {
+  const MonitoreoMotorEnviar = () => {
     let monitoreomotorTmp = { ...monitoreomotor };
     return monitoreomotorTmp;
   };
@@ -76,6 +83,7 @@ const FormMonitoreoMotor = () => {
             value={monitoreomotor.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

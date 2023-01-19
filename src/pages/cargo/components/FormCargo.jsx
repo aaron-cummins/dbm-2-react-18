@@ -4,11 +4,14 @@ import { CargoContext } from "../context/cargoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormCargo = () => {
   const { registrarCargo, cargoActual, actualizarCargo, obtenerCargo } = useContext(CargoContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const cargoDefault = useMemo(() => {
     return {
       id: 0,
@@ -23,28 +26,42 @@ const FormCargo = () => {
     cargoActual !== null ? setCargo(cargoActual) : setCargo(cargoDefault);
   }, [cargoActual, cargoDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", cargo.nombre, "Nombre del cargo requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setCargo({
-          ...cargo,
-          [e.target.name]: e.target.checked,
-        })
-      : setCargo({
-          ...cargo,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setCargo({ ...cargo, [name]: checked });
+    else setCargo({ ...cargo, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setCargo(cargoDefault);
     obtenerCargo(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    cargoActual !== null ? actualizarCargo(CargoAEnviar()) : registrarCargo(CargoAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      cargoActual !== null
+        ? actualizarCargo(CargoAEnviar())
+        : registrarCargo(CargoAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const CargoAEnviar = () => {
@@ -65,6 +82,7 @@ const FormCargo = () => {
             value={cargo.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

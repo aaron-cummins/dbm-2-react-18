@@ -3,19 +3,12 @@ import {
   InputText,
   Buttons,
   Checkbox,
-  SelectMotor,
-  SelectTipoAdmision,
-  SelectTipoEmision,
-  SelectTipoBlock,
-  SelectTipoCombustible,
-  SelectTipoFiltrado,
-  SelectTipoInyeccion,
-  SelectModuloControl,
-  SelectPostTratamiento,
+  Select,
 } from "components";
 import { VersionMotorContext } from "../context/versionMotorContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { SelectsContext } from "contexts/SelectsContext";
 import { useSnackbar } from "notistack";
 import useValidacionForm from "hooks/useValidacionForm";
 
@@ -24,6 +17,17 @@ const FormVersionMotor = () => {
     useContext(VersionMotorContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    motoresList,
+    tipoAdmisionList,
+    tipoEmisionList,
+    tipoBlockList,
+    tipoCombustibleList,
+    tipoFiltradoList,
+    tipoInyeccionList, 
+    moduloControlList,
+    postTratamientoList,
+  } = useContext(SelectsContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const versionmotorDefault = useMemo(() => {
@@ -189,37 +193,40 @@ const FormVersionMotor = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-2">
-          <SelectMotor
+          <Select
             id="motorId"
             name="motorId"
             placeholder="Motor"
             label="Motor"
             value={versionmotor.motor?.id}
             onChange={handleChange}
+            list={motoresList}
             required={true}
             error={error?.motorId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectTipoAdmision
+          <Select
             id="tipoAdmisionId"
             name="tipoAdmisionId"
             placeholder="tipo Admisión"
             label="Tipo Admisión"
             value={versionmotor.tipoAdmision?.id}
             onChange={handleChange}
+            list={tipoAdmisionList}
             required={true}
             error={error.tipoAdmisionId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectTipoEmision
+          <Select
             id="tipoEmisionId"
             name="tipoEmisionId"
             placeholder="Tipo Emisión"
             label="Tipo Emisión"
             value={versionmotor.tipoEmision?.id}
             onChange={handleChange}
+            list={tipoEmisionList}
             required={true}
             error={error.tipoEmisionId}
           />
@@ -227,37 +234,40 @@ const FormVersionMotor = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-2">
-          <SelectTipoBlock
+          <Select
             id="tipoBlockId"
             name="tipoBlockId"
             placeholder="Tipo Block"
             label="Tipo Block"
             value={versionmotor.tipoBlock?.id}
             onChange={handleChange}
+            list={tipoBlockList}
             required={true}
             error={error.tipoBlockId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectTipoCombustible
+          <Select
             id="tipoCombustibleId"
             name="tipoCombustibleId"
             placeholder="Tipo Combustible"
             label="Tipo Combustible"
             value={versionmotor.tipoCombustible?.id}
             onChange={handleChange}
+            list={tipoCombustibleList}
             required={true}
             error={error.tipoCombustibleId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectTipoFiltrado
+          <Select
             id="tipoFiltradoId"
             name="tipoFiltradoId"
             placeholder="Tipo Filtrado"
             label="Tipo Filtrado"
             value={versionmotor.tipoFiltrado?.id}
             onChange={handleChange}
+            list={tipoFiltradoList}
             required={true}
             error={error.tipoFiltradoId}
           />
@@ -265,37 +275,40 @@ const FormVersionMotor = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-2">
-          <SelectTipoInyeccion
+          <Select
             id="tipoInyeccionId"
             name="tipoInyeccionId"
             placeholder="Tipo Inyección"
             label="Tipo Inyección"
             value={versionmotor.tipoInyeccion?.id}
             onChange={handleChange}
+            list={tipoInyeccionList}
             required={true}
             error={error.tipoInyeccionId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectModuloControl
+          <Select
             id="moduloControlId"
             name="moduloControlId"
             placeholder="Modulo Control"
             label="Modulo Control"
             value={versionmotor.moduloControl?.id}
             onChange={handleChange}
+            list={moduloControlList}
             required={true}
             error={error.moduloControlId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectPostTratamiento
+          <Select
             id="postTratamientoId"
             name="postTratamientoId"
             placeholder="Post Tratamiento"
             label="Post Tratamiento"
             value={versionmotor.posttratamiento?.id}
             onChange={handleChange}
+            list={postTratamientoList}
             required={true}
             error={error.postTratamientoId}
           />

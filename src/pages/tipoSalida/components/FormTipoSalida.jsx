@@ -4,12 +4,15 @@ import { TipoSalidaContext } from "../context/TipoSalidaContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipoSalida = () => {
   const { TipoSalidaActual, registrarTipoSalida, actualizarTipoSalida, obtenerTipoSalida } =
     useContext(TipoSalidaContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const TipoSalidaDefault = useMemo(
     () => ({
       id: 0,
@@ -24,29 +27,42 @@ const FormTipoSalida = () => {
     TipoSalidaActual ? setTipoSalida(TipoSalidaActual) : setTipoSalida(TipoSalidaDefault);
   }, [TipoSalidaActual, TipoSalidaDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", TipoSalida.nombre, "Nombre tipo de salida requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setTipoSalida({
-          ...TipoSalida,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipoSalida({
-          ...TipoSalida,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipoSalida({ ...TipoSalida, [name]: checked });
+    else setTipoSalida({ ...TipoSalida, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipoSalida(TipoSalidaDefault);
     obtenerTipoSalida(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    TipoSalidaActual ? actualizarTipoSalida(TipoSalidaEnviar()) : registrarTipoSalida(TipoSalidaEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      TipoSalidaActual !== null
+        ? actualizarTipoSalida(TipoSalidaEnviar())
+        : registrarTipoSalida(TipoSalidaEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const TipoSalidaEnviar = () => {
@@ -67,6 +83,7 @@ const FormTipoSalida = () => {
             value={TipoSalida.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

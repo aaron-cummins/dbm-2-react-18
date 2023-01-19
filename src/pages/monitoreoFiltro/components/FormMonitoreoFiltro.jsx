@@ -4,12 +4,14 @@ import { MonitoreoFiltroContext } from "../context/monitoreoFiltroContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormMonitoreoFiltro = () => {
   const { registrarMonitoreoFiltro, monitoreofiltroActual, actualizarMonitoreoFiltro, obtenerMonitoreoFiltro } =
     useContext(MonitoreoFiltroContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const monitoreofiltroDefault = useMemo(() => {
     return {
@@ -27,40 +29,45 @@ const FormMonitoreoFiltro = () => {
       : setMonitoreoFiltro(monitoreofiltroDefault);
   }, [monitoreofiltroActual, monitoreofiltroDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", monitoreofiltro.nombre, "Nombre de monitoreo filtro requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setMonitoreoFiltro({
-          ...monitoreofiltro,
-          [e.target.name]: e.target.checked,
-        })
-      : setMonitoreoFiltro({
-          ...monitoreofiltro,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setMonitoreoFiltro({ ...monitoreofiltro, [name]: checked });
+    else setMonitoreoFiltro({ ...monitoreofiltro, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setMonitoreoFiltro(monitoreofiltroDefault);
     obtenerMonitoreoFiltro(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (monitoreofiltro.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (validaciones()) {
+      monitoreofiltroActual !== null
+        ? actualizarMonitoreoFiltro(MonitoreoFiltroEnviar())
+        : registrarMonitoreoFiltro(MonitoreoFiltroEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    monitoreofiltroActual !== null
-      ? actualizarMonitoreoFiltro(MonitoreoFiltroAEnviar())
-      : registrarMonitoreoFiltro(MonitoreoFiltroAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
-  const MonitoreoFiltroAEnviar = () => {
+  const MonitoreoFiltroEnviar = () => {
     let monitoreofiltroTmp = { ...monitoreofiltro };
     return monitoreofiltroTmp;
   };
@@ -78,6 +85,7 @@ const FormMonitoreoFiltro = () => {
             value={monitoreofiltro.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

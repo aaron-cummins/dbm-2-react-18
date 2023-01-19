@@ -1,15 +1,22 @@
 import { useState, useContext, useMemo, useEffect } from "react";
-import { InputText, Buttons, Checkbox, SelectConversionFlota, SelectUnidad } from "components";
+import { InputText, Buttons, Checkbox, Select } from "components";
 import { ConversionUnidadContext } from "../context/ConversionUnidadContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { SelectsContext } from "contexts/SelectsContext";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormConversionUnidad = () => {
   const { obtenerConversionUnidad, ConversionUnidadActual, actualizarConversionUnidad, registrarConversionUnidad } =
     useContext(ConversionUnidadContext);
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
+  const {
+    unidadesList,
+    conversionFlotaList,
+  } = useContext(SelectsContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const ConversionUnidadDefault = useMemo(() => {
     return {
@@ -33,45 +40,46 @@ const FormConversionUnidad = () => {
     ConversionUnidadActual !== null ? setConversionUnidad(ConversionUnidadActual) : setConversionUnidad(ConversionUnidadDefault);
   }, [ConversionUnidadActual, ConversionUnidadDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", ConversionUnidad.nombre, "Nombre requerido")) valida = false;
+    if (validarSelect("conversionFlotasId", ConversionUnidad.conversionFlotas, "Debe seleccionar una conversión de flotas")) valida = false;
+    if (validarSelect("unidadId", ConversionUnidad.unidad, "Debe seleccionar una unidad")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setConversionUnidad({
-          ...ConversionUnidad,
-          [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "conversionFlotasId"
-      ? setConversionUnidad({
-          ...ConversionUnidad,
-          conversionFlotas: {
-            id: e.target.value,
-          },
-          [e.target.name]: e.target.value,
-        })
-      : e.target.name === "unidadId"
-      ? setConversionUnidad({
-          ...ConversionUnidad,
-          unidad: {
-            id: e.target.value,
-          },
-          [e.target.name]: e.target.value,
-        })
-      : setConversionUnidad({
-          ...ConversionUnidad,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setConversionUnidad({ ...ConversionUnidad, [name]: checked });
+    else if (name === "conversionFlotasId") setConversionUnidad({ ...ConversionUnidad, conversionFlotas: { id: value } });
+    else if (name === "unidadId") setConversionUnidad({ ...ConversionUnidad, unidad: { id: value } });
+    else setConversionUnidad({ ...ConversionUnidad, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setConversionUnidad(ConversionUnidadDefault);
     obtenerConversionUnidad(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    ConversionUnidadActual ? actualizarConversionUnidad(ConversionUnidadEnviar()) : registrarConversionUnidad(ConversionUnidadEnviar());
-
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      ConversionUnidadActual !== null
+        ? actualizarConversionUnidad(ConversionUnidadEnviar())
+        : registrarConversionUnidad(ConversionUnidadEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const ConversionUnidadEnviar = () => {
@@ -94,6 +102,7 @@ const FormConversionUnidad = () => {
             value={ConversionUnidad.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="grid grid-cols-2 gap-4">
@@ -105,23 +114,29 @@ const FormConversionUnidad = () => {
 
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-6">
-          <SelectUnidad
+          <Select
             id="unidadId"
             name="unidadId"
             placeholder="unidad"
             value={ConversionUnidad.unidad?.id}
             onChange={handleChange}
+            label="Unidad"
+            list={unidadesList}
             required={true}
+            error={error.unidadId}
           />
         </div>
         <div className="form-group mb-6">
-          <SelectConversionFlota
+          <Select
             id="conversionFlotasId"
             name="conversionFlotasId"
             placeholder="conversionFlotas"
             value={ConversionUnidad.conversionFlotas?.id}
             onChange={handleChange}
+            label="Conversión flotas"
+            list={conversionFlotaList}
             required={true}
+            error={error.conversionFlotasId}
           />
         </div>
       </div>
