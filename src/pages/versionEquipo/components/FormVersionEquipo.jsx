@@ -4,12 +4,15 @@ import { VersionEquipoContext } from "../context/versionEquipoContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormVersionEquipo = () => {
   const { registrarVersionEquipo, versionequipoActual, actualizarVersionEquipo, obtenerVersionEquipo } =
     useContext(VersionEquipoContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const versionequipoDefault = useMemo(() => {
     return {
       id: 0,
@@ -24,33 +27,45 @@ const FormVersionEquipo = () => {
     versionequipoActual !== null ? setVersionEquipo(versionequipoActual) : setVersionEquipo(versionequipoDefault);
   }, [versionequipoActual, versionequipoDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("version", versionequipo.version, "Versión requerida")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setVersionEquipo({
-          ...versionequipo,
-          [e.target.name]: e.target.checked,
-        })
-      : setVersionEquipo({
-          ...versionequipo,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setVersionEquipo({ ...versionequipo, [name]: checked });
+    else setVersionEquipo({ ...versionequipo, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setVersionEquipo(versionequipoDefault);
     obtenerVersionEquipo(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    versionequipoActual !== null
-      ? actualizarVersionEquipo(VersionEquipoAEnviar())
-      : registrarVersionEquipo(VersionEquipoAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      versionequipoActual !== null
+        ? actualizarVersionEquipo(VersionEquipoEnviar())
+        : registrarVersionEquipo(VersionEquipoEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
-  const VersionEquipoAEnviar = () => {
+  const VersionEquipoEnviar = () => {
     let versionequipoTmp = { ...versionequipo };
     return versionequipoTmp;
   };
@@ -68,6 +83,7 @@ const FormVersionEquipo = () => {
             value={versionequipo.version}
             onChangeFN={handleChange}
             required={true}
+            error={error.version}
           />
         </div>
         <div className="form-group mb-4">

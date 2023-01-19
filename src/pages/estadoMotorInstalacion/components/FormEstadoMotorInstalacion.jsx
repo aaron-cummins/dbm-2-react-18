@@ -4,6 +4,7 @@ import { EstadoMotorInstalacionContext } from "../context/EstadoMotorInstalacion
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormEstadoMotorInstalacion = () => {
   const {
@@ -14,6 +15,7 @@ const FormEstadoMotorInstalacion = () => {
   } = useContext(EstadoMotorInstalacionContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const EstadoMotorInstalacionDefault = useMemo(
     () => ({
@@ -31,31 +33,42 @@ const FormEstadoMotorInstalacion = () => {
       : setEstadoMotorInstalacion(EstadoMotorInstalacionDefault);
   }, [EstadoMotorInstalacionActual, EstadoMotorInstalacionDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", EstadoMotorInstalacion.nombre, "Nombre requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setEstadoMotorInstalacion({
-          ...EstadoMotorInstalacion,
-          [e.target.name]: e.target.checked,
-        })
-      : setEstadoMotorInstalacion({
-          ...EstadoMotorInstalacion,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setEstadoMotorInstalacion({ ...EstadoMotorInstalacion, [name]: checked });
+    else setEstadoMotorInstalacion({ ...EstadoMotorInstalacion, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setEstadoMotorInstalacion(EstadoMotorInstalacionDefault);
     obtenerEstadoMotorInstalacion(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    EstadoMotorInstalacionActual
-      ? actualizarEstadoMotorInstalacion(EstadoMotorInstalacionEnviar())
-      : registrarEstadoMotorInstalacion(EstadoMotorInstalacionEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      EstadoMotorInstalacionActual !== null
+        ? actualizarEstadoMotorInstalacion(EstadoMotorInstalacionEnviar())
+        : registrarEstadoMotorInstalacion(EstadoMotorInstalacionEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const EstadoMotorInstalacionEnviar = () => {
@@ -76,6 +89,7 @@ const FormEstadoMotorInstalacion = () => {
             value={EstadoMotorInstalacion.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

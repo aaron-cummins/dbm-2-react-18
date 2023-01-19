@@ -4,12 +4,14 @@ import { PostTratamientoContext } from "../context/PostTratamientoContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormPostTratamiento = () => {
   const { PostTratamientoActual, registrarPostTratamiento, actualizarPostTratamiento, obtenerPostTratamiento } =
     useContext(PostTratamientoContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const PostTratamientoDefault = useMemo(
     () => ({
@@ -25,31 +27,42 @@ const FormPostTratamiento = () => {
     PostTratamientoActual ? setPostTratamiento(PostTratamientoActual) : setPostTratamiento(PostTratamientoDefault);
   }, [PostTratamientoActual, PostTratamientoDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", PostTratamiento.nombre, "Nombre de posttratamiento requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setPostTratamiento({
-          ...PostTratamiento,
-          [e.target.name]: e.target.checked,
-        })
-      : setPostTratamiento({
-          ...PostTratamiento,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setPostTratamiento({ ...PostTratamiento, [name]: checked });
+    else setPostTratamiento({ ...PostTratamiento, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setPostTratamiento(PostTratamientoDefault);
     obtenerPostTratamiento(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    PostTratamientoActual
-      ? actualizarPostTratamiento(PostTratamientoEnviar())
-      : registrarPostTratamiento(PostTratamientoEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      PostTratamientoActual !== null
+        ? actualizarPostTratamiento(PostTratamientoEnviar())
+        : registrarPostTratamiento(PostTratamientoEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const PostTratamientoEnviar = () => {
@@ -70,6 +83,7 @@ const FormPostTratamiento = () => {
             value={PostTratamiento.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

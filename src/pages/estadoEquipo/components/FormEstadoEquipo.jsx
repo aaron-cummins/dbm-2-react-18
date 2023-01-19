@@ -4,12 +4,14 @@ import { EstadoEquipoContext } from "../context/EstadoEquipoContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormEstadoEquipo = () => {
   const { EstadoEquipoActual, registrarEstadoEquipo, actualizarEstadoEquipo, obtenerEstadoEquipo } =
     useContext(EstadoEquipoContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const EstadoEquipoDefault = useMemo(
     () => ({
@@ -25,29 +27,42 @@ const FormEstadoEquipo = () => {
     EstadoEquipoActual ? setEstadoEquipo(EstadoEquipoActual) : setEstadoEquipo(EstadoEquipoDefault);
   }, [EstadoEquipoActual, EstadoEquipoDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", EstadoEquipo.nombre, "Nombre de estado equipo requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setEstadoEquipo({
-          ...EstadoEquipo,
-          [e.target.name]: e.target.checked,
-        })
-      : setEstadoEquipo({
-          ...EstadoEquipo,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setEstadoEquipo({ ...EstadoEquipo, [name]: checked });
+    else setEstadoEquipo({ ...EstadoEquipo, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setEstadoEquipo(EstadoEquipoDefault);
     obtenerEstadoEquipo(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    EstadoEquipoActual ? actualizarEstadoEquipo(EstadoEquipoEnviar()) : registrarEstadoEquipo(EstadoEquipoEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      EstadoEquipoActual !== null
+        ? actualizarEstadoEquipo(EstadoEquipoEnviar())
+        : registrarEstadoEquipo(EstadoEquipoEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const EstadoEquipoEnviar = () => {
@@ -68,6 +83,7 @@ const FormEstadoEquipo = () => {
             value={EstadoEquipo.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

@@ -4,11 +4,14 @@ import { FlotaContext } from "../context/flotaContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormFlota = () => {
   const { registrarFlota, flotaActual, actualizarFlota, obtenerFlota } = useContext(FlotaContext);
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const flotaDefault = useMemo(
     () => ({
       id: 0,
@@ -24,31 +27,45 @@ const FormFlota = () => {
     flotaActual !== null ? setFlota(flotaActual) : setFlota(flotaDefault);
   }, [flotaActual, flotaDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", flota.nombre, "Nombre requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setFlota({
-          ...flota,
-          [e.target.name]: e.target.checked,
-        })
-      : setFlota({
-          ...flota,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setFlota({ ...flota, [name]: checked });
+    else setFlota({ ...flota, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setFlota(flotaDefault);
     obtenerFlota(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    flotaActual !== null ? actualizarFlota(FlotaAEnviar()) : registrarFlota(FlotaAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      flotaActual !== null
+        ? actualizarFlota(FlotaEnviar())
+        : registrarFlota(FlotaEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
-  const FlotaAEnviar = () => {
+  const FlotaEnviar = () => {
     let flotaTmp = { ...flota };
     return flotaTmp;
   };
@@ -66,6 +83,7 @@ const FormFlota = () => {
             value={flota.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
       </div>

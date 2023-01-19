@@ -153,9 +153,16 @@ export const SelectsContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList("tipolugartrabajo"));
       if (resultado && resultado.data) {
-        dispatch({
+        let tipoLugarTrabajoActivos = [];
+        resultado.data.forEach((item) => {
+          item.activo && tipoLugarTrabajoActivos.push({ id: item.id, nombre: item.tipo });
+        });
+
+
+
+       dispatch({
           type: OBTENER_LISTA_TIPO_LUGAR_TRABAJO,
-          payload: resultado.data,
+          payload: tipoLugarTrabajoActivos,
         });
       }
     } catch (error) {

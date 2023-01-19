@@ -4,12 +4,15 @@ import { TipoCombustibleContext } from "../context/tipocombustibleContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipoCombustible = () => {
   const { registrarTipoCombustible, tipocombustibleActual, actualizarTipoCombustible, obtenerTipoCombustible } =
     useContext(TipoCombustibleContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const tipocombustibleDefault = useMemo(() => {
     return {
       id: 0,
@@ -24,40 +27,45 @@ const FormTipoCombustible = () => {
     tipocombustibleActual ? setTipoCombustible(tipocombustibleActual) : setTipoCombustible(tipocombustibleDefault);
   }, [tipocombustibleActual, tipocombustibleDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", tipocombustible.nombre, "Nombre del tipo combustible requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setTipoCombustible({
-          ...tipocombustible,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipoCombustible({
-          ...tipocombustible,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipoCombustible({ ...tipocombustible, [name]: checked });
+    else setTipoCombustible({ ...tipocombustible, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipoCombustible(tipocombustibleDefault);
     obtenerTipoCombustible(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (tipocombustible.nombre === "") {
-      enqueueSnackbar("Debe ingresar un nombre valido", { variant: "error" });
+    if (validaciones()) {
+      tipocombustibleActual !== null
+        ? actualizarTipoCombustible(TipoCombustibleEnviar())
+        : registrarTipoCombustible(TipoCombustibleEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    tipocombustibleActual
-      ? actualizarTipoCombustible(TipoCombustibleAEnviar())
-      : registrarTipoCombustible(TipoCombustibleAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
-  const TipoCombustibleAEnviar = () => {
+  const TipoCombustibleEnviar = () => {
     let tipocombustibleTmp = { ...tipocombustible };
     return tipocombustibleTmp;
   };
@@ -75,6 +83,7 @@ const FormTipoCombustible = () => {
             value={tipocombustible.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

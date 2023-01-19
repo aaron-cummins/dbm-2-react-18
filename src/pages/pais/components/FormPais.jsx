@@ -4,11 +4,14 @@ import { PaisContext } from "../context/paisContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormPais = () => {
   const { registrarPais, paisActual, actualizarPais, obtenerPais } = useContext(PaisContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const paisDefault = useMemo(() => {
     return {
       id: 0,
@@ -24,28 +27,43 @@ const FormPais = () => {
     paisActual ? setPais(paisActual) : setPais(paisDefault);
   }, [paisActual, paisDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", pais.nombre, "Nombre del país requerido")) valida = false;
+    if (validarTexto("abreviacion", pais.abreviacion, "Abreviación del país requerida")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setPais({
-          ...pais,
-          [e.target.name]: e.target.checked,
-        })
-      : setPais({
-          ...pais,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setPais({ ...pais, [name]: checked });
+    else setPais({ ...pais, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setPais(paisDefault);
     obtenerPais(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    paisActual ? actualizarPais(PaisAEnviar()) : registrarPais(PaisAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      paisActual !== null
+        ? actualizarPais(PaisAEnviar())
+        : registrarPais(PaisAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const PaisAEnviar = () => {
@@ -66,6 +84,7 @@ const FormPais = () => {
             value={pais.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
@@ -77,6 +96,7 @@ const FormPais = () => {
             value={pais.abreviacion}
             onChangeFN={handleChange}
             required={true}
+            error={error.abreviacion}
           />
         </div>
       </div>

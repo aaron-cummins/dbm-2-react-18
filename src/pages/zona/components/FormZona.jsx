@@ -1,15 +1,21 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox, Select} from "components";
 import { ZonaContext } from "../context/zonaContext";
 import { closeModal } from "utilities/Utiles";
-import { SelectPais } from "components";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
+import { SelectsContext } from "contexts/SelectsContext";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormZona = () => {
   const { registrarZona, zonaActual, actualizarZona, obtenerZona } = useContext(ZonaContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    paisList,
+  } = useContext(SelectsContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
+
   const zonaDefault = useMemo(() => {
     return {
       id: 0,
@@ -28,38 +34,44 @@ const FormZona = () => {
     zonaActual ? setZona(zonaActual) : setZona(zonaDefault);
   }, [zonaActual, zonaDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", zona.nombre, "Nombre de zona requerido")) valida = false;
+    if (validarSelect("paisId", zona.pais, "Debe seleccionar un país")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setZona({
-          ...zona,
-          [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "paisId"
-      ? setZona({
-          ...zona,
-          paisId: e.target.value,
-          pais: {
-            nombre: e.target.options[e.target.selectedIndex].text,
-            id: e.target.value,
-          },
-        })
-      : setZona({
-          ...zona,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setZona({ ...zona, [name]: checked });
+    else if (name === "paisId") setZona({ ...zona, pais: { id: value } });
+    else setZona({ ...zona, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setZona(zonaDefault);
     obtenerZona(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    zonaActual ? actualizarZona(ZonaAEnviar()) : registrarZona(ZonaAEnviar());
-
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      zonaActual !== null
+        ? actualizarZona(ZonaAEnviar())
+        : registrarZona(ZonaAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const ZonaAEnviar = () => {
@@ -81,10 +93,20 @@ const FormZona = () => {
             value={zona.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <SelectPais id="paisId" name="paisId" value={zona.pais?.id} onChange={handleChange} required={true} />
+          <Select 
+            id="paisId" 
+            name="paisId" 
+            value={zona.pais?.id} 
+            onChange={handleChange}
+            label="País"
+            list={paisList} 
+            required={true}
+            error={error.paisId}
+            />
         </div>
       </div>
 

@@ -28,7 +28,7 @@ const LugarTrabajo = () => {
 
         <TablaLugarTrabajo />
 
-        <Modal ModalTitle="Lugar de Tabajo" modalId="lugarTrabajo-modal">
+        <Modal ModalTitle="Lugar de Trabajo" modalId="lugarTrabajo-modal">
           <FormLugarTrabajo />
         </Modal>
       </div>

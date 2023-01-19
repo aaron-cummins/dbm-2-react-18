@@ -4,12 +4,14 @@ import { EstadoMotorContext } from "../context/EstadoMotorContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormEstadoMotor = () => {
   const { EstadoMotorActual, registrarEstadoMotor, actualizarEstadoMotor, obtenerEstadoMotor } =
     useContext(EstadoMotorContext);
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const EstadoMotorDefault = useMemo(
     () => ({
@@ -25,29 +27,42 @@ const FormEstadoMotor = () => {
     EstadoMotorActual ? setEstadoMotor(EstadoMotorActual) : setEstadoMotor(EstadoMotorDefault);
   }, [EstadoMotorActual, EstadoMotorDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", EstadoMotor.nombre, "Nombre de estado motor requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setEstadoMotor({
-          ...EstadoMotor,
-          [e.target.name]: e.target.checked,
-        })
-      : setEstadoMotor({
-          ...EstadoMotor,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setEstadoMotor({ ...EstadoMotor, [name]: checked });
+    else setEstadoMotor({ ...EstadoMotor, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setEstadoMotor(EstadoMotorDefault);
     obtenerEstadoMotor(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    EstadoMotorActual ? actualizarEstadoMotor(EstadoMotorEnviar()) : registrarEstadoMotor(EstadoMotorEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      EstadoMotorActual !== null
+        ? actualizarEstadoMotor(EstadoMotorEnviar())
+        : registrarEstadoMotor(EstadoMotorEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const EstadoMotorEnviar = () => {
@@ -68,6 +83,7 @@ const FormEstadoMotor = () => {
             value={EstadoMotor.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">

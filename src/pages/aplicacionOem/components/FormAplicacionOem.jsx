@@ -4,12 +4,14 @@ import { AplicacionOemContext } from "../context/aplicacionOemContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormAplicacionOem = () => {
   const { aplicacionOemActual, registrarAplicacionOem, actualizarAplicacionOem, obtenerAplicacionOem } =
     useContext(AplicacionOemContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const aplicacionoemDefault = useMemo(
     () => ({
@@ -25,31 +27,42 @@ const FormAplicacionOem = () => {
     aplicacionOemActual ? setAplicacionOem(aplicacionOemActual) : setAplicacionOem(aplicacionoemDefault);
   }, [aplicacionOemActual, aplicacionoemDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", aplicacionoem.nombre, "Nombre aplicación oem")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setAplicacionOem({
-          ...aplicacionoem,
-          [e.target.name]: e.target.checked,
-        })
-      : setAplicacionOem({
-          ...aplicacionoem,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setAplicacionOem({ ...aplicacionoem, [name]: checked });
+    else setAplicacionOem({ ...aplicacionoem, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setAplicacionOem(aplicacionoemDefault);
     obtenerAplicacionOem(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    aplicacionOemActual
-      ? actualizarAplicacionOem(AplicacionOemAEnviar())
-      : registrarAplicacionOem(AplicacionOemAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      aplicacionOemActual !== null
+        ? actualizarAplicacionOem(AplicacionOemAEnviar())
+        : registrarAplicacionOem(AplicacionOemAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const AplicacionOemAEnviar = () => {
@@ -70,6 +83,7 @@ const FormAplicacionOem = () => {
             value={aplicacionoem.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
