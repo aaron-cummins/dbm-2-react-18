@@ -7,7 +7,7 @@ import { useSnackbar } from "notistack";
 import { SelectsContext } from "contexts/SelectsContext";
 import useValidacionForm from "hooks/useValidacionForm";
 
-const FormMontaje = () => {
+const FormDesmontaje = () => {
   const { obtenerEemm, registrarEemm, actualizarEemm, eemmActual, eemm, setEemm, eemmDefault } =
     useContext(EemmContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
@@ -20,6 +20,8 @@ const FormMontaje = () => {
     estadoEquipoList,
     estadoMotorList,
     tipoContratoList,
+    motivoCambioList,
+    tipoSalidaList,
   } = useContext(SelectsContext);
 
   useEffect(() => {
@@ -75,7 +77,7 @@ const FormMontaje = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (validaciones()) {
-      eemmActual !== null ? actualizarEemm(MontajeAEnviar()) : registrarEemm(MontajeAEnviar());
+      eemmActual !== null ? actualizarEemm(DesmontajeAEnviar()) : registrarEemm(DesmontajeAEnviar());
       limpiaForm();
       closeModal();
     } else {
@@ -84,23 +86,36 @@ const FormMontaje = () => {
     }
   };
 
-  const MontajeAEnviar = () => {
-    let montajeTmp = { ...eemm };
+  const DesmontajeAEnviar = () => {
+    let desmontajeTmp = { ...eemm };
 
-    montajeTmp.estadoEquipoInstalacionId = eemm.estadoEquipoInstalacion.id;
-    montajeTmp.estadoMotorInstalacionId = eemm.estadoMotorInstalacion.id;
-    montajeTmp.estadoEquipoId = eemm.estadoEquipo.id;
-    montajeTmp.estadoMotorId = eemm.estadoMotor.id;
-    montajeTmp.contratoId = eemm.contrato.id;
-    montajeTmp.am = eemm.am.id;
+    desmontajeTmp.estadoEquipoInstalacionId = eemm.estadoEquipoInstalacion.id;
+    desmontajeTmp.estadoMotorInstalacionId = eemm.estadoMotorInstalacion.id;
+    desmontajeTmp.estadoEquipoId = eemm.estadoEquipo.id;
+    desmontajeTmp.estadoMotorId = eemm.estadoMotor.id;
+    desmontajeTmp.contratoId = eemm.contrato.id;
+    desmontajeTmp.am = eemm.am.id;
 
-    return montajeTmp;
+    return desmontajeTmp;
   };
 
   return (
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="form-group mb-4">
+          <InputText
+            id="esnId"
+            name="esnId"
+            placeholder="ESN [Placa]"
+            label="ESN [Placa]"
+            value={eemm?.esnId}
+            onChangeFN={handleChange}
+            required={true}
+            readOnly={true}
+            error={error.esnId}
+          />
+        </div>
         <div className="form-group mb-4">
           <InputText
             type="date"
@@ -111,21 +126,39 @@ const FormMontaje = () => {
             value={eemm?.fechaps}
             onChangeFN={handleChange}
             required={true}
+            readOnly={true}
             error={error.fechaps}
+          />
+        </div>
+
+        <div className="form-group mb-4">
+          <InputText
+            type="date"
+            id="fechaFalla"
+            name="fechaFalla"
+            placeholder="Fecha falla o detención"
+            label="Fecha falla o detención"
+            value={eemm?.fechaFalla}
+            onChangeFN={handleChange}
+            required={true}
+            error={error.fechaFalla}
           />
         </div>
         <div className="form-group mb-4">
           <InputText
-            id="hrEquipoInstalacion"
-            name="hrEquipoInstalacion"
-            placeholder="Hrs Equipo en instalación"
-            label="Horas Equipo en instalación"
-            value={eemm?.hrEquipoInstalacion}
+            id="hrOperadaMotor"
+            name="hrOperadaMotor"
+            placeholder="Hrs Operadas Motor"
+            label="Horas operadas Motor"
+            value={eemm?.hrOperadaMotor}
             onChangeFN={handleChange}
             required={true}
-            error={error.hrEquipoInstalacion}
+            error={error.hrOperadaMotor}
           />
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div className="form-group mb-4">
           <InputText
             id="hrMotorInstalacion"
@@ -135,52 +168,23 @@ const FormMontaje = () => {
             value={eemm?.hrMotorInstalacion}
             onChangeFN={handleChange}
             required={true}
+            readOnly={true}
             error={error.hrMotorInstalacion}
           />
         </div>
         <div className="form-group mb-4">
           <InputText
-            id="axial"
-            name="axial"
-            placeholder="Medición axial (mm)"
-            label="Medición axial (mm)"
-            value={eemm?.axial}
+            id="hrAcumuladasMotor"
+            name="hrAcumuladasMotor"
+            placeholder="Hrs acumuladas motor"
+            label="Horas acumuladas motor"
+            value={eemm?.hrAcumuladasMotor}
             onChangeFN={handleChange}
             required={true}
-            error={error.axial}
+            readOnly={true}
+            error={error.hrAcumuladasMotor}
           />
         </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-        <div className="form-group mb-4">
-          <Select
-            id="estadoEquipoInstalacionId"
-            name="estadoEquipoInstalacionId"
-            placeholder="Estado Equipo instalación"
-            label="Estado Equipo instalación"
-            list={estadoEquipoInstalacionList}
-            value={eemm.estadoEquipoInstalacion?.id}
-            onChange={handleChange}
-            required={true}
-            error={error.estadoEquipoInstalacionId}
-          />
-        </div>
-
-        <div className="form-group mb-4">
-          <Select
-            id="estadoMotorInstalacionId"
-            name="estadoMotorInstalacionId"
-            placeholder="Estado Motor instalación"
-            label="Estado Motor instalación"
-            list={estadoMotorInstalacionList}
-            value={eemm.estadoMotorInstalacion?.id}
-            onChange={handleChange}
-            required={true}
-            error={error.estadoMotorInstalacionId}
-          />
-        </div>
-
         <div className="form-group mb-4">
           <Select
             id="estadoEquipoId"
@@ -209,6 +213,63 @@ const FormMontaje = () => {
           />
         </div>
       </div>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div className="form-group mb-4">
+          <InputText
+            id="hrHistoricoMotor"
+            name="hrHistoricoMotor"
+            placeholder="Hrs histoóricas motor"
+            label="Horas históricas motor"
+            value={eemm?.hrHistoricoMotor}
+            onChangeFN={handleChange}
+            required={true}
+            readOnly={true}
+            error={error.hrHistoricoMotor}
+          />
+        </div>
+
+        <div className="form-group mb-4">
+          <InputText
+            id="hrHistoricoEquipo"
+            name="hrHistoricoEquipo"
+            placeholder="Hrs históricas equipo"
+            label="Horas históricas equipo"
+            value={eemm?.hrHistoricoEquipo}
+            onChangeFN={handleChange}
+            required={true}
+            readOnly={true}
+            error={error.hrHistoricoEquipo}
+          />
+        </div>
+
+        <div className="form-group mb-4">
+          <Select
+            id="motivoCambioId"
+            name="motivoCambioId"
+            placeholder="motivo Cambio"
+            label="Motivo Cambio"
+            list={motivoCambioList}
+            value={eemm.motivoCambio?.id}
+            onChange={handleChange}
+            required={true}
+            error={error.motivoCambioId}
+          />
+        </div>
+
+        <div className="form-group mb-4">
+          <Select
+            id="tipoSalidaId"
+            name="tipoSalidaId"
+            placeholder="tipo salida"
+            label="Tipo de salida"
+            list={tipoSalidaList}
+            value={eemm.tipoSalida?.id}
+            onChange={handleChange}
+            required={true}
+            error={error.tipoSalidaId}
+          />
+        </div>
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-8">
         <div className="form-group mb-4">
@@ -221,45 +282,35 @@ const FormMontaje = () => {
             value={eemm.contrato?.id}
             onChange={handleChange}
             required={true}
+            readOnly={true}
             error={error.contratoId}
+          />
+        </div>
+        <div className="form-group mb-4"></div>
+        <div className="form-group mb-4">
+          <InputText
+            id="adId"
+            name="adId"
+            placeholder="Aviso desmontaje"
+            label="Aviso desmontaje"
+            value={eemm.ad?.id}
+            onChangeFN={handleChange}
+            required={true}
+            error={error.adId}
           />
         </div>
 
         <div className="form-group mb-4">
           <InputText
-            id="intervencionId"
-            name="intervencionId"
-            placeholder="Correlativo Intervención"
-            label="Correlativo Intervención"
-            value={eemm?.intervencionId}
+            type="date"
+            id="fechaAd"
+            name="fechaAd"
+            placeholder="Fecha aviso desmontaje"
+            label="Fecha aviso desmontaje"
+            value={eemm.fechaAd}
             onChangeFN={handleChange}
             required={true}
-            error={error.intervencionId}
-          />
-        </div>
-        <div className="form-group mb-4">
-          <InputText
-            id="amId"
-            name="amId"
-            placeholder="Aviso mmontaje"
-            label="Aviso mmontaje"
-            value={eemm.am?.id}
-            onChange={handleChange}
-            required={true}
-            error={error.amId}
-          />
-        </div>
-        <div className="form-group mb-4">
-          <InputText
-            type="date"
-            id="fechaAm"
-            name="fechaAm"
-            placeholder="Fecha Aviso mmontaje"
-            label="Fecha Aviso mmontaje"
-            value={eemm.am?.id}
-            onChange={handleChange}
-            required={true}
-            error={error.fechaAm}
+            error={error.fechaAd}
           />
         </div>
       </div>
@@ -271,4 +322,4 @@ const FormMontaje = () => {
   );
 };
 
-export default FormMontaje;
+export default FormDesmontaje;

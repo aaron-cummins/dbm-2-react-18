@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox, Switch } from "components";
 import { EstadoMotorContext } from "../context/EstadoMotorContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
@@ -16,6 +16,7 @@ const FormEstadoMotor = () => {
       id: 0,
       nombre: "",
       activo: false,
+      montaje: false,
     }),
     []
   );
@@ -26,15 +27,10 @@ const FormEstadoMotor = () => {
   }, [EstadoMotorActual, EstadoMotorDefault]);
 
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setEstadoMotor({
-          ...EstadoMotor,
-          [e.target.name]: e.target.checked,
-        })
-      : setEstadoMotor({
-          ...EstadoMotor,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+    type === "checkbox"
+      ? setEstadoMotor({ ...EstadoMotor, [name]: checked })
+      : setEstadoMotor({ ...EstadoMotor, [name]: value });
   };
 
   const limpiaForm = () => {
@@ -58,7 +54,7 @@ const FormEstadoMotor = () => {
   return (
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-8">
           <InputText
             id="nombre"
@@ -69,6 +65,14 @@ const FormEstadoMotor = () => {
             onChangeFN={handleChange}
             required={true}
           />
+        </div>
+        <div className="form-group mb-4">
+          <Switch
+            label="montaje"
+            id="montaje"
+            name="montaje"
+            onChange={handleChange}
+            checked={EstadoMotor.montaje}></Switch>
         </div>
         <div className="form-group mb-4">
           <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={EstadoMotor.activo} />

@@ -21,6 +21,11 @@ const TablaEsn = () => {
     { name: "Esn Placa", selector: (row) => row.esnPlaca, sortable: true },
     { name: "Versión Motor", selector: (row) => row.versionMotor?.nombreComercial, sortable: true },
     {
+      name: "Montado",
+      cell: (props) => <ColActivoTabla activo={props.montado} />,
+      sortable: true,
+    },
+    {
       name: "Activo",
       cell: (props) => <ColActivoTabla activo={props.activo} />,
       sortable: true,

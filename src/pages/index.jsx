@@ -20,6 +20,7 @@ export { default as Pie } from "./Charts/Pie";
 export { default as Pyramid } from "./Charts/Pyramid";
 export { default as Stacked } from "./Charts/Stacked";
 
+export { default as Am } from "./am/Am";
 export { default as Aplicacion } from "./aplicacion/Aplicacion";
 export { default as AplicacionOem } from "./aplicacionOem/AplicacionOem";
 export { default as Cargo } from "./cargo/Cargo";
@@ -32,6 +33,7 @@ export { default as Equipo } from "./equipo/Equipo";
 export { default as Eemm } from "./eemm/Eemm";
 export { default as IndexEemm } from "./eemm/components/IndexEemm";
 export { default as MontajeMotor } from "./eemm/components/MontajeMotor";
+export { default as DesmontajeMotor } from "./eemm/components/DesmontajeMotor";
 export { default as Esn } from "./esn/Esn";
 export { default as EstadoMotorInstalacion } from "./estadoMotorInstalacion/EstadoMotorInstalacion";
 export { default as EstadoMotor } from "./estadoMotor/EstadoMotor";

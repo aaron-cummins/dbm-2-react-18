@@ -1,26 +1,23 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Alerts, Filtros, Header, Seccion, Select } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
-import { TbEngine } from "react-icons/tb";
 import { GiMineTruck } from "react-icons/gi";
 import { useNavigate } from "react-router-dom";
 import { EemmContext } from "../context/eemmContext";
 
-import FormMontaje from "./montaje/FormMontaje";
+import FormDesmontaje from "./desmontaje/FormDesmontaje";
 import TablaUnidad from "./tablas/TablaUnidad";
-import TablaEsn from "./tablas/TablaEsn";
 import useValidacionForm from "hooks/useValidacionForm";
 import { useSnackbar } from "notistack";
 
-const MontajeMotor = () => {
-  const { eemm, setEemm, obtenerEemmEsnlist, obtenerEemmUnidadlist, eemmDefault } = useContext(EemmContext);
+const DesmontajeMotor = () => {
+  const { eemm, setEemm, obtenerEemmUnidadlist, eemmDefault } = useContext(EemmContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
   const { enqueueSnackbar } = useSnackbar();
   const {
     obtenerAm,
     obtenerFlotasLugarTrabajo,
     obtenerUnidades,
-    obtenerEsn,
     limpiarFlotasLugarTrabajo,
     limpiarUnidades,
     limpiarEsn,
@@ -32,7 +29,6 @@ const MontajeMotor = () => {
     lugarTrabajoUsuarioList,
     flotasLugarTrabajoList,
     unidadesList,
-    esnList,
   } = useContext(SelectsContext);
 
   useEffect(() => {
@@ -55,7 +51,6 @@ const MontajeMotor = () => {
     if (validarNumero("lugarTrabajoId", eemm.lugarTrabajoId, "Debe seleccionar un lugar de trabajo")) valida = false;
     if (validarSelect("flotaLugarTrabajoId", eemm.flotaLugarTrabajo, "Debe seleccionar una flota")) valida = false;
     if (validarSelect("unidadId", eemm.unidad, "Debe seleccionar una unidad")) valida = false;
-    if (validarSelect("esnId", eemm.esn, "Debe seleccionar un ESN")) valida = false;
 
     return valida;
   };
@@ -68,7 +63,6 @@ const MontajeMotor = () => {
       setEemm({ ...eemm, unidad: { id: 0 }, [name]: value });
       limpiarFlotasLugarTrabajo();
       limpiarUnidades();
-      limpiarEsn();
       setVisible(false);
     } else if (name === "flotaLugarTrabajoId") {
       obtenerUnidades(value);
@@ -77,11 +71,7 @@ const MontajeMotor = () => {
       limpiarEsn();
       setVisible(false);
     } else if (name === "unidadId") {
-      obtenerEsn(false);
       setEemm({ ...eemm, unidad: { id: value }, [name]: value });
-      setVisible(false);
-    } else if (name === "esnId") {
-      setEemm({ ...eemm, esn: { id: value }, [name]: value });
       setVisible(false);
     } else setEemm({ ...eemm, [name]: value });
 
@@ -91,7 +81,6 @@ const MontajeMotor = () => {
 
   const handleSearch = (e) => {
     if (validaciones()) {
-      obtenerEemmEsnlist(eemm.esn.id);
       obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
         setMontado(!item);
       });
@@ -112,7 +101,7 @@ const MontajeMotor = () => {
 
   return (
     <>
-      <Header category="Administración" title="Montaje Motor">
+      <Header category="Administración" title="Desmontaje Motor">
         <button
           type="button"
           style={{
@@ -125,7 +114,7 @@ const MontajeMotor = () => {
         </button>
       </Header>
 
-      <Filtros Fn={handleSearch}>
+      <Filtros Fn={handleSearch} columnas="3">
         <div className="form-group">
           <Select
             id="lugarTrabajoId"
@@ -165,41 +154,17 @@ const MontajeMotor = () => {
             error={error.unidadId}
           />
         </div>
-
-        <div className="form-group">
-          <Select
-            id="esnId"
-            name="esnId"
-            placeholder="ESN"
-            label="ESN"
-            list={esnList}
-            value={eemm.esn.id}
-            onChange={(e) => handleChange(e)}
-            required={true}
-            error={error.esnId}
-          />
-        </div>
       </Filtros>
 
       <Seccion titulo="Historial de la unidad" icono={<GiMineTruck />} visible={visible}>
         <TablaUnidad />
       </Seccion>
 
-      <Seccion titulo="Historial ESN" icono={<TbEngine />} visible={visible}>
-        <TablaEsn />
-      </Seccion>
-
-      <Seccion titulo="Informacion de montaje" visible={visible}>
-        {montado ? (
-          <FormMontaje />
-        ) : (
-          <Alerts type="danger">
-            La unidad ya tiene un motor instalado, para montar el nuevo motor debe desmontar el actual.
-          </Alerts>
-        )}
+      <Seccion titulo="Información de Desmontaje" visible={visible}>
+        <FormDesmontaje />
       </Seccion>
     </>
   );
 };
 
-export default MontajeMotor;
+export default DesmontajeMotor;

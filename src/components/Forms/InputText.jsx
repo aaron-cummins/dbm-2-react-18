@@ -1,7 +1,7 @@
 import Label from "./Label";
 
 /* INPUT FORM */
-const InputText = ({ id, name, placeholder, value, onChangeFN, required, label, type, error }) => {
+const InputText = ({ id, name, placeholder, value, onChangeFN, required, label, type, error, readOnly = false }) => {
   //const classStyle =
   //   "form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none";
   const classStyle =
@@ -21,6 +21,8 @@ const InputText = ({ id, name, placeholder, value, onChangeFN, required, label, 
         onChange={onChangeFN}
         required={required}
         onBlur={onChangeFN}
+        readOnly={readOnly}
+        disabled={readOnly}
       />
       {error ? (
         <span className="flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1">{error}</span>

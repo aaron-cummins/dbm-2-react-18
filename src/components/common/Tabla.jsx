@@ -21,7 +21,7 @@ const Tabla = (props) => {
       style: {
         paddingLeft: "16px", // override the cell padding for head cells
         paddingRight: "16px",
-        background: "#fafafa",
+        background: "#e9ecef", //"#fafafa",
         fontSize: "20x",
         fontWeight: 900,
       },
@@ -44,12 +44,12 @@ const Tabla = (props) => {
 
   return (
     <>
-      <div className="mb-5 border-solid border-1">
+      <div className="border-solid border-1">
         <DataTable
           progressPending={cargando}
           progressComponent={<Spinner />}
           customStyles={customStyles}
-          pagination
+          pagination={!props.pagination ? true : props.pagination}
           paginationComponentOptions={paginationOptions}
           noDataComponent="No se encontraron datos para mostrar"
           selectableRowsComponent={Checkbox}

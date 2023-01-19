@@ -4,15 +4,15 @@ import { TbNewSection } from "react-icons/tb";
 
 const Seccion = (props) => {
   return (
-    <div className="mb-5 border-solid border-1">
-      <div className="flex justify-between items-center gap-2 mb-1 pl-2 pr-2 bg-gray-50 ">
-        <p className="text-sm text-gray-00 uppercase font-semibold inline-flex items-center gap-2">
+    <div className={`mb-2 border-solid border-1 ${props.visible ? "" : "hidden"} bg-white`}>
+      <div className="flex justify-between items-center gap-2 mt-3 mb-2 pl-2 pr-2">
+        <span className="text-sm text-gray-00 uppercase font-semibold inline-flex items-center gap-2">
           <TbNewSection />
           {props.titulo}
-        </p>
-        <p>{props.icono ? props.icono : <AiOutlineAppstoreAdd />}</p>
+        </span>
+        <span>{props.icono ? props.icono : <AiOutlineAppstoreAdd />}</span>
       </div>
-      <div className="justify-between items-center mb-2 mt-1 pl-2 pr-2 p-4">{props.children}</div>
+      <div className="justify-between items-center mb-2 mt-1 pl-2 pr-2 p-4 border-t-1">{props.children}</div>
     </div>
   );
 };

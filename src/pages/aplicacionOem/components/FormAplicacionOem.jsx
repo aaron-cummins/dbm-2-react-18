@@ -67,13 +67,19 @@ const FormAplicacionOem = () => {
             name="nombre"
             placeholder="Nombre"
             label="Nombre"
-            value={aplicacionoem.nombre}
+            value={aplicacionoem?.nombre}
             onChangeFN={handleChange}
             required={true}
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={aplicacionoem.activo} />
+          <Checkbox
+            id="activo"
+            name="activo"
+            label="Activo"
+            onChangeFN={handleChange}
+            checked={aplicacionoem?.activo}
+          />
         </div>
       </div>
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

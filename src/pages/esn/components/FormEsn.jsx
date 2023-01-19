@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Checkbox, SelectVersionMotor } from "components";
+import { InputText, Buttons, Checkbox, SelectVersionMotor, Switch } from "components";
 import { EsnContext } from "../context/esnContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
@@ -82,7 +82,7 @@ const FormEsn = () => {
   return (
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-6">
           <InputText
             id="esn"
@@ -107,8 +107,11 @@ const FormEsn = () => {
             error={error.esnPlaca}
           />
         </div>
+        <div className="form-group mb-4">
+          <Switch label="montado" id="montado" name="montado" onChange={handleChange} checked={esn.montado}></Switch>
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-6">
           <SelectVersionMotor
             id="versionMotorId"
@@ -121,6 +124,7 @@ const FormEsn = () => {
             error={error.versionMotorId}
           />
         </div>
+
         <div className="form-group mb-4">
           <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={esn.activo} label="Activo" />
         </div>

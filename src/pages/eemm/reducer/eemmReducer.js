@@ -1,4 +1,12 @@
-import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import {
+  OBTENER_LISTA,
+  REGISTRAR,
+  OBTENER,
+  ACTUALIZAR,
+  ELIMINAR,
+  OBTENER_LISTA_UNIDAD,
+  OBTENER_LISTA_ESN,
+} from "const/actionTypes";
 
 export default (state, action) => {
   switch (action.type) {
@@ -6,6 +14,16 @@ export default (state, action) => {
       return {
         ...state,
         eemmList: action.payload,
+      };
+    case OBTENER_LISTA_UNIDAD:
+      return {
+        ...state,
+        eemmUnidad: action.payload,
+      };
+    case OBTENER_LISTA_ESN:
+      return {
+        ...state,
+        eemmEsn: action.payload,
       };
     case REGISTRAR:
       return {

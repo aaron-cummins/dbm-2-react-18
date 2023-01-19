@@ -37,6 +37,9 @@ import {
   OBTENER_LISTA_ESTADO_MOTOR_INSTALACION,
   OBTENER_LISTA_ESTADO_EQUIPO,
   OBTENER_LISTA_ESTADO_MOTOR,
+  OBTENER_LISTA_AM,
+  OBTENER_LISTA_TIPO_SALIDA,
+  OBTENER_LISTA_MOTIVO_CAMBIO,
 } from "../const/actionTypes";
 
 //import/no-anonymous-default-export
@@ -254,6 +257,23 @@ export default (state, action) => {
       return {
         ...state,
         estadoMotorList: action.payload,
+      };
+    case OBTENER_LISTA_AM:
+      return {
+        ...state,
+        amList: action.payload,
+      };
+
+    case OBTENER_LISTA_TIPO_SALIDA:
+      return {
+        ...state,
+        tipoSalidaList: action.payload,
+      };
+
+    case OBTENER_LISTA_MOTIVO_CAMBIO:
+      return {
+        ...state,
+        motivoCambioList: action.payload,
       };
     default:
       return state;

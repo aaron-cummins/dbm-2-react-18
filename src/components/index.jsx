@@ -22,6 +22,7 @@ export { default as Buttons } from "./Forms/Buttons";
 export { default as Checkbox } from "./Forms/Checkbox";
 export { default as InputText } from "./Forms/InputText";
 export { default as Label } from "./Forms/Label";
+export { default as Switch } from "./Forms/Switch";
 
 export { default as ColExperimentalTabla } from "./common/ColExperimentalTabla";
 export { default as Alerts } from "./common/Alerts";

@@ -17,6 +17,11 @@ const TablaEstadoMotor = () => {
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
     {
+      name: "montaje",
+      cell: (props) => <ColActivoTabla activo={props.montaje} />,
+      sortable: true,
+    },
+    {
       name: "Activo",
       cell: (props) => <ColActivoTabla activo={props.activo} />,
       sortable: true,

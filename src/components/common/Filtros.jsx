@@ -6,23 +6,26 @@ import { FaUserCog } from "react-icons/fa";
 const Filtros = (props) => {
   const { currentColor } = useStateContext();
   return (
-    <div className="mb-5 border-solid border-1">
-      <div className="flex justify-between items-center gap-2 mb-1 pl-2 pr-2 bg-gray-50 ">
-        <p className="text-sm text-gray-00 uppercase font-semibold inline-flex items-center gap-2">
+    <div className="mb-2 border-solid border-1 bg-white">
+      <div className="flex justify-between items-center gap-2 mt-3 mb-1 pl-2 pr-2">
+        <span className="text-sm text-gray-00 uppercase font-semibold inline-flex items-center gap-2">
           <FaUserCog /> Filtro
-        </p>
-        <p>
+        </span>
+        <span>
           <FiFilter />
-        </p>
+        </span>
       </div>
-      <div className="justify-between items-center mb-2 mt-1 pl-2 pr-2 grid grid-cols-4 gap-4">{props.children}</div>
+      <div
+        className={`justify-between items-center mb-2 mt-1 pl-2 pr-2 pt-4 grid grid-cols-1 md:grid-cols-3 lg:grid-cols-${
+          props.columnas ? props.columnas : "4"
+        } gap-4 border-t-1`}>
+        {props.children}
+      </div>
       <div className="flex justify-between items-center gap-2 mb-1 pl-2 pr-2">
-        <p></p>
-        <p>
+        <span></span>
+        <span>
           <button
             type="button"
-            data-bs-toggle="modal"
-            data-bs-target="#aplicacion-modal"
             style={{
               backgroundColor: currentColor,
               color: "white",
@@ -32,7 +35,7 @@ const Filtros = (props) => {
             onClick={props.Fn}>
             Buscar
           </button>
-        </p>
+        </span>
       </div>
     </div>
   );

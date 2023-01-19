@@ -5,7 +5,7 @@ import { EemmContextProvider } from "./context/eemmContext";
 const Eemm = () => {
   return (
     <EemmContextProvider>
-      <div className="m-1 p-7 bg-white rounded-3xl">
+      <div className="m-1 p-7 rounded-3xl">
         <Outlet />
       </div>
     </EemmContextProvider>

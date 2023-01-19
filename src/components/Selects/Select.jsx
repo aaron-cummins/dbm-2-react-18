@@ -17,9 +17,11 @@ const Select = (props) => {
         value={props.value}
         onChange={props.onChange}
         aria-label={`Select ${props.label}`}
-        required={props.required}>
+        required={props.required}
+        readOnly={props.readOnly ? props.readOnly : false}
+        disabled={props.readOnly ? props.readOnly : false}>
         <option defaultValue="00" key="00">
-          Seleccione una {props.label}
+          Seleccione un(a) {props.label}
         </option>
         {props.list?.map((item) => (
           <option key={item.id} value={item.id}>
