@@ -1,20 +1,30 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, SelectModulo } from "components";
+import { InputText, Buttons, Select } from "components";
 import { VistasGroupContext } from "../context/vistasGroupContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import { SelectsContext } from "contexts/SelectsContext";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormVistasGroup = () => {
   const { registrarVistasGroup, vistasgroupActual, actualizarVistasGroup, obtenerVistasGroup } =
     useContext(VistasGroupContext);
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    modulosList,
+  } = useContext(SelectsContext);
   const { mensaje } = useStateContext();
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
+
   const vistasgroupDefault = useMemo(() => {
     return {
       id: 0,
       nombre: "",
       moduloId: 0,
+      modulos: {
+        id: 0,
+      },
     };
   }, []);
 
@@ -24,33 +34,49 @@ const FormVistasGroup = () => {
     vistasgroupActual ? setVistasGroup(vistasgroupActual) : setVistasGroup(vistasgroupDefault);
   }, [vistasgroupActual, vistasgroupDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", vistasgroup.nombre, "Nombre grupo de vista requerido")) valida = false;
+    if (validarSelect("moduloId", vistasgroup.modulos, "Debe seleccionar un módulo")) valida = false;
+
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setVistasGroup({
-          ...vistasgroup,
-          [e.target.name]: e.target.checked,
-        })
-      : setVistasGroup({
-          ...vistasgroup,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setVistasGroup({ ...vistasgroup, [name]: checked });
+    else if (name === "moduloId") setVistasGroup({ ...vistasgroup, modulos: { id: value } });
+    else setVistasGroup({ ...vistasgroup, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setVistasGroup(vistasgroupDefault);
     obtenerVistasGroup(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    vistasgroupActual ? actualizarVistasGroup(VistasGroupAEnviar()) : registrarVistasGroup(VistasGroupAEnviar());
-
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      vistasgroupActual !== null
+        ? actualizarVistasGroup(VistasGroupAEnviar())
+        : registrarVistasGroup(VistasGroupAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const VistasGroupAEnviar = () => {
     let vistasgroupTmp = { ...vistasgroup };
+    vistasgroupTmp.moduloId = document.querySelector("#moduloId").value;
     return vistasgroupTmp;
   };
 
@@ -67,10 +93,19 @@ const FormVistasGroup = () => {
             value={vistasgroup.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <SelectModulo id="moduloId" name="moduloId" value={vistasgroup.moduloId} onChange={handleChange} />
+          <Select 
+            id="moduloId" 
+            name="moduloId" 
+            value={vistasgroup.modulos?.id}
+            label="Modulo"
+            list={modulosList}
+            onChange={handleChange}
+            error={error.moduloId} 
+            />
         </div>
       </div>
 

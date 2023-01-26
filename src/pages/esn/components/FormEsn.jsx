@@ -1,15 +1,20 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Checkbox, SelectVersionMotor, Switch } from "components";
+import { InputText, Buttons, Checkbox, Select, Switch } from "components";
 import { EsnContext } from "../context/esnContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
+import { SelectsContext } from "contexts/SelectsContext";
 import useValidacionForm from "hooks/useValidacionForm";
 
 const FormEsn = () => {
   const { registrarEsn, esnActual, actualizarEsn, obtenerEsn } = useContext(EsnContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const {
+    versionMotorList,
+  } = useContext(SelectsContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const esnDefault = useMemo(() => {
     return {
@@ -29,28 +34,30 @@ const FormEsn = () => {
   }, []);
 
   const [esn, setEsn] = useState(esnDefault);
-  const [error, setError] = useState({});
-  const { validarTexto, validarSelect } = useValidacionForm();
 
   useEffect(() => {
     esnActual !== null ? setEsn(esnActual) : setEsn(esnDefault);
   }, [esnActual, esnDefault]);
 
   const validaciones = () => {
-    let error = {};
-    if (validarTexto(esn.esn)) error.esn = "Debe ingresar un ESN";
-    if (validarTexto(esn.esnPlaca)) error.esnPlaca = "Debe ingresar un ESN Placa";
-    if (validarSelect(esn.versionMotor)) error.versionMotorId = "Debe Seleccionar una versión de motor";
+    let valida = true;
 
-    setError(error);
-    return error;
+    if (validarTexto("nombre", esn.esn, "ESN requerido")) valida = false;
+    if (validarTexto("nombre", esn.esnPlaca, "ESN placa")) valida = false;
+    if (validarSelect("versionMotorId", esn.versionMotor, "Debe seleccionar una versión motor")) valida = false;
+  
+    return valida;
   };
 
   const handleChange = (e) => {
-    const { value, name, type, checked } = e.target;
+    const { name, value, type, checked } = e.target;
+
     if (type === "checkbox") setEsn({ ...esn, [name]: checked });
-    else if (name === "versionMotorId") setEsn({ ...esn, versionMotor: { id: value }, [name]: value });
+    else if (name === "versionMotorId") setEsn({ ...esn, versionMotor: { id: value } });
     else setEsn({ ...esn, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
@@ -59,13 +66,14 @@ const FormEsn = () => {
     setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    const validado = validaciones();
-    if (Object.keys(validado).length === 0) {
-      esnActual !== null ? actualizarEsn(EsnAEnviar()) : registrarEsn(EsnAEnviar());
-      limpiaForm();
+    if (validaciones()) {
+      esnActual !== null
+        ? actualizarEsn(EsnAEnviar())
+        : registrarEsn(EsnAEnviar());
       closeModal();
+      limpiaForm();
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
@@ -113,14 +121,15 @@ const FormEsn = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-6">
-          <SelectVersionMotor
+          <Select
             id="versionMotorId"
             name="versionMotorId"
             placeholder="versionMotorId"
             label="version Motor"
-            value={esn.versionMotor.id}
+            value={esn.versionMotor?.id}
             onChange={handleChange}
             required={true}
+            list={versionMotorList} 
             error={error.versionMotorId}
           />
         </div>

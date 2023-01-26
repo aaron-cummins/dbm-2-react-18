@@ -5,26 +5,28 @@ import {
   Buttons,
   Checkbox,
   InputText,
-  SelectTipoContrato,
-  SelectMonitoreoFiltro,
-  SelectMonitoreoMotor,
-  SelectLugarTrabajo,
-  SelectFlotaLugarTrabajo,
+  Select,
 } from "components";
 import { closeModal, formatDate, formatDateshort } from "utilities/Utiles";
 import { SelectsContext } from "contexts/SelectsContext";
 import { ContratoContext } from "../context/contratoContext";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormContrato = () => {
   const { mensaje } = useStateContext();
-  const { obtenerFlotasLugarTrabajo } = useContext(SelectsContext);
+  const { obtenerFlotasLugarTrabajo, tipoContratoList, monitoreoFiltroList, monitoreoMotorList, lugarTrabajoUsuarioList, flotasLugarTrabajoList } = useContext(SelectsContext);
   const { enqueueSnackbar } = useSnackbar();
   const { obtenerContrato, contratoActual, registrarContrato, actualizarContrato } = useContext(ContratoContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const contatoDefault = useMemo(() => {
     return {
       id: 0,
       nombre: "",
+      lugarTrabajoId: 0,
+      lugarTrabajo: {
+        id: 0,
+      },
       tipoContratoId: 0,
       tipoContrato: {
         id: 0,
@@ -56,77 +58,70 @@ const FormContrato = () => {
   const [contrato, setContrato] = useState(contatoDefault);
 
   useEffect(() => {
-    if (contratoActual) {
+    if (contratoActual !== null) {
+      contratoActual.lugarTrabajo = contratoActual.flotaLugarTrabajo.lugarTrabajo;
       setContrato(contratoActual);
       obtenerFlotasLugarTrabajo(contratoActual.flotaLugarTrabajo?.id);
     } else setContrato(contatoDefault);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [contratoActual, contatoDefault]);
 
-  const handleOnSubmit = (e) => {
-    e.preventDefault();
-    contratoActual ? actualizarContrato(contratoAEnviar()) : registrarContrato(contratoAEnviar());
-    limpiaForm();
-    closeModal();
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", contrato.nombre, "Nombre de contrato requerido")) valida = false;
+    if (validarNumero("duracion", contrato.duracion, "Duración requerida")) valida = false;
+    if (validarSelect("tipoContratoId", contrato.tipoContrato, "Debe seleccionar un tipo de contrato")) valida = false;
+    if (validarSelect("lugarTrabajoId", contrato.lugarTrabajo, "Debe seleccionar un lugar de trabajo")) valida = false;
+    if (validarSelect("flotasLugarTrabajoId", contrato.flotaLugarTrabajo, "Debe seleccionar una flota lugar de trabajo")) valida = false;
+    if (validarSelect("monitoreoFiltroId", contrato.monitoreoFiltro, "Debe seleccionar un monitoreo de filtro")) valida = false;
+    if (validarSelect("monitoreoMotorId", contrato.monitoreoMotor, "Debe seleccionar un monitoreo de motor")) valida = false;
+  
+    return valida;
   };
 
   const handleChange = (e) => {
-    if (e.target.name === "lt") {
-      obtenerFlotasLugarTrabajo(e.target.value);
-      setContrato({ ...contrato, [e.target.name]: e.target.value });
+    const { name, value, type, checked } = e.target;
+    
+    if (type === "checkbox") setContrato({ ...contrato, [name]: checked });
+    else if (name === "lugarTrabajoId") { 
+      setContrato({ ...contrato, [name]: value, lugarTrabajo: { id: value }});
+      obtenerFlotasLugarTrabajo(value); 
     }
+    else if (name === "flotasLugarTrabajoId") setContrato({...contrato, [name]: value, flotaLugarTrabajo: { id: value } })
+    else if (name === "tipoContratoId") setContrato({ ...contrato, tipoContrato: { id: value }});
+    else if (name === "monitoreoFiltroId") setContrato({ ...contrato, monitoreoFiltro: { id: value } });
+    else if (name === "monitoreoMotorId") setContrato({ ...contrato, monitoreoMotor: { id: value } });
+    else setContrato({ ...contrato, [name]: value });
 
-    e.target.name === "activo"
-      ? setContrato({
-          ...contrato,
-          [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "tipoContratoId"
-      ? setContrato({
-          ...contrato,
-          [e.target.name]: e.target.value,
-          tipoContrato: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "flotasLugarTrabajoId"
-      ? setContrato({
-          ...contrato,
-          [e.target.name]: e.target.value,
-          flotasLugarTrabajo: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "monitoreoMotorId"
-      ? setContrato({
-          ...contrato,
-          [e.target.name]: e.target.value,
-          monitoreoMotor: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "monitoreoFiltroId"
-      ? setContrato({
-          ...contrato,
-          [e.target.name]: e.target.value,
-          monitoreoFiltro: {
-            id: e.target.value,
-          },
-        })
-      : setContrato({
-          ...contrato,
-          [e.target.name]: e.target.value,
-        });
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     obtenerContrato(null);
     setContrato(contatoDefault);
     closeModal();
+    setError({});
+  };
+
+  const handleOnSubmit = async (e) => {
+    e.preventDefault();
+    if (validaciones()) {
+      contratoActual !== null
+        ? actualizarContrato(contratoAEnviar())
+        : registrarContrato(contratoAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const contratoAEnviar = () => {
     let contratoTmp = { ...contrato };
+    contratoTmp.flotasLugarTrabajoId = contratoTmp.flotaLugarTrabajo.id;
     contratoTmp.tipoContratoId = contrato.tipoContrato.id;
     contratoTmp.flotasLugarTrabajoId = contrato.flotaLugarTrabajo.id;
     contratoTmp.monitoreoFiltroId = contrato.monitoreoFiltro.id;
@@ -148,39 +143,49 @@ const FormContrato = () => {
             value={contrato.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectTipoContrato
+          <Select
             id="tipoContratoId"
             name="tipoContratoId"
             placeholder="tipo Contrato"
             value={contrato.tipoContrato?.id}
             onChange={handleChange}
             required={true}
+            label="Tipo contrato"
+            list={tipoContratoList}
+            error={error.tipoContratoId}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-2">
-          <SelectLugarTrabajo
-            id="lt"
-            name="lt"
+          <Select
+            id="lugarTrabajoId"
+            name="lugarTrabajoId"
             placeholder="Lugar trabajo"
-            value={contrato.flotaLugarTrabajo.lugarTrabajo?.id}
+            value={contrato.lugarTrabajo?.id}
             onChange={handleChange}
             required={true}
+            label="Lugar trabajo"
+            list={lugarTrabajoUsuarioList}
+            error={error.lugarTrabajoId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectFlotaLugarTrabajo
+          <Select
             id="flotasLugarTrabajoId"
             name="flotasLugarTrabajoId"
             placeholder="flotas Lugar Trabajo"
             value={contrato.flotaLugarTrabajo?.id}
             onChange={handleChange}
             required={true}
+            label="Flotas lugar trabajo"
+            list={flotasLugarTrabajoList}
+            error={error.flotasLugarTrabajoId}
           />
         </div>
       </div>
@@ -196,6 +201,7 @@ const FormContrato = () => {
             value={contrato.fechaInicio ? formatDateshort(contrato.fechaInicio) : ""}
             onChangeFN={handleChange}
             required={true}
+            error={error.fechaInicio}
           />
         </div>
         <div className="form-group mb-2">
@@ -207,6 +213,7 @@ const FormContrato = () => {
             value={contrato.duracion}
             onChangeFN={handleChange}
             required={true}
+            error={error.duracion}
           />
         </div>
       </div>
@@ -221,6 +228,7 @@ const FormContrato = () => {
             value={contrato.fechaCobro ? formatDateshort(contrato.fechaCobro) : ""}
             onChangeFN={handleChange}
             required={true}
+            error={error.fechaCobro}
           />
         </div>
         <div className="form-group mb-2">
@@ -235,7 +243,7 @@ const FormContrato = () => {
       </div>
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-2">
-          <SelectMonitoreoFiltro
+          <Select
             id="monitoreoFiltroId"
             name="monitoreoFiltroId"
             placeholder="monitoreo Filtro"
@@ -243,16 +251,21 @@ const FormContrato = () => {
             value={contrato.monitoreoFiltro?.id}
             onChange={handleChange}
             required={true}
+            list={monitoreoFiltroList}
+            error={error.monitoreoFiltroId}
           />
         </div>
         <div className="form-group mb-2">
-          <SelectMonitoreoMotor
+          <Select
             id="monitoreoMotorId"
             name="monitoreoMotorId"
             placeholder="Monitoreo Motor"
             value={contrato.monitoreoMotor?.id}
             onChange={handleChange}
             required={true}
+            label="Monitoreo motor"
+            list={monitoreoMotorList}
+            error={error.monitoreoMotorId}
           />
         </div>
       </div>
