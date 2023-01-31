@@ -1,14 +1,14 @@
 import React, { useEffect, useContext } from "react";
-import { AmContext } from "../context/amContext";
+import { AvisoMontajeContext } from "../context/avisoMontajeContext";
 import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
-const TablaAm = () => {
-  const { amList, obtenerAmes, obtenerAm } = useContext(AmContext);
+const TablaAvisoMontaje = () => {
+  const { avisoMontajeList, obtenerAvisoMontajes, obtenerAvisoMontaje } = useContext(AvisoMontajeContext);
 
-  const getAm = (props) => obtenerAm(props);
+  const getAvisoMontaje = (props) => obtenerAvisoMontaje(props);
 
   useEffect(() => {
-    obtenerAmes();
+    obtenerAvisoMontajes();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -22,11 +22,11 @@ const TablaAm = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getAm(props)} nombreform="am" />,
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getAvisoMontaje(props)} nombreform="am" />,
     },
   ];
 
-  return <Tabla columns={columns} data={amList} />;
+  return <Tabla columns={columns} data={avisoMontajeList} />;
 };
 
-export default TablaAm;
+export default TablaAvisoMontaje;

@@ -3,11 +3,11 @@ import { EemmContext } from "../../context/eemmContext";
 import { Tabla } from "components";
 import { formatDateshort } from "utilities/Utiles";
 
-const TablaUnidad = () => {
-  const { eemmUnidad } = useContext(EemmContext);
+const TablaEemm = () => {
+  const { eemmList } = useContext(EemmContext);
 
   const columns = [
-    { name: "Faena", selector: (row) => row.flotaLugarTrabajo?.lugarTrabajo?.nombre, sortable: true, width: "100px" },
+    { name: "Faena", selector: (row) => row.flotaLugarTrabajo?.lugarTrabajo?.nombre, sortable: true },
     { name: "Flota", selector: (row) => row.flotaLugarTrabajo?.flotas?.nombre, sortable: true, width: "100px" },
     { name: "Unidad", selector: (row) => row.unidad?.nombre, sortable: true, width: "100px" },
     { name: "ESN [Placa]", selector: (row) => row.esn?.esn, sortable: true },
@@ -19,7 +19,7 @@ const TablaUnidad = () => {
     { name: "Fecha falla", selector: (row) => (row.fechaFalla ? formatDateshort(row.fechaFalla) : ""), sortable: true },
   ];
 
-  return <Tabla columns={columns} data={eemmUnidad} pagination={false} />;
+  return <Tabla columns={columns} data={eemmList} pagination={false} />;
 };
 
-export default TablaUnidad;
+export default TablaEemm;

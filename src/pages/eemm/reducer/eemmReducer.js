@@ -39,6 +39,7 @@ export default (state, action) => {
       return {
         ...state,
         eemmList: state.eemmList.map((eemm) => (eemm.id === action.payload.id ? action.payload : eemm)),
+        eemmActual: action.payload,
       };
     case ELIMINAR:
       return {

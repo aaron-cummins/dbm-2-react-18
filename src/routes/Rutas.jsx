@@ -68,8 +68,10 @@ import {
   Eemm,
   IndexEemm,
   MonitoreoMotor,
-  Am,
+  AvisoMontaje,
   DesmontajeMotor,
+  AvisoDesmontaje,
+  Ub,
 } from "pages";
 import AuthGuard from "./AuthGuard";
 
@@ -85,7 +87,8 @@ const Rutas = () => {
 
       <Route element={<AuthGuard />}>
         {/* Administración */}
-        <Route path="/am" element={<Am />}></Route>
+        <Route path="/avisodesmontaje" element={<AvisoDesmontaje />}></Route>
+        <Route path="/avisomontaje" element={<AvisoMontaje />}></Route>
         <Route path="/aplicacion" element={<Aplicacion />}></Route>
         <Route path="/aplicacionoem" element={<AplicacionOem />}></Route>
         <Route path="/cargo" element={<Cargo />}></Route>
@@ -129,6 +132,7 @@ const Rutas = () => {
         <Route path="/tipoinyeccion" element={<TipoInyeccion />}></Route>
         <Route path="/tipolugartrabajo" element={<TipoLugarTrabajo />}></Route>
         <Route path="/unidad" element={<Unidad />}></Route>
+        <Route path="/ub" element={<Ub />}></Route>
         <Route path="/tipoblock" element={<TipoBlock />}></Route>
         <Route path="/tipocontrato" element={<TipoContrato />}></Route>
         <Route path="/tiposalida" element={<TipoSalida />}></Route>

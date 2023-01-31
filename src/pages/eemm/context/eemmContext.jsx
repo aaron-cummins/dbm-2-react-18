@@ -8,11 +8,10 @@ import {
   OBTENER_LISTA_UNIDAD,
   OBTENER_LISTA_ESN,
 } from "const/actionTypes";
-import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
+import { getList, getByID, postObject, putObject, deleteObject, postObjectByID } from "services/genericService";
 import eemmReducer from "../reducer/eemmReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
-import { formatDateshort } from "utilities/Utiles";
 
 export const EemmContext = createContext();
 
@@ -47,8 +46,8 @@ export const EemmContextProvider = (props) => {
       estadoMotor: { id: 0 },
       estadoMotorInstalacionId: 0,
       estadoMotorInstalacion: { id: 0 },
-      fechaFalla: formatDateshort(Date.now()),
-      fechaps: formatDateshort(Date.now()),
+      fechaFalla: "", //formatDateshort(Date.now()),
+      fechaps: "", //formatDateshort(Date.now()),
       flotaLugarTrabajoId: 0,
       flotaLugarTrabajo: { id: 0 },
       hrAcumuladasMotor: 0,
@@ -69,6 +68,8 @@ export const EemmContextProvider = (props) => {
       ub: { id: 0 },
       unidadId: 0,
       unidad: { id: 0 },
+      usuarioId: 0,
+      usuario: { id: 0 },
       lugarTrabajoId: 0,
       axial: 0.0,
     }),
@@ -90,16 +91,21 @@ export const EemmContextProvider = (props) => {
   const obtenerEemmUnidadlist = async (id_unidad) => {
     let montado = false;
     try {
-      const resultado = await callEndpoint(getList(`${urlApi}/unidad/${id_unidad}`));
+      const resultado = id_unidad ? await callEndpoint(getList(`${urlApi}/unidad/${id_unidad}`)) : [];
 
       if (resultado && resultado.data) {
         resultado.data.forEach((item) => {
-          item.activo === true ? (montado = true) : (montado = false);
+          montado = item.activo;
         });
 
         dispatch({
           type: OBTENER_LISTA_UNIDAD,
           payload: resultado.data,
+        });
+      } else {
+        dispatch({
+          type: OBTENER_LISTA_UNIDAD,
+          payload: resultado,
         });
       }
 
@@ -112,16 +118,42 @@ export const EemmContextProvider = (props) => {
 
   /* OBETENER LISTADO DE por ESN EEMMS */
   const obtenerEemmEsnlist = async (id_esn) => {
+    let montado = false;
     try {
-      const resultado = await callEndpoint(getList(`${urlApi}/esn/${id_esn}`));
+      const resultado = id_esn ? await callEndpoint(getList(`${urlApi}/esn/${id_esn}`)) : [];
       if (resultado && resultado.data) {
+        resultado.data.forEach((item) => {
+          console.log(item.esn.montado);
+          if (item.esn.montado) montado = item.esn.montado;
+        });
+
         dispatch({
           type: OBTENER_LISTA_ESN,
           payload: resultado.data,
         });
+      } else {
+        dispatch({
+          type: OBTENER_LISTA_ESN,
+          payload: resultado,
+        });
       }
+      return montado;
     } catch (error) {
       console.log(error);
+      return montado;
+    }
+  };
+
+  /* Actualizar REGISTRAR ESN */
+  const actualizarEsn = async (id, montado) => {
+    try {
+      montado
+        ? await callEndpoint(postObjectByID("esn/montado/true", id))
+        : await callEndpoint(postObjectByID("esn/montado/false", id));
+      alerta("success", "Esn actualizado con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta("error", `'Ocurrió un error al intentar actualizar el esn. ${error}`);
     }
   };
 
@@ -163,22 +195,24 @@ export const EemmContextProvider = (props) => {
   };
 
   /* REGISTRAR EEMM */
-  const registrarEemm = async (eemm) => {
+  const registrarEemm = async (eemm, montaje) => {
+    let eemmtipo = montaje ? "Montaje" : "Desmontaje";
     try {
       const resultado = await callEndpoint(postObject(urlApi, eemm));
       dispatch({
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "Montaje realizado con exito!");
+      alerta("success", `${eemmtipo} realizado con exito!`);
     } catch (error) {
       console.log(error);
-      alerta("error", `'Ocurrió un error al intentar realizar el montaje. ${error}`);
+      alerta("error", `'Ocurrió un error al intentar realizar el ${eemmtipo}. ${error}`);
     }
   };
 
   /* ACTUALIZAR EEMM */
-  const actualizarEemm = async (eemm) => {
+  const actualizarEemm = async (eemm, montaje) => {
+    let eemmtipo = montaje ? "Montaje" : "Desmontaje";
     try {
       const resultado = await callEndpoint(putObject(urlApi, eemm));
 
@@ -186,10 +220,10 @@ export const EemmContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "Montaje actualizado con exito!");
+      alerta("success", `${eemmtipo} actualizado con exito!`);
     } catch (error) {
       console.log(error);
-      alerta("error", `'Ocurrió un error al intentar actualizar el Montaje. ${error}`);
+      alerta("error", `'Ocurrió un error al intentar actualizar el ${eemmtipo}. ${error}`);
     }
   };
 
@@ -220,6 +254,7 @@ export const EemmContextProvider = (props) => {
         eemm,
         setEemm,
 
+        actualizarEsn,
         obtenerEemmEsnlist,
         obtenerEemmUnidadlist,
         obtenerEemmlist,

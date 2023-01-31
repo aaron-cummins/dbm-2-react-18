@@ -15,34 +15,37 @@ const DesmontajeMotor = () => {
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
   const { enqueueSnackbar } = useSnackbar();
   const {
-    obtenerAm,
+    obtenerAd,
     obtenerFlotasLugarTrabajo,
     obtenerUnidades,
     limpiarFlotasLugarTrabajo,
     limpiarUnidades,
-    limpiarEsn,
     obtenerEstadoEquipo,
     obtenerEstadoMotor,
-    obtenerEstadoEquipoInstalaciones,
-    obtenerEstadoMotorInstalaciones,
     obtenerTipoContrato,
+    obtenerMotivoCambio,
+    obtenerTipoSalida,
     lugarTrabajoUsuarioList,
     flotasLugarTrabajoList,
     unidadesList,
+    obtenerUb,
+    obtenerEsn,
   } = useContext(SelectsContext);
 
   useEffect(() => {
-    obtenerAm();
+    obtenerAd();
     obtenerEstadoEquipo();
-    obtenerEstadoMotor(true);
-    obtenerEstadoEquipoInstalaciones();
-    obtenerEstadoMotorInstalaciones();
+    obtenerEstadoMotor(false);
     obtenerTipoContrato();
+    obtenerMotivoCambio();
+    obtenerTipoSalida();
+    obtenerUb();
+    obtenerEsn(true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const [visible, setVisible] = useState(false);
-  const [montado, setMontado] = useState(false);
+  const [desmontado, setDesmontado] = useState(true);
   const navigate = useNavigate();
 
   const validaciones = () => {
@@ -68,7 +71,6 @@ const DesmontajeMotor = () => {
       obtenerUnidades(value);
       setEemm({ ...eemm, flotaLugarTrabajo: { id: value }, [name]: value });
       limpiarUnidades();
-      limpiarEsn();
       setVisible(false);
     } else if (name === "unidadId") {
       setEemm({ ...eemm, unidad: { id: value }, [name]: value });
@@ -82,7 +84,7 @@ const DesmontajeMotor = () => {
   const handleSearch = (e) => {
     if (validaciones()) {
       obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
-        setMontado(!item);
+        setDesmontado(item);
       });
 
       //console.log(val.data);
@@ -95,6 +97,7 @@ const DesmontajeMotor = () => {
 
   const volver = () => {
     setEemm(eemmDefault);
+    obtenerEemmUnidadlist(null);
     navigate("/eemm");
     setError([]);
   };
@@ -161,7 +164,11 @@ const DesmontajeMotor = () => {
       </Seccion>
 
       <Seccion titulo="Información de Desmontaje" visible={visible}>
-        <FormDesmontaje />
+        {desmontado ? (
+          <FormDesmontaje search={handleSearch} desmontado={setDesmontado} />
+        ) : (
+          <Alerts type="danger">La unidad ya de encuentra desmontada.</Alerts>
+        )}
       </Seccion>
     </>
   );

@@ -1,27 +1,27 @@
 import React, { createContext, useReducer } from "react";
 import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
 import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
-import amReducer from "../reducer/amReducer";
+import avisoDesmontajeReducer from "../reducer/avisoDesmontajeReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
 import { useStateContext } from "contexts/ContextProvider";
 
-export const AmContext = createContext();
+export const AvisoDesmontajeContext = createContext();
 
-export const AmContextProvider = (props) => {
+export const AvisoDesmontajeContextProvider = (props) => {
   const { callEndpoint } = useFetchAndLoad();
   const { alerta } = useStateContext();
-  const urlApi = "am";
+  const urlApi = "ad";
 
   const initialState = {
-    amList: [],
-    amActual: null,
+    avisoDesmontajeList: [],
+    avisoDesmontajeActual: null,
   };
 
-  const [state, dispatch] = useReducer(amReducer, initialState);
+  const [state, dispatch] = useReducer(avisoDesmontajeReducer, initialState);
 
-  /* OBETENER LISTADO DE AMS */
-  const obtenerAmes = async () => {
+  /* OBETENER LISTADO DE Aviso Montaje */
+  const obtenerAvisoDesmontajes = async () => {
     try {
       const resultado = await callEndpoint(getList(urlApi));
       if (resultado && resultado.data) {
@@ -35,8 +35,8 @@ export const AmContextProvider = (props) => {
     }
   };
 
-  /* OBTENER UN AM */
-  const obtenerAm = async (am) => {
+  /* OBTENER UN AvisoDesmontaje*/
+  const obtenerAvisoDesmontaje = async (am) => {
     try {
       let amEncontrado = null;
       if (am !== null) {
@@ -57,23 +57,23 @@ export const AmContextProvider = (props) => {
     }
   };
 
-  /* REGISTRAR AM */
-  const registrarAm = async (am) => {
+  /* REGISTRAR Aviso Montaje*/
+  const registrarAvisoDesmontaje = async (am) => {
     try {
       const resultado = await callEndpoint(postObject(urlApi, am));
       dispatch({
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "Aplicación creada con exito!");
+      alerta("success", "Aviso Montaje cread con exito!");
     } catch (error) {
       console.log(error);
-      alerta("error", `'Ocurrió un error al intentar crear la aplicación. ${error}`);
+      alerta("error", `'Ocurrió un error al intentar crear el Aviso Montaje. ${error}`);
     }
   };
 
-  /* ACTUALIZAR AM */
-  const actualizarAm = async (am) => {
+  /* ACTUALIZAR Aviso Montaje */
+  const actualizarAvisoDesmontaje = async (am) => {
     try {
       const resultado = await callEndpoint(putObject(urlApi, am));
 
@@ -81,41 +81,41 @@ export const AmContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "Aplicación actualizada con exito!");
+      alerta("success", "Aviso Montaje actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("error", `'Ocurrió un error al intentar actualizar la aplicación. ${error}`);
+      alerta("error", `'Ocurrió un error al intentar actualizar el Aviso Montaje. ${error}`);
     }
   };
 
-  /* ELIMINAR AM */
-  const eliminarAm = async (id) => {
+  /* ELIMINAR AvisoDesmontaje */
+  const eliminarAvisoDesmontaje = async (id) => {
     try {
       await callEndpoint(deleteObject(urlApi, id));
       dispatch({
         type: ELIMINAR,
         payload: id,
       });
-      alerta("success", "Aplicación eliminada con exito!");
+      alerta("success", "Aviso Montaje eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("error", `'Ocurrió un error al intentar eliminar la aplicación. ${error}`);
+      alerta("error", `'Ocurrió un error al intentar eliminar el Aviso Montaje. ${error}`);
     }
   };
 
   return (
-    <AmContext.Provider
+    <AvisoDesmontajeContext.Provider
       value={{
-        amList: state.amList,
-        amActual: state.amActual,
+        avisoDesmontajeList: state.avisoDesmontajeList,
+        avisoDesmontajeActual: state.avisoDesmontajeActual,
 
-        obtenerAmes,
-        obtenerAm,
-        registrarAm,
-        actualizarAm,
-        eliminarAm,
+        obtenerAvisoDesmontajes,
+        obtenerAvisoDesmontaje,
+        registrarAvisoDesmontaje,
+        actualizarAvisoDesmontaje,
+        eliminarAvisoDesmontaje,
       }}>
       {props.children}
-    </AmContext.Provider>
+    </AvisoDesmontajeContext.Provider>
   );
 };

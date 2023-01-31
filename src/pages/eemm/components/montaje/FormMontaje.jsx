@@ -1,15 +1,24 @@
 import { EemmContext } from "../../context/eemmContext";
 import React, { useContext, useEffect } from "react";
-import { closeModal } from "utilities/Utiles";
-import { Buttons, Checkbox, InputText, Select } from "components";
+import { Buttons, InputText, Select } from "components";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
 import { SelectsContext } from "contexts/SelectsContext";
 import useValidacionForm from "hooks/useValidacionForm";
 
-const FormMontaje = () => {
-  const { obtenerEemm, registrarEemm, actualizarEemm, eemmActual, eemm, setEemm, eemmDefault } =
-    useContext(EemmContext);
+const FormMontaje = (props) => {
+  const {
+    obtenerEemm,
+    registrarEemm,
+    actualizarEemm,
+    eemmActual,
+    eemm,
+    setEemm,
+    eemmDefault,
+    actualizarEsn,
+    obtenerEemmEsnlist,
+    obtenerEemmUnidadlist,
+  } = useContext(EemmContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
@@ -60,6 +69,7 @@ const FormMontaje = () => {
       setEemm({ ...eemm, estadoMotorInstalacion: { id: value }, [name]: value });
     else if (name === "contratoId") setEemm({ ...eemm, contrato: { id: value }, [name]: value });
     else if (name === "esnId") setEemm({ ...eemm, esn: { id: value }, [name]: value });
+    else if (name === "amId") setEemm({ ...eemm, am: { id: value }, [name]: value });
     else setEemm({ ...eemm, [name]: value });
 
     if (type === "select-one") validarNumero(name, value);
@@ -75,9 +85,21 @@ const FormMontaje = () => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (validaciones()) {
-      eemmActual !== null ? actualizarEemm(MontajeAEnviar()) : registrarEemm(MontajeAEnviar());
-      limpiaForm();
-      closeModal();
+      eemmActual !== null ? actualizarEemm(MontajeAEnviar(), true) : registrarEemm(MontajeAEnviar(), true);
+
+      actualizarEsn(eemm.esn.id, true);
+
+      obtenerEemmEsnlist(eemm.esn.id).then((item) => {
+        props.esnMontado(item);
+      });
+
+      obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
+        props.unidadMontada(item);
+      });
+
+      props.search();
+      //limpiaForm();
+      //closeModal();
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
@@ -92,7 +114,8 @@ const FormMontaje = () => {
     montajeTmp.estadoEquipoId = eemm.estadoEquipo.id;
     montajeTmp.estadoMotorId = eemm.estadoMotor.id;
     montajeTmp.contratoId = eemm.contrato.id;
-    montajeTmp.am = eemm.am.id;
+    montajeTmp.amId = eemm.am.id;
+    montajeTmp.activo = true;
 
     return montajeTmp;
   };
@@ -160,7 +183,7 @@ const FormMontaje = () => {
             placeholder="Estado Equipo instalación"
             label="Estado Equipo instalación"
             list={estadoEquipoInstalacionList}
-            value={eemm.estadoEquipoInstalacion?.id}
+            value={eemm?.estadoEquipoInstalacion?.id}
             onChange={handleChange}
             required={true}
             error={error.estadoEquipoInstalacionId}
@@ -174,7 +197,7 @@ const FormMontaje = () => {
             placeholder="Estado Motor instalación"
             label="Estado Motor instalación"
             list={estadoMotorInstalacionList}
-            value={eemm.estadoMotorInstalacion?.id}
+            value={eemm?.estadoMotorInstalacion?.id}
             onChange={handleChange}
             required={true}
             error={error.estadoMotorInstalacionId}
@@ -188,7 +211,7 @@ const FormMontaje = () => {
             placeholder="Estado Equipo"
             label="Estado Equipo"
             list={estadoEquipoList}
-            value={eemm.estadoEquipo?.id}
+            value={eemm?.estadoEquipo?.id}
             onChange={handleChange}
             required={true}
             error={error.estadoEquipoId}
@@ -202,7 +225,7 @@ const FormMontaje = () => {
             placeholder="Estado Motor"
             label="Estado Motor"
             list={estadoMotorList}
-            value={eemm.estadoMotor?.id}
+            value={eemm?.estadoMotor?.id}
             onChange={handleChange}
             required={true}
             error={error.estadoMotorId}
@@ -218,7 +241,7 @@ const FormMontaje = () => {
             placeholder="contrato"
             label="Contrato"
             list={tipoContratoList}
-            value={eemm.contrato?.id}
+            value={eemm?.contrato?.id}
             onChange={handleChange}
             required={true}
             error={error.contratoId}
@@ -238,28 +261,16 @@ const FormMontaje = () => {
           />
         </div>
         <div className="form-group mb-4">
-          <InputText
+          <Select
             id="amId"
             name="amId"
-            placeholder="Aviso mmontaje"
-            label="Aviso mmontaje"
-            value={eemm.am?.id}
+            placeholder="Aviso montaje"
+            label="Aviso montaje"
+            value={eemm?.am?.id}
+            list={amList}
             onChange={handleChange}
             required={true}
             error={error.amId}
-          />
-        </div>
-        <div className="form-group mb-4">
-          <InputText
-            type="date"
-            id="fechaAm"
-            name="fechaAm"
-            placeholder="Fecha Aviso mmontaje"
-            label="Fecha Aviso mmontaje"
-            value={eemm.am?.id}
-            onChange={handleChange}
-            required={true}
-            error={error.fechaAm}
           />
         </div>
       </div>

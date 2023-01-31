@@ -1,27 +1,37 @@
 import { EemmContext } from "../../context/eemmContext";
 import React, { useContext, useEffect } from "react";
-import { closeModal } from "utilities/Utiles";
-import { Buttons, Checkbox, InputText, Select } from "components";
+import { formatDateshort } from "utilities/Utiles";
+import { Buttons, InputText, Select } from "components";
 import { useStateContext } from "contexts/ContextProvider";
 import { useSnackbar } from "notistack";
 import { SelectsContext } from "contexts/SelectsContext";
 import useValidacionForm from "hooks/useValidacionForm";
 
-const FormDesmontaje = () => {
-  const { obtenerEemm, registrarEemm, actualizarEemm, eemmActual, eemm, setEemm, eemmDefault } =
-    useContext(EemmContext);
+const FormDesmontaje = (props) => {
+  const {
+    obtenerEemm,
+    registrarEemm,
+    actualizarEemm,
+    eemmActual,
+    eemm,
+    setEemm,
+    eemmDefault,
+    eemmUnidad,
+    obtenerEemmUnidadlist,
+    actualizarEsn,
+  } = useContext(EemmContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
   const {
-    amList,
-    estadoEquipoInstalacionList,
-    estadoMotorInstalacionList,
+    adList,
     estadoEquipoList,
     estadoMotorList,
     tipoContratoList,
     motivoCambioList,
     tipoSalidaList,
+    ubList,
+    esnList,
   } = useContext(SelectsContext);
 
   useEffect(() => {
@@ -29,24 +39,56 @@ const FormDesmontaje = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eemmActual, eemm]);
 
+  useEffect(() => {
+    if (eemmUnidad.length > 0) {
+      let em = eemmUnidad[eemmUnidad.length - 1];
+      let eemmAct = em;
+
+      eemmAct.lugarTrabajoId = em.flotaLugarTrabajo.lugarTrabajo.id;
+      eemmAct.flotaLugarTrabajoId = em.flotaLugarTrabajo.id;
+      eemmAct.unidadId = em.unidad.id;
+
+      eemmAct.amId = em.avisoMontaje?.id;
+      eemmAct.aprobadorDesmontajeId = em.aprobadorDesmontaje ? em.aprobadorDesmontaje?.id : 0;
+      eemmAct.aprobadorId = em.aprobador ? em.aprobador?.id : 0;
+      eemmAct.aprobadorMontajeId = em.aprobadorMontaje ? em.aprobadorMontaje?.id : 0;
+      eemmAct.usuarioId = em.usuario ? em.usuario?.id : 0;
+      eemmAct.intervencionId = em.intervencion ? em.intervencion?.id : 0;
+      eemmAct.ubId = em.ub?.id;
+      eemmAct.contratoId = em.contrato?.id;
+      eemmAct.estadoEquipoInstalacionId = em.estadoEquipoInstalacion?.id;
+      eemmAct.estadoMotorInstalacionId = em.estadoMotorInstalacion?.id;
+      eemmAct.estadoEquipoId = em.estadoEquipo?.id;
+      eemmAct.estadoMotorId = em.estadoMotor?.id;
+      eemmAct.esnId = em.esn?.id;
+      eemmAct.usuarioId = em.usuario?.id;
+      eemmAct.hrMotorInstalacion = em.hrMotorInstalacion ? em.hrMotorInstalacion : 0;
+      eemmAct.hrAcumuladasMotor = em.hrAcumuladasMotor ? em.hrAcumuladasMotor : 0;
+      eemmAct.hrEquipoInstalacion = em.hrEquipoInstalacion ? em.hrEquipoInstalacion : 0;
+      eemmAct.hrHistoricoEquipo = em.hrHistoricoEquipo ? em.hrHistoricoEquipo : 0;
+      eemmAct.hrHistoricoMotor = em.hrHistoricoMotor ? em.hrHistoricoMotor : 0;
+      eemmAct.hrOperadaMotor = em.hrOperadaMotor ? em.hrOperadaMotor : 0;
+      eemmAct.tsr = em.tsr ? em.tsr : "";
+
+      setEemm(eemmAct);
+
+      //setEemm(...eemm, em);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eemmUnidad]);
+
   const validaciones = () => {
     let valida = true;
 
-    if (validarTexto("fechaps", eemm.fechaps, "Debe seleccionar una fecha de puesta en servicio")) valida = false;
-    if (validarNumero("hrEquipoInstalacion", eemm.hrEquipoInstalacion, "Debe ingresar horas validas")) valida = false;
-    if (validarNumero("hrMotorInstalacion", eemm.hrMotorInstalacion, "Debe ingresar las horas de instalación"))
-      valida = false;
-    if (validarNumero("axial", eemm.axial, "Debe ingresar una medición axial (mm)")) valida = false;
-    if (validarSelect("estadoEquipoInstalacionId", eemm.estadoEquipoInstalacion, "Debe seleccionar un estado"))
-      valida = false;
-    if (validarSelect("estadoMotorInstalacionId", eemm.estadoMotorInstalacion, "Debe seleccionar un estado"))
-      valida = false;
+    if (validarTexto("fechaFalla", eemm.fechaFalla, "Debe seleccionar una fecha de detención o falla")) valida = false;
+    if (validarTexto("tsr", eemm.tsr, "Debe ingresar un numero de TSR")) valida = false;
     if (validarSelect("estadoEquipoId", eemm.estadoEquipo, "Debe seleccionar un estado")) valida = false;
     if (validarSelect("estadoMotorId", eemm.estadoMotor, "Debe seleccionar un estado")) valida = false;
     if (validarSelect("contratoId", eemm.contrato, "Debe seleccionar un contrato")) valida = false;
-    if (validarNumero("intervencionId", eemm.intervencionId, "Debe ingresar un numero de intevención")) valida = false;
-    if (validarSelect("amId", eemm.am, "Debe seleccionar un am")) valida = false;
-
+    if (validarSelect("motivoCambioId", eemm.motivoCambio, "Debe seleccionar un motivo de cambio")) valida = false;
+    if (validarSelect("tipoSalidaId", eemm.tipoSalida, "Debe seleccionar un tipo de salida")) valida = false;
+    if (validarSelect("adId", eemm.ad, "Debe seleccionar un aviso de desmontaje")) valida = false;
+    if (validarSelect("ubId", eemm.ub, "Debe seleccionar una Ub")) valida = false;
     return valida;
   };
 
@@ -56,12 +98,10 @@ const FormDesmontaje = () => {
     if (type === "checkbox") setEemm({ ...eemm, [name]: checked });
     else if (name === "estadoEquipoId") setEemm({ ...eemm, estadoEquipo: { id: value }, [name]: value });
     else if (name === "estadoMotorId") setEemm({ ...eemm, estadoMotor: { id: value }, [name]: value });
-    else if (name === "estadoEquipoInstalacionId")
-      setEemm({ ...eemm, estadoEquipoInstalacion: { id: value }, [name]: value });
-    else if (name === "estadoMotorInstalacionId")
-      setEemm({ ...eemm, estadoMotorInstalacion: { id: value }, [name]: value });
-    else if (name === "contratoId") setEemm({ ...eemm, contrato: { id: value }, [name]: value });
-    else if (name === "esnId") setEemm({ ...eemm, esn: { id: value }, [name]: value });
+    else if (name === "motivoCambioId") setEemm({ ...eemm, motivoCambio: { id: value }, [name]: value });
+    else if (name === "tipoSalidaId") setEemm({ ...eemm, tipoSalida: { id: value }, [name]: value });
+    else if (name === "adId") setEemm({ ...eemm, ad: { id: value }, [name]: value });
+    else if (name === "ubId") setEemm({ ...eemm, ub: { id: value }, [name]: value });
     else setEemm({ ...eemm, [name]: value });
 
     if (type === "select-one") validarNumero(name, value);
@@ -76,10 +116,17 @@ const FormDesmontaje = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
+    DesmontajeAEnviar();
     if (validaciones()) {
-      eemmActual !== null ? actualizarEemm(DesmontajeAEnviar()) : registrarEemm(DesmontajeAEnviar());
+      eemmActual !== null ? actualizarEemm(DesmontajeAEnviar(), false) : registrarEemm(DesmontajeAEnviar(), false);
+
+      actualizarEsn(eemm.esn.id, false);
+
       limpiaForm();
-      closeModal();
+
+      obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
+        props.desmontado(item);
+      });
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
@@ -89,12 +136,13 @@ const FormDesmontaje = () => {
   const DesmontajeAEnviar = () => {
     let desmontajeTmp = { ...eemm };
 
-    desmontajeTmp.estadoEquipoInstalacionId = eemm.estadoEquipoInstalacion.id;
-    desmontajeTmp.estadoMotorInstalacionId = eemm.estadoMotorInstalacion.id;
     desmontajeTmp.estadoEquipoId = eemm.estadoEquipo.id;
     desmontajeTmp.estadoMotorId = eemm.estadoMotor.id;
-    desmontajeTmp.contratoId = eemm.contrato.id;
-    desmontajeTmp.am = eemm.am.id;
+    desmontajeTmp.motivoCambioId = eemm.motivoCambio.id;
+    desmontajeTmp.tipoSalidaId = eemm.tipoSalida.id;
+    desmontajeTmp.adId = eemm.ad.id;
+    desmontajeTmp.ubId = eemm.ub.id;
+    desmontajeTmp.activo = false;
 
     return desmontajeTmp;
   };
@@ -104,13 +152,14 @@ const FormDesmontaje = () => {
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         <div className="form-group mb-4">
-          <InputText
+          <Select
             id="esnId"
             name="esnId"
             placeholder="ESN [Placa]"
             label="ESN [Placa]"
-            value={eemm?.esnId}
-            onChangeFN={handleChange}
+            list={esnList}
+            value={eemm?.esn?.id}
+            onChange={handleChange}
             required={true}
             readOnly={true}
             error={error.esnId}
@@ -123,7 +172,7 @@ const FormDesmontaje = () => {
             name="fechaps"
             placeholder="Fecha PS"
             label="Fecha puesta en servicio"
-            value={eemm?.fechaps}
+            value={formatDateshort(eemm?.fechaps)}
             onChangeFN={handleChange}
             required={true}
             readOnly={true}
@@ -192,7 +241,7 @@ const FormDesmontaje = () => {
             placeholder="Estado Equipo"
             label="Estado Equipo"
             list={estadoEquipoList}
-            value={eemm.estadoEquipo?.id}
+            value={eemm?.estadoEquipo?.id}
             onChange={handleChange}
             required={true}
             error={error.estadoEquipoId}
@@ -206,7 +255,7 @@ const FormDesmontaje = () => {
             placeholder="Estado Motor"
             label="Estado Motor"
             list={estadoMotorList}
-            value={eemm.estadoMotor?.id}
+            value={eemm?.estadoMotor?.id}
             onChange={handleChange}
             required={true}
             error={error.estadoMotorId}
@@ -249,7 +298,7 @@ const FormDesmontaje = () => {
             placeholder="motivo Cambio"
             label="Motivo Cambio"
             list={motivoCambioList}
-            value={eemm.motivoCambio?.id}
+            value={eemm?.motivoCambio?.id}
             onChange={handleChange}
             required={true}
             error={error.motivoCambioId}
@@ -263,7 +312,7 @@ const FormDesmontaje = () => {
             placeholder="tipo salida"
             label="Tipo de salida"
             list={tipoSalidaList}
-            value={eemm.tipoSalida?.id}
+            value={eemm?.tipoSalida?.id}
             onChange={handleChange}
             required={true}
             error={error.tipoSalidaId}
@@ -279,7 +328,7 @@ const FormDesmontaje = () => {
             placeholder="contrato"
             label="Contrato"
             list={tipoContratoList}
-            value={eemm.contrato?.id}
+            value={eemm?.contrato?.id}
             onChange={handleChange}
             required={true}
             readOnly={true}
@@ -288,31 +337,50 @@ const FormDesmontaje = () => {
         </div>
         <div className="form-group mb-4"></div>
         <div className="form-group mb-4">
-          <InputText
+          <Select
             id="adId"
             name="adId"
             placeholder="Aviso desmontaje"
             label="Aviso desmontaje"
-            value={eemm.ad?.id}
-            onChangeFN={handleChange}
+            value={eemm?.ad?.id}
+            list={adList}
+            onChange={handleChange}
             required={true}
             error={error.adId}
           />
         </div>
 
         <div className="form-group mb-4">
-          <InputText
-            type="date"
-            id="fechaAd"
-            name="fechaAd"
-            placeholder="Fecha aviso desmontaje"
-            label="Fecha aviso desmontaje"
-            value={eemm.fechaAd}
-            onChangeFN={handleChange}
+          <Select
+            id="ubId"
+            name="ubId"
+            placeholder="ub"
+            label="Ub"
+            value={eemm?.ub?.id}
+            list={ubList}
+            onChange={handleChange}
             required={true}
-            error={error.fechaAd}
+            error={error.ubId}
           />
         </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="form-group mb-4"></div>
+        <div className="form-group mb-4"></div>
+        <div className="form-group mb-4">
+          <InputText
+            id="tsr"
+            name="tsr"
+            placeholder="tsr"
+            label="TSR"
+            value={eemm?.tsr}
+            onChangeFN={handleChange}
+            required={true}
+            error={error.tsr}
+          />
+        </div>
+        <div className="form-group mb-4"></div>
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

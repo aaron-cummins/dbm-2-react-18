@@ -1,15 +1,17 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Checkbox, SelectVersionMotor, Switch } from "components";
+import { InputText, Buttons, Checkbox, Switch, Select } from "components";
 import { EsnContext } from "../context/esnContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
 import useValidacionForm from "hooks/useValidacionForm";
+import { SelectsContext } from "contexts/SelectsContext";
 
 const FormEsn = () => {
   const { registrarEsn, esnActual, actualizarEsn, obtenerEsn } = useContext(EsnContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
+  const { versionMotorList } = useContext(SelectsContext);
 
   const esnDefault = useMemo(() => {
     return {
@@ -20,6 +22,7 @@ const FormEsn = () => {
       usuario: {
         id: 0,
       },
+      montado: false,
       versionMotorId: 0,
       versionMotor: {
         id: 0,
@@ -61,8 +64,8 @@ const FormEsn = () => {
 
   const handleOnSubmit = (e) => {
     e.preventDefault();
-    const validado = validaciones();
-    if (Object.keys(validado).length === 0) {
+    EsnAEnviar();
+    if (validaciones()) {
       esnActual !== null ? actualizarEsn(EsnAEnviar()) : registrarEsn(EsnAEnviar());
       limpiaForm();
       closeModal();
@@ -113,11 +116,12 @@ const FormEsn = () => {
       </div>
       <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-6">
-          <SelectVersionMotor
+          <Select
             id="versionMotorId"
             name="versionMotorId"
             placeholder="versionMotorId"
             label="version Motor"
+            list={versionMotorList}
             value={esn.versionMotor.id}
             onChange={handleChange}
             required={true}

@@ -4,7 +4,7 @@ const useValidacionForm = () => {
   const [error, setError] = useState([]);
 
   const validarTexto = (campo, valor, mensaje) => {
-    if (!valor.trim()) {
+    if (!valor || !valor.trim()) {
       addError(campo, valor, mensaje);
       return true;
     } else {

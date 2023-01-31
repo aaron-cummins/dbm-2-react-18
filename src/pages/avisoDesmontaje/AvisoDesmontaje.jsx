@@ -1,39 +1,39 @@
 import React from "react";
 import { Header, Modal } from "components";
 import { useStateContext } from "contexts/ContextProvider";
-import { AmContextProvider } from "./context/amContext";
+import { AvisoDesmontajeContextProvider } from "./context/avisoDesmontajeContext";
 
-import FormAm from "./components/FormAm";
-import TablaAm from "./components/TablaAm";
+import FormAvisoDesmontaje from "./components/FormAvisoDesmontaje";
+import TablaAvisoDesmontaje from "./components/TablaAvisoDesmontaje";
 
-const Am = () => {
+const AvisoDesmontaje = () => {
   const { currentColor } = useStateContext();
   return (
-    <AmContextProvider>
+    <AvisoDesmontajeContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="Am">
+        <Header category="Administración" title="Aviso Desmontaje">
           <button
             type="button"
             data-bs-toggle="modal"
-            data-bs-target="#am-modal"
+            data-bs-target="#ad-modal"
             style={{
               backgroundColor: currentColor,
               color: "white",
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            Nueva Am
+            Nuevo Aviso Desmontaje
           </button>
         </Header>
 
-        <TablaAm />
+        <TablaAvisoDesmontaje />
 
-        <Modal ModalTitle="Am" modalId="am-modal">
-          <FormAm modalid="#am-modal" />
+        <Modal ModalTitle="Aviso Desmontaje" modalId="ad-modal">
+          <FormAvisoDesmontaje modalid="#ad-modal" />
         </Modal>
       </div>
-    </AmContextProvider>
+    </AvisoDesmontajeContextProvider>
   );
 };
 
-export default Am;
+export default AvisoDesmontaje;

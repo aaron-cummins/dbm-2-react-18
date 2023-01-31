@@ -1,5 +1,6 @@
 import React, { createContext, useReducer } from "react";
 import {
+  OBTENER_LISTA_AD,
   OBTENER_LISTA_AM,
   OBTENER_LISTA_APLICACION,
   OBTENER_LISTA_APLICACION_OEM,
@@ -41,10 +42,12 @@ import {
   OBTENER_LISTA_ESTADO_EQUIPO,
   OBTENER_LISTA_ESTADO_MOTOR,
   OBTENER_LISTA_TIPO_SALIDA,
+  OBTENER_LISTA_UB,
 } from "const/actionTypes";
 import { getByID, getList } from "services/genericService";
 import selectsReducer from "reducer/selectsReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { formatDateshort } from "utilities/Utiles";
 
 export const SelectsContext = createContext();
 
@@ -54,10 +57,14 @@ export const SelectsContextProvider = (props) => {
 
   const styleSetect =
     "form-control block w-full px-3 py-1.5 border border-solid rounded border-gray-300 text-gray-600 pl-1";
+
+  //const styleSetect =
+  //  "form-control block w-full px-3 py-1.5 rounded-l-lg border-t-1 border-l-1 border-b-1 border-solid border-gray-300 text-gray-600 pl-1";
   const styleErrorSelect = "flex items-center font-medium tracking-wide text-red-500 text-xs mt-1 ml-1";
 
   const { callEndpoint } = useFetchAndLoad();
   const initialState = {
+    adList: [],
     amList: [],
     aplicacionesList: [],
     aplicacionOemsList: [],
@@ -96,6 +103,7 @@ export const SelectsContextProvider = (props) => {
     tipoContratoList: [],
     tipoSalidaList: [],
     unidadesList: [],
+    obList: [],
     versionEquiposList: [],
     versionMotorList: [],
     zonaList: [],
@@ -168,9 +176,7 @@ export const SelectsContextProvider = (props) => {
           item.activo && tipoLugarTrabajoActivos.push({ id: item.id, nombre: item.tipo });
         });
 
-
-
-       dispatch({
+        dispatch({
           type: OBTENER_LISTA_TIPO_LUGAR_TRABAJO,
           payload: tipoLugarTrabajoActivos,
         });
@@ -796,20 +802,43 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
-  /* OBTENER LISTADO DE AM */
+  /* OBTENER LISTADO DE Avso montaje  */
   const obtenerAm = async () => {
     try {
       let resultado = await callEndpoint(getList("am"));
 
       let amActivos = [];
       resultado.data.forEach((item) => {
-        item.activo && amActivos.push(item);
+        item.activo &&
+          amActivos.push({ id: item.id, nombre: item.nombre + " - (" + formatDateshort(item.fecha) + ")" });
       });
 
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA_AM,
           payload: amActivos,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  /* OBTENER LISTADO DE Aviso desmontaje */
+  const obtenerAd = async () => {
+    try {
+      let resultado = await callEndpoint(getList("ad"));
+
+      let adActivos = [];
+      resultado.data.forEach((item) => {
+        item.activo &&
+          adActivos.push({ id: item.id, nombre: item.nombre + " - (" + formatDateshort(item.fecha) + ")" });
+      });
+
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_AD,
+          payload: adActivos,
         });
       }
     } catch (error) {
@@ -859,9 +888,31 @@ export const SelectsContextProvider = (props) => {
     }
   };
 
+  /* OBTENER LISTADO DE UB */
+  const obtenerUb = async () => {
+    try {
+      let resultado = await callEndpoint(getList("ub"));
+
+      let ubActivos = [];
+      resultado.data.forEach((item) => {
+        item.activo && ubActivos.push({ id: item.id, nombre: item.nombre + " / " + item.procesamiento });
+      });
+
+      if (resultado && resultado.data) {
+        dispatch({
+          type: OBTENER_LISTA_UB,
+          payload: ubActivos,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   return (
     <SelectsContext.Provider
       value={{
+        adList: state.adList,
         amList: state.amList,
         aplicacionOemsList: state.aplicacionOemsList,
         aplicacionesList: state.aplicacionesList,
@@ -898,8 +949,9 @@ export const SelectsContextProvider = (props) => {
         tipoInyeccionList: state.tipoInyeccionList,
         tipoLugarTrabajoList: state.tipoLugarTrabajoList,
         tipoContratoList: state.tipoContratoList,
-        tipoSalidaList: state.tipoSalida,
+        tipoSalidaList: state.tipoSalidaList,
         unidadesList: state.unidadesList,
+        ubList: state.ubList,
         versionEquiposList: state.versionEquiposList,
         versionMotorList: state.versionMotorList,
         zonaList: state.zonaList,
@@ -911,6 +963,7 @@ export const SelectsContextProvider = (props) => {
         limpiarFlotasLugarTrabajo,
         limpiarUnidades,
 
+        obtenerAd,
         obtenerAm,
         obtenerAplicaciones,
         obtenerAplicacionOems,
@@ -949,6 +1002,7 @@ export const SelectsContextProvider = (props) => {
         obtenerTipoContrato,
         obtenerTipoSalida,
         obtenerUnidades,
+        obtenerUb,
         obtenerVersionEquipos,
         obtenerVersionMotor,
         obtenerZonas,

@@ -46,7 +46,8 @@ const MontajeMotor = () => {
   }, []);
 
   const [visible, setVisible] = useState(false);
-  const [montado, setMontado] = useState(false);
+  const [unidadMontada, setUnidadMontada] = useState(false);
+  const [esnMontado, setEsnMontado] = useState(false);
   const navigate = useNavigate();
 
   const validaciones = () => {
@@ -91,9 +92,11 @@ const MontajeMotor = () => {
 
   const handleSearch = (e) => {
     if (validaciones()) {
-      obtenerEemmEsnlist(eemm.esn.id);
+      obtenerEemmEsnlist(eemm.esn.id).then((item) => {
+        setEsnMontado(item);
+      });
       obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
-        setMontado(!item);
+        setUnidadMontada(item);
       });
 
       //console.log(val.data);
@@ -106,6 +109,8 @@ const MontajeMotor = () => {
 
   const volver = () => {
     setEemm(eemmDefault);
+    obtenerEemmEsnlist(null);
+    obtenerEemmUnidadlist(null);
     navigate("/eemm");
     setError([]);
   };
@@ -133,7 +138,7 @@ const MontajeMotor = () => {
             placeholder="Lugar Trabajo"
             label="Lugar Trabajo"
             list={lugarTrabajoUsuarioList}
-            value={eemm.flotaLugarTrabajo.lugarTrabajo?.id}
+            value={eemm?.flotaLugarTrabajo.lugarTrabajo?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.lugarTrabajoId}
@@ -146,7 +151,7 @@ const MontajeMotor = () => {
             placeholder="Flota"
             label="Flota"
             list={flotasLugarTrabajoList}
-            value={eemm.flotaLugarTrabajo?.id}
+            value={eemm?.flotaLugarTrabajo?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.flotaLugarTrabajoId}
@@ -190,12 +195,14 @@ const MontajeMotor = () => {
       </Seccion>
 
       <Seccion titulo="Informacion de montaje" visible={visible}>
-        {montado ? (
-          <FormMontaje />
-        ) : (
+        {unidadMontada ? (
           <Alerts type="danger">
             La unidad ya tiene un motor instalado, para montar el nuevo motor debe desmontar el actual.
           </Alerts>
+        ) : esnMontado ? (
+          <Alerts type="danger">El ESN ya se encuentra montado en otro equipo.</Alerts>
+        ) : (
+          <FormMontaje search={handleSearch} unidadMontada={setUnidadMontada} esnMontado={setEsnMontado} />
         )}
       </Seccion>
     </>

@@ -1,12 +1,13 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
 import { InputText, Buttons, Checkbox } from "components";
-import { AmContext } from "../context/amContext";
+import { AvisoMontajeContext } from "../context/avisoMontajeContext";
 import { useStateContext } from "contexts/ContextProvider";
-import { closeModal } from "utilities/Utiles";
+import { closeModal, formatDateshort } from "utilities/Utiles";
 import { useSnackbar } from "notistack";
 
-const FormAm = () => {
-  const { registrarAm, amActual, actualizarAm, obtenerAm } = useContext(AmContext);
+const FormAvisoMontaje = () => {
+  const { registrarAvisoMontaje, avisoMontajeActual, actualizarAvisoMontaje, obtenerAvisoMontaje } =
+    useContext(AvisoMontajeContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
 
@@ -14,6 +15,7 @@ const FormAm = () => {
     return {
       id: 0,
       nombre: "",
+      fecha: "",
       activo: false,
     };
   }, []);
@@ -22,8 +24,8 @@ const FormAm = () => {
   const [error, setError] = useState({});
 
   useEffect(() => {
-    amActual !== null ? setAm(amActual) : setAm(amDefault);
-  }, [amActual, amDefault]);
+    avisoMontajeActual !== null ? setAm(avisoMontajeActual) : setAm(amDefault);
+  }, [avisoMontajeActual, amDefault]);
 
   const validaciones = () => {
     let error = {};
@@ -42,7 +44,7 @@ const FormAm = () => {
 
   const limpiaForm = () => {
     setAm(amDefault);
-    obtenerAm(null);
+    obtenerAvisoMontaje(null);
     setError({});
   };
 
@@ -51,7 +53,7 @@ const FormAm = () => {
     setError(validaciones(am));
 
     if (Object.keys(error).length === 0) {
-      amActual !== null ? actualizarAm(AmAEnviar()) : registrarAm(AmAEnviar());
+      avisoMontajeActual !== null ? actualizarAvisoMontaje(AmAEnviar()) : registrarAvisoMontaje(AmAEnviar());
       limpiaForm();
       closeModal();
     } else {
@@ -68,7 +70,7 @@ const FormAm = () => {
   return (
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-8">
           <InputText
             id="nombre"
@@ -82,6 +84,21 @@ const FormAm = () => {
             error={error?.nombre}
           />
         </div>
+
+        <div className="form-group mb-8">
+          <InputText
+            type="date"
+            id="fecha"
+            name="fecha"
+            placeholder="Fecha"
+            label="Fecha"
+            value={formatDateshort(am?.fecha)}
+            onChangeFN={handleChange}
+            onBlur={handleChange}
+            //required={true}
+            error={error?.fecha}
+          />
+        </div>
         <div className="form-group mb-4">
           <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={am?.activo} label="Activo" />
         </div>
@@ -93,4 +110,4 @@ const FormAm = () => {
   );
 };
 
-export default FormAm;
+export default FormAvisoMontaje;
