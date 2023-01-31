@@ -7,8 +7,8 @@ const TablaEsn = () => {
   const { eemmEsn } = useContext(EemmContext);
 
   const columns = [
-    { name: "Faena", selector: (row) => row.flotas.lugarTrabajo?.nombre, sortable: true },
-    { name: "Flota", selector: (row) => row.flotas.flotas?.nombre, sortable: true },
+    { name: "Faena", selector: (row) => row.flotaLugarTrabajo?.lugarTrabajo?.nombre, sortable: true },
+    { name: "Flota", selector: (row) => row.flotaLugarTrabajo?.flotas?.nombre, sortable: true },
     { name: "Unidad", selector: (row) => row.unidad?.nombre, sortable: true },
     { name: "ESN [Placa]", selector: (row) => row.esn?.esn, sortable: true },
     { name: "Estado motor", selector: (row) => row.estadoMotor?.nombre, sortable: true },

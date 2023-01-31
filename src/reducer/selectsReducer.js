@@ -40,6 +40,8 @@ import {
   OBTENER_LISTA_AM,
   OBTENER_LISTA_TIPO_SALIDA,
   OBTENER_LISTA_MOTIVO_CAMBIO,
+  OBTENER_LISTA_AD,
+  OBTENER_LISTA_UB,
 } from "../const/actionTypes";
 
 //import/no-anonymous-default-export
@@ -263,6 +265,11 @@ export default (state, action) => {
         ...state,
         amList: action.payload,
       };
+    case OBTENER_LISTA_AD:
+      return {
+        ...state,
+        adList: action.payload,
+      };
 
     case OBTENER_LISTA_TIPO_SALIDA:
       return {
@@ -274,6 +281,12 @@ export default (state, action) => {
       return {
         ...state,
         motivoCambioList: action.payload,
+      };
+
+    case OBTENER_LISTA_UB:
+      return {
+        ...state,
+        ubList: action.payload,
       };
     default:
       return state;

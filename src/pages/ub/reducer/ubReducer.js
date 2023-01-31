@@ -5,27 +5,27 @@ export default (state, action) => {
     case OBTENER_LISTA:
       return {
         ...state,
-        amList: action.payload,
+        ubList: action.payload,
       };
     case REGISTRAR:
       return {
         ...state,
-        amList: [...state.amList, action.payload],
+        ubList: [...state.ubList, action.payload],
       };
     case OBTENER:
       return {
         ...state,
-        amActual: action.payload,
+        ubActual: action.payload,
       };
     case ACTUALIZAR:
       return {
         ...state,
-        amList: state.amList.map((am) => (am.id === action.payload.id ? action.payload : am)),
+        ubList: state.ubList.map((ub) => (ub.id === action.payload.id ? action.payload : ub)),
       };
     case ELIMINAR:
       return {
         ...state,
-        amList: state.amList.filter((am) => am.id !== action.payload),
+        ubList: state.ubList.filter((ub) => ub.id !== action.payload),
       };
     default:
       return state;

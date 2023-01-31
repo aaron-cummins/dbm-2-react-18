@@ -11,9 +11,7 @@ const FormEsn = () => {
   const { registrarEsn, esnActual, actualizarEsn, obtenerEsn } = useContext(EsnContext);
   const { mensaje } = useStateContext();
   const { enqueueSnackbar } = useSnackbar();
-  const {
-    versionMotorList,
-  } = useContext(SelectsContext);
+  const { versionMotorList } = useContext(SelectsContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const esnDefault = useMemo(() => {
@@ -25,6 +23,7 @@ const FormEsn = () => {
       usuario: {
         id: 0,
       },
+      montado: false,
       versionMotorId: 0,
       versionMotor: {
         id: 0,
@@ -45,7 +44,7 @@ const FormEsn = () => {
     if (validarTexto("nombre", esn.esn, "ESN requerido")) valida = false;
     if (validarTexto("nombre", esn.esnPlaca, "ESN placa")) valida = false;
     if (validarSelect("versionMotorId", esn.versionMotor, "Debe seleccionar una versión motor")) valida = false;
-  
+
     return valida;
   };
 
@@ -69,9 +68,7 @@ const FormEsn = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (validaciones()) {
-      esnActual !== null
-        ? actualizarEsn(EsnAEnviar())
-        : registrarEsn(EsnAEnviar());
+      esnActual !== null ? actualizarEsn(EsnAEnviar()) : registrarEsn(EsnAEnviar());
       closeModal();
       limpiaForm();
     } else {
@@ -129,7 +126,7 @@ const FormEsn = () => {
             value={esn.versionMotor?.id}
             onChange={handleChange}
             required={true}
-            list={versionMotorList} 
+            list={versionMotorList}
             error={error.versionMotorId}
           />
         </div>
