@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const useValidacionForm = () => {
-  const [error, setError] = useState([]);
+  const [error, setError] = useState([]); 
 
   const validarTexto = (campo, valor, mensaje) => {
     if (!valor || !valor.trim()) {

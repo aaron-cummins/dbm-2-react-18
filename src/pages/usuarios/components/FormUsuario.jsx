@@ -78,7 +78,7 @@ const FormUsuario = () => {
     const { name, value, type, checked } = e.target;
 
     if (type === "checkbox") setUsuario({ ...usuario, [name]: checked });
-    else if (name === "cargoId") setUsuario({ ...usuario, cargo: { id: value } });
+    else if (name === "cargoId") setUsuario({ ...usuario, cargo: { id: value } }); 
     else setUsuario({ ...usuario, [name]: value });
 
     if (type === "select-one") validarNumero(name, value);

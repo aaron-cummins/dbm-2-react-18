@@ -92,7 +92,7 @@ const FormRoles = () => {
             error={error.nombre}
           />
         </div>
-        <div className="form-group form-check mb-6 items-center">
+        <div className="form-group form-check mb-6 items-center"> 
           <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={roles.activo} />
         </div>
       </div>
