@@ -6,6 +6,7 @@ import { useStateContext } from "contexts/ContextProvider";
 import { SelectsContext } from "contexts/SelectsContext";
 import { useContext } from "react";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormUnidad = () => {
   const { registrarUnidad, unidadActual, actualizarUnidad, obtenerUnidad } = useContext(UnidadContext);
@@ -19,12 +20,16 @@ const FormUnidad = () => {
     flotasLugarTrabajoList,
   } = useContext(SelectsContext);
   const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
   const unidadDefault = useMemo(() => {
     return {
       id: 0,
       nombre: "",
       lugarTrabajoId: 0,
+      lugarTrabajo: {
+        id: 0,
+      },
       flotaLugarTrabajoId: 0,
       flotaLugarTrabajo: {
         id: 0,
@@ -56,96 +61,72 @@ const FormUnidad = () => {
 
   useEffect(() => {
     if (unidadActual !== null) {
+      unidadActual.lugarTrabajo = unidadActual.flotaLugarTrabajo.lugarTrabajo;
       setUnidad(unidadActual);
       obtenerFlotasLugarTrabajo(unidadActual.flotaLugarTrabajo.lugarTrabajo?.id);
     } else setUnidad(unidadDefault);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [unidadActual, unidadDefault]);
 
-  const handleChange = (e) => {
-    if (e.target.name === "lugarTrabajoId") {
-      obtenerFlotasLugarTrabajo(e.target.value);
-      setUnidad({ ...unidad, [e.target.name]: e.target.value });
-    }
+  const validaciones = () => {
+    let valida = true;
 
-    e.target.name === "activo"
-      ? setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.checked,
-        })
-      : e.target.name === "flotaLugarTrabajoId"
-      ? setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.value,
-          flotaLugarTrabajo: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "oemId"
-      ? setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.value,
-          oem: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "aplicacionOemId"
-      ? setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.value,
-          aplicacionOem: {
-            id: e.target.value,
-          },
-        })
-      : e.target.name === "versionId"
-      ? setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.value,
-          version: {
-            id: e.target.value,
-          },
-        })
-      : setUnidad({
-          ...unidad,
-          [e.target.name]: e.target.value,
-        });
+    if (validarTexto("nombre", unidad.nombre, "Nombre unidad requerido")) valida = false;
+    if (validarTexto("nserieEquipo", unidad.nserieEquipo, "Serie de equipo requerido")) valida = false;
+    if (validarTexto("modelo", unidad.modelo, "Modelo requerido")) valida = false;
+    if (validarSelect("lugarTrabajoId", unidad.lugarTrabajo, "Debe seleccionar un lugar de trabajo")) valida = false;
+    if (validarSelect("flotaLugarTrabajoId", unidad.flotaLugarTrabajo, "Debe seleccionar una flota lugar trabajo")) valida = false;
+    if (validarSelect("aplicacionOemId", unidad.aplicacionOem, "Debe seleccionar una aplicacion Oem")) valida = false;
+    if (validarSelect("oemId", unidad.oem, "Debe seleccionar un oem")) valida = false;
+    if (validarSelect("versionId", unidad.version, "Debe seleccionar una versión de equipo")) valida = false;
+  
+    return valida;
+  };
+
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    
+    if (type === "checkbox") setUnidad({ ...unidad, [name]: checked });
+    else if (name === "lugarTrabajoId") { 
+      setUnidad({ ...unidad, [name]: value, lugarTrabajo: { id: value }});
+      obtenerFlotasLugarTrabajo(value); 
+    }
+    else if (name === "flotaLugarTrabajoId") setUnidad({...unidad, [name]: value, flotaLugarTrabajo: { id: value }, })
+    else if (name === "aplicacionOemId") {
+    setUnidad({ ...unidad, aplicacionOem: { id: value }});
+    }
+    else if (name === "oemId") setUnidad({ ...unidad, oem: { id: value } });
+    else if (name === "versionId") setUnidad({ ...unidad, version: { id: value } });
+    else setUnidad({ ...unidad, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setUnidad(unidadDefault);
     obtenerUnidad(null);
     closeModal();
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    if (unidad.lugarTrabajoId === 0) {
-      enqueueSnackbar("Debe seleccionar un Lugar de trabajo", { variant: "error" });
+    if (validaciones()) {
+      unidadActual !== null
+        ? actualizarUnidad(UnidadAEnviar())
+        : registrarUnidad(UnidadAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-    if (unidad.flotaLugarTrabajoId === 0) {
-      enqueueSnackbar("Debe seleccionar una flota", { variant: "error" });
-      return;
-    }
-    if (unidad.aplicacionOemId === 0) {
-      enqueueSnackbar("Debe seleccionar un aplicación", { variant: "error" });
-      return;
-    }
-    if (unidad.oemId === 0) {
-      enqueueSnackbar("Debe seleccionar un Oem", { variant: "error" });
-      return;
-    }
-    if (unidad.versionId === 0) {
-      enqueueSnackbar("Debe seleccionar una version de equipo", { variant: "error" });
-      return;
-    }
-    unidadActual !== null ? actualizarUnidad(UnidadAEnviar()) : registrarUnidad(UnidadAEnviar());
-    enqueueSnackbar("Unidad Guardada exitosamente.", { variant: "success" });
-    limpiaForm();
   };
 
   const UnidadAEnviar = () => {
     let unidadTmp = { ...unidad };
+
     unidadTmp.flotaLugarTrabajoId = unidad.flotaLugarTrabajo.id;
     unidadTmp.oemId = unidad.oem.id;
     unidadTmp.aplicacionOemId = unidad.aplicacionOem.id;
@@ -166,9 +147,10 @@ const FormUnidad = () => {
               placeholder="Lugar Trabajo"
               label="Lugar trabajo"
               list={lugarTrabajoUsuarioList}
-              value={unidad.flotaLugarTrabajo.lugarTrabajo?.id}
+              value={unidad.lugarTrabajo?.id}
               onChange={handleChange}
               required={true}
+              error={error.lugarTrabajoId}
             />
           </div>
           <div className="form-group mb-2">
@@ -181,6 +163,7 @@ const FormUnidad = () => {
               value={unidad.flotaLugarTrabajo?.id}
               onChange={handleChange}
               required={true}
+              error={error.flotaLugarTrabajoId}
             />
           </div>
         </div>
@@ -195,6 +178,7 @@ const FormUnidad = () => {
               value={unidad.nombre}
               onChangeFN={handleChange}
               required={true}
+              error={error.nombre}
             />
           </div>
           <div className="form-group mb-4">
@@ -206,6 +190,7 @@ const FormUnidad = () => {
               value={unidad.nserieEquipo}
               onChangeFN={handleChange}
               required={true}
+              error={error.nserieEquipo}
             />
           </div>
           <div className="form-group mb-4">
@@ -217,6 +202,7 @@ const FormUnidad = () => {
               value={unidad.modelo}
               onChangeFN={handleChange}
               required={true}
+              error={error.modelo}
             />
           </div>
         </div>
@@ -231,6 +217,7 @@ const FormUnidad = () => {
               value={unidad.aplicacionOem?.id}
               onChange={handleChange}
               required={true}
+              error={error.aplicacionOemId}
             />
           </div>
           <div className="form-group mb-4">
@@ -242,6 +229,7 @@ const FormUnidad = () => {
               value={unidad.oem?.id}
               onChange={handleChange}
               required={true}
+              error={error.oemId}
             />
           </div>
           <div className="form-group mb-4">
@@ -254,6 +242,7 @@ const FormUnidad = () => {
               value={unidad.version.id}
               onChange={handleChange}
               required={true}
+              error={error.versionId}
             />
           </div>
         </div>
@@ -280,6 +269,7 @@ const FormUnidad = () => {
               label="Fecha Desactivación"
               value={unidad.fechaDesactivacion ? formatDateshort(unidad.fechaDesactivacion) : ""}
               onChangeFN={handleChange}
+              required={true}
             />
           </div>
           <div className="form-group mb-4">

@@ -25,9 +25,13 @@ export const VistasContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList("vistasgroup"));
       if (resultado && resultado.data) {
+        let GrupoVistasActivos = [];
+        resultado.data.forEach((item) => {
+          item.activo && GrupoVistasActivos.push({ id: item.id, nombre: item.modulos.nombre + " / " + item.nombre });
+        });
         dispatch({
           type: OBTENER_LISTA_ACTIVAS,
-          payload: resultado.data,
+          payload: GrupoVistasActivos,
         });
       }
     } catch (error) {
@@ -40,6 +44,7 @@ export const VistasContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList(urlApi));
       if (resultado && resultado.data) {
+        
         dispatch({
           type: OBTENER_LISTA,
           payload: resultado.data,

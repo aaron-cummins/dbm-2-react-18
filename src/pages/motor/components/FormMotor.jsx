@@ -1,20 +1,30 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Checkbox, SelectAplicacion } from "components";
+import { InputText, Buttons, Checkbox, Select} from "components";
 import { MotorContext } from "../context/motorContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { SelectsContext } from "contexts/SelectsContext";
 import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormMotor = () => {
   const { registrarMotor, motorActual, actualizarMotor, obtenerMotor } = useContext(MotorContext);
   const { enqueueSnackbar } = useSnackbar();
   const { mensaje } = useStateContext();
+  const {
+    aplicacionesList,
+  } = useContext(SelectsContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
+
   const motorDefault = useMemo(
     () => ({
       id: 0,
       nombre: "",
       rangoPotencia: "",
       aplicacionId: 0,
+      aplicacion: {
+        id: 0,
+      },
       activo: false,
     }),
     []
@@ -26,34 +36,53 @@ const FormMotor = () => {
     motorActual !== null ? setMotor(motorActual) : setMotor(motorDefault);
   }, [motorActual, motorDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", motor.nombre, "Nombre de motor requerido")) valida = false;
+    if (validarTexto("rangoPotencia", motor.rangoPotencia, "Nombre de rango potencia requerido")) valida = false;
+    if (validarSelect("aplicacionId", motor.aplicacion, "Debe seleccionar una aplicación")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setMotor({
-          ...motor,
-          [e.target.name]: e.target.checked,
-        })
-      : setMotor({
-          ...motor,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setMotor({ ...motor, [name]: checked });
+    else if (name === "aplicacionId") setMotor({ ...motor, aplicacion: { id: value } });
+    else setMotor({ ...motor, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setMotor(motorDefault);
     obtenerMotor(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    motorActual !== null ? actualizarMotor(MotorAEnviar()) : registrarMotor(MotorAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      motorActual !== null
+        ? actualizarMotor(MotorEnviar())
+        : registrarMotor(MotorEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
-  const MotorAEnviar = () => {
+  const MotorEnviar = () => {
     let motorTmp = { ...motor };
+    motorTmp.aplicacionId = document.querySelector("#aplicacionId").value;
     return motorTmp;
   };
+
 
   return (
     <form onSubmit={handleOnSubmit}>
@@ -68,15 +97,19 @@ const FormMotor = () => {
             value={motor.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <SelectAplicacion
+          <Select
             id="aplicacionId"
             name="aplicacionId"
-            value={motor.aplicacionId}
+            value={motor.aplicacion?.id}
             onChange={handleChange}
+            label="aplicacion"
+            list={aplicacionesList}
             required={true}
+            error={error.aplicacionId}
           />
         </div>
       </div>
@@ -90,6 +123,7 @@ const FormMotor = () => {
             value={motor.rangoPotencia}
             onChangeFN={handleChange}
             required={true}
+            error={error.rangoPotencia}
           />
         </div>
         <div className="form-group mb-4">
