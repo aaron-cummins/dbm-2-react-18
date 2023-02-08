@@ -20,7 +20,7 @@ const InputText = ({ id, name, placeholder, value, onChangeFN, required, label, 
         value={value}
         onChange={onChangeFN}
         required={required}
-        onBlur={onChangeFN}
+        onBlur={type === "date" ? null : onChangeFN}
         readOnly={readOnly}
         disabled={readOnly}
       />

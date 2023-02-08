@@ -13,7 +13,8 @@ import useValidacionForm from "hooks/useValidacionForm";
 import { useSnackbar } from "notistack";
 
 const MontajeMotor = () => {
-  const { eemm, setEemm, obtenerEemmEsnlist, obtenerEemmUnidadlist, eemmDefault } = useContext(EemmContext);
+  const { eemm, setEemm, obtenerEemmEsnlist, obtenerEemmUnidadlist, eemmDefault, unidadMontada, esnMontado } =
+    useContext(EemmContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -36,6 +37,7 @@ const MontajeMotor = () => {
   } = useContext(SelectsContext);
 
   useEffect(() => {
+    setEemm(eemmDefault);
     obtenerAm();
     obtenerEstadoEquipo();
     obtenerEstadoMotor(true);
@@ -46,8 +48,7 @@ const MontajeMotor = () => {
   }, []);
 
   const [visible, setVisible] = useState(false);
-  const [unidadMontada, setUnidadMontada] = useState(false);
-  const [esnMontado, setEsnMontado] = useState(false);
+
   const navigate = useNavigate();
 
   const validaciones = () => {
@@ -64,9 +65,11 @@ const MontajeMotor = () => {
   const handleChange = (e) => {
     const { name, value, type } = e.target;
 
+    console.log(name, value, type);
+
     if (name === "lugarTrabajoId") {
       obtenerFlotasLugarTrabajo(value);
-      setEemm({ ...eemm, unidad: { id: 0 }, [name]: value });
+      setEemm({ ...eemm, [name]: value });
       limpiarFlotasLugarTrabajo();
       limpiarUnidades();
       limpiarEsn();
@@ -92,14 +95,9 @@ const MontajeMotor = () => {
 
   const handleSearch = (e) => {
     if (validaciones()) {
-      obtenerEemmEsnlist(eemm.esn.id).then((item) => {
-        setEsnMontado(item);
-      });
-      obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
-        setUnidadMontada(item);
-      });
+      obtenerEemmEsnlist(eemm.esn.id);
+      obtenerEemmUnidadlist(eemm.unidad.id);
 
-      //console.log(val.data);
       setVisible(true);
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
@@ -108,9 +106,9 @@ const MontajeMotor = () => {
   };
 
   const volver = () => {
-    setEemm(eemmDefault);
-    obtenerEemmEsnlist(null);
-    obtenerEemmUnidadlist(null);
+    //setEemm(eemmDefault);
+    //obtenerEemmEsnlist(null);
+    //obtenerEemmUnidadlist(null);
     navigate("/eemm");
     setError([]);
   };
@@ -138,7 +136,7 @@ const MontajeMotor = () => {
             placeholder="Lugar Trabajo"
             label="Lugar Trabajo"
             list={lugarTrabajoUsuarioList}
-            value={eemm?.flotaLugarTrabajo.lugarTrabajo?.id}
+            value={eemm?.lugarTrabajo?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.lugarTrabajoId}
@@ -164,7 +162,7 @@ const MontajeMotor = () => {
             placeholder="Unidad"
             label="Unidad"
             list={unidadesList}
-            value={eemm.unidad.id}
+            value={eemm?.unidad?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.unidadId}
@@ -178,7 +176,7 @@ const MontajeMotor = () => {
             placeholder="ESN"
             label="ESN"
             list={esnList}
-            value={eemm.esn.id}
+            value={eemm?.esn?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.esnId}
@@ -202,7 +200,7 @@ const MontajeMotor = () => {
         ) : esnMontado ? (
           <Alerts type="danger">El ESN ya se encuentra montado en otro equipo.</Alerts>
         ) : (
-          <FormMontaje search={handleSearch} unidadMontada={setUnidadMontada} esnMontado={setEsnMontado} />
+          <FormMontaje />
         )}
       </Seccion>
     </>

@@ -35,7 +35,8 @@ const FormDesmontaje = (props) => {
   } = useContext(SelectsContext);
 
   useEffect(() => {
-    eemmActual !== null ? setEemm(eemmActual) : setEemm(eemm);
+    //eemmActual !== null ? setEemm(eemmActual) : setEemm(eemm);}
+    eemm ? setEemm(eemm) : setEemm(eemmDefault);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eemmActual, eemm]);
 
@@ -43,6 +44,13 @@ const FormDesmontaje = (props) => {
     if (eemmUnidad.length > 0) {
       let em = eemmUnidad[eemmUnidad.length - 1];
       let eemmAct = em;
+      let HHequipo = 0;
+      let HHmotor = 0;
+
+      eemmUnidad.forEach((item) => {
+        HHequipo += item.hrEquipoInstalacion;
+        HHmotor += item.hrOperadaMotor;
+      });
 
       eemmAct.lugarTrabajoId = em.flotaLugarTrabajo.lugarTrabajo.id;
       eemmAct.flotaLugarTrabajoId = em.flotaLugarTrabajo.id;
@@ -65,8 +73,8 @@ const FormDesmontaje = (props) => {
       eemmAct.hrMotorInstalacion = em.hrMotorInstalacion ? em.hrMotorInstalacion : 0;
       eemmAct.hrAcumuladasMotor = em.hrAcumuladasMotor ? em.hrAcumuladasMotor : 0;
       eemmAct.hrEquipoInstalacion = em.hrEquipoInstalacion ? em.hrEquipoInstalacion : 0;
-      eemmAct.hrHistoricoEquipo = em.hrHistoricoEquipo ? em.hrHistoricoEquipo : 0;
-      eemmAct.hrHistoricoMotor = em.hrHistoricoMotor ? em.hrHistoricoMotor : 0;
+      eemmAct.hrHistoricoEquipo = HHequipo ? HHequipo : 0;
+      eemmAct.hrHistoricoMotor = HHmotor ? HHmotor : 0;
       eemmAct.hrOperadaMotor = em.hrOperadaMotor ? em.hrOperadaMotor : 0;
       eemmAct.tsr = em.tsr ? em.tsr : "";
 
@@ -118,15 +126,17 @@ const FormDesmontaje = (props) => {
     e.preventDefault();
     DesmontajeAEnviar();
     if (validaciones()) {
-      eemmActual !== null ? actualizarEemm(DesmontajeAEnviar(), false) : registrarEemm(DesmontajeAEnviar(), false);
+      //eemmActual !== null ? actualizarEemm(DesmontajeAEnviar(), false) : registrarEemm(DesmontajeAEnviar(), false);
 
-      actualizarEsn(eemm.esn.id, false);
+      eemm.id !== 0 ? actualizarEemm(DesmontajeAEnviar(), false) : registrarEemm(DesmontajeAEnviar(), false);
 
-      limpiaForm();
-
-      obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
-        props.desmontado(item);
+      actualizarEsn(eemm.esn.id, false).then((item) => {
+        obtenerEemmUnidadlist(eemm.unidad.id);
       });
+
+      //fuerzaFiltros();
+
+      /*limpiaForm();*/
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
@@ -162,7 +172,7 @@ const FormDesmontaje = (props) => {
             onChange={handleChange}
             required={true}
             readOnly={true}
-            error={error.esnId}
+            error={error?.esnId}
           />
         </div>
         <div className="form-group mb-4">
@@ -172,11 +182,11 @@ const FormDesmontaje = (props) => {
             name="fechaps"
             placeholder="Fecha PS"
             label="Fecha puesta en servicio"
-            value={formatDateshort(eemm?.fechaps)}
+            value={eemm?.fechaps ? formatDateshort(eemm?.fechaps) : ""}
             onChangeFN={handleChange}
             required={true}
             readOnly={true}
-            error={error.fechaps}
+            error={error?.fechaps}
           />
         </div>
 
@@ -190,7 +200,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.fechaFalla}
             onChangeFN={handleChange}
             required={true}
-            error={error.fechaFalla}
+            error={error?.fechaFalla}
           />
         </div>
         <div className="form-group mb-4">
@@ -202,7 +212,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.hrOperadaMotor}
             onChangeFN={handleChange}
             required={true}
-            error={error.hrOperadaMotor}
+            error={error?.hrOperadaMotor}
           />
         </div>
       </div>
@@ -218,7 +228,7 @@ const FormDesmontaje = (props) => {
             onChangeFN={handleChange}
             required={true}
             readOnly={true}
-            error={error.hrMotorInstalacion}
+            error={error?.hrMotorInstalacion}
           />
         </div>
         <div className="form-group mb-4">
@@ -231,7 +241,7 @@ const FormDesmontaje = (props) => {
             onChangeFN={handleChange}
             required={true}
             readOnly={true}
-            error={error.hrAcumuladasMotor}
+            error={error?.hrAcumuladasMotor}
           />
         </div>
         <div className="form-group mb-4">
@@ -244,7 +254,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.estadoEquipo?.id}
             onChange={handleChange}
             required={true}
-            error={error.estadoEquipoId}
+            error={error?.estadoEquipoId}
           />
         </div>
 
@@ -258,7 +268,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.estadoMotor?.id}
             onChange={handleChange}
             required={true}
-            error={error.estadoMotorId}
+            error={error?.estadoMotorId}
           />
         </div>
       </div>
@@ -273,7 +283,7 @@ const FormDesmontaje = (props) => {
             onChangeFN={handleChange}
             required={true}
             readOnly={true}
-            error={error.hrHistoricoMotor}
+            error={error?.hrHistoricoMotor}
           />
         </div>
 
@@ -287,7 +297,7 @@ const FormDesmontaje = (props) => {
             onChangeFN={handleChange}
             required={true}
             readOnly={true}
-            error={error.hrHistoricoEquipo}
+            error={error?.hrHistoricoEquipo}
           />
         </div>
 
@@ -301,7 +311,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.motivoCambio?.id}
             onChange={handleChange}
             required={true}
-            error={error.motivoCambioId}
+            error={error?.motivoCambioId}
           />
         </div>
 
@@ -315,7 +325,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.tipoSalida?.id}
             onChange={handleChange}
             required={true}
-            error={error.tipoSalidaId}
+            error={error?.tipoSalidaId}
           />
         </div>
       </div>
@@ -332,7 +342,7 @@ const FormDesmontaje = (props) => {
             onChange={handleChange}
             required={true}
             readOnly={true}
-            error={error.contratoId}
+            error={error?.contratoId}
           />
         </div>
         <div className="form-group mb-4"></div>
@@ -346,7 +356,7 @@ const FormDesmontaje = (props) => {
             list={adList}
             onChange={handleChange}
             required={true}
-            error={error.adId}
+            error={error?.adId}
           />
         </div>
 
@@ -360,7 +370,7 @@ const FormDesmontaje = (props) => {
             list={ubList}
             onChange={handleChange}
             required={true}
-            error={error.ubId}
+            error={error?.ubId}
           />
         </div>
       </div>
@@ -377,7 +387,7 @@ const FormDesmontaje = (props) => {
             value={eemm?.tsr}
             onChangeFN={handleChange}
             required={true}
-            error={error.tsr}
+            error={error?.tsr}
           />
         </div>
         <div className="form-group mb-4"></div>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Select } from "components";
+import { InputText, Buttons, Select, Checkbox } from "components";
 import { VistasContext } from "../context/vistasContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
@@ -24,6 +24,7 @@ const FormVistas = () => {
       vistasGroupHelper: {
         id: 0,
       },
+      activo: false,
       created_at: formatDate(Date(Date.now)),
       updated_at: formatDate(Date(Date.now)),
     };
@@ -45,7 +46,7 @@ const FormVistas = () => {
 
     if (validarTexto("nombre", vistas.nombre, "Nombre vistas requerido")) valida = false;
     if (validarSelect("grupoVistasId", vistas.vistasGroupHelper, "Debe selecionar un grupo vistas")) valida = false;
-  
+
     return valida;
   };
 
@@ -69,9 +70,7 @@ const FormVistas = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (validaciones()) {
-      vistasActual !== null
-        ? actualizarVistas(VistasAEnviar())
-        : registrarVistas(VistasAEnviar());
+      vistasActual !== null ? actualizarVistas(VistasAEnviar()) : registrarVistas(VistasAEnviar());
       closeModal();
       limpiaForm();
     } else {
@@ -96,33 +95,33 @@ const FormVistas = () => {
             name="nombre"
             placeholder="Nombre"
             label="Nombre"
-            value={vistas.nombre}
+            value={vistas?.nombre}
             onChangeFN={handleChange}
             required={true}
             error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <Select 
-            id="grupoVistasId" 
-            name="grupoVistasId" 
-            value={vistas.vistasGroupHelper?.id} 
+          <Select
+            id="grupoVistasId"
+            name="grupoVistasId"
+            value={vistas?.vistasGroupHelper?.id}
             onChange={handleChange}
             label="Grupo vistas"
             list={vistasGroupList}
             error={error.grupoVistasId}
-            />
+          />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-8">
+      <div className="grid grid-cols-3 gap-4">
+        <div className="form-group mb-4">
           <InputText
             id="accion"
             name="accion"
             placeholder="Acción"
             label="Acción"
-            value={vistas.accion}
+            value={vistas?.accion}
             onChangeFN={handleChange}
             required={true}
             error={error.accion}
@@ -134,11 +133,14 @@ const FormVistas = () => {
             name="controller"
             placeholder="Controller"
             label="Controller"
-            value={vistas.controller}
+            value={vistas?.controller}
             onChangeFN={handleChange}
             required={true}
             error={error.controller}
           />
+        </div>
+        <div className="form-group mb-4">
+          <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={vistas?.activo} label="Activo" />
         </div>
       </div>
 

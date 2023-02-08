@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { InputText, Buttons, Select } from "components";
+import { InputText, Buttons, Select, Checkbox } from "components";
 import { VistasGroupContext } from "../context/vistasGroupContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
@@ -11,9 +11,7 @@ const FormVistasGroup = () => {
   const { registrarVistasGroup, vistasgroupActual, actualizarVistasGroup, obtenerVistasGroup } =
     useContext(VistasGroupContext);
   const { enqueueSnackbar } = useSnackbar();
-  const {
-    modulosList,
-  } = useContext(SelectsContext);
+  const { modulosList } = useContext(SelectsContext);
   const { mensaje } = useStateContext();
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
 
@@ -25,6 +23,7 @@ const FormVistasGroup = () => {
       modulos: {
         id: 0,
       },
+      activo: false,
     };
   }, []);
 
@@ -83,29 +82,32 @@ const FormVistasGroup = () => {
   return (
     <form onSubmit={handleOnSubmit}>
       {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-3 gap-4">
         <div className="form-group mb-8">
           <InputText
             id="nombre"
             name="nombre"
             placeholder="Nombre"
             label="Nombre"
-            value={vistasgroup.nombre}
+            value={vistasgroup?.nombre}
             onChangeFN={handleChange}
             required={true}
             error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <Select 
-            id="moduloId" 
-            name="moduloId" 
-            value={vistasgroup.modulos?.id}
+          <Select
+            id="moduloId"
+            name="moduloId"
+            value={vistasgroup?.modulos?.id}
             label="Modulo"
             list={modulosList}
             onChange={handleChange}
-            error={error.moduloId} 
-            />
+            error={error.moduloId}
+          />
+        </div>
+        <div className="form-group mb-4">
+          <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={vistasgroup?.activo} label="Activo" />
         </div>
       </div>
 

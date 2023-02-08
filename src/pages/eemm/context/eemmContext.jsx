@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useReducer, useState } from "react";
+import React, { createContext, useReducer, useState } from "react";
 import {
   OBTENER,
   OBTENER_LISTA,
@@ -20,63 +20,63 @@ export const EemmContextProvider = (props) => {
   const { alerta } = useStateContext();
   const urlApi = "eemm";
 
-  const eemmDefault = useMemo(
-    () => ({
-      activo: false,
-      adId: 0,
-      ad: { id: 0 },
-      amId: 0,
-      am: { id: 0 },
-      aprobadorDesmontajeId: 0,
-      aprobadorDesmontaje: { id: 0 },
-      aprobadorId: 0,
-      aprobador: { id: 0 },
-      aprobadorMontajeId: 0,
-      aprobadorMontaje: { id: 0 },
-      causaRaiz: "",
-      contratoId: 0,
-      contrato: { id: 0 },
-      esnId: 0,
-      esn: { id: 0 },
-      estadoEquipoId: 0,
-      estadoEquipo: { id: 0 },
-      estadoEquipoInstalacionId: 0,
-      estadoEquipoInstalacion: { id: 0 },
-      estadoMotorId: 0,
-      estadoMotor: { id: 0 },
-      estadoMotorInstalacionId: 0,
-      estadoMotorInstalacion: { id: 0 },
-      fechaFalla: "", //formatDateshort(Date.now()),
-      fechaps: "", //formatDateshort(Date.now()),
-      flotaLugarTrabajoId: 0,
-      flotaLugarTrabajo: { id: 0 },
-      hrAcumuladasMotor: 0,
-      hrEquipoInstalacion: 0,
-      hrHistoricoEquipo: 0,
-      hrHistoricoMotor: 0,
-      hrMotorInstalacion: 0,
-      hrOperadaMotor: 0,
-      id: 0,
-      intervencionId: 0,
-      intervencon: { id: 0 },
-      motivoCambioId: 0,
-      motivoCambio: { id: 0 },
-      tipoSalidaId: 0,
-      tipoSalida: { id: 0 },
-      tsr: "",
-      ubId: 0,
-      ub: { id: 0 },
-      unidadId: 0,
-      unidad: { id: 0 },
-      usuarioId: 0,
-      usuario: { id: 0 },
-      lugarTrabajoId: 0,
-      axial: 0.0,
-    }),
-    []
-  );
+  const eemmDefault = {
+    activo: false,
+    adId: 0,
+    ad: { id: 0 },
+    amId: 0,
+    am: { id: 0 },
+    aprobadorDesmontajeId: 0,
+    aprobadorDesmontaje: { id: 0 },
+    aprobadorId: 0,
+    aprobador: { id: 0 },
+    aprobadorMontajeId: 0,
+    aprobadorMontaje: { id: 0 },
+    causaRaiz: "",
+    contratoId: 0,
+    contrato: { id: 0 },
+    esnId: 0,
+    esn: { id: 0 },
+    estadoEquipoId: 0,
+    estadoEquipo: { id: 0 },
+    estadoEquipoInstalacionId: 0,
+    estadoEquipoInstalacion: { id: 0 },
+    estadoMotorId: 0,
+    estadoMotor: { id: 0 },
+    estadoMotorInstalacionId: 0,
+    estadoMotorInstalacion: { id: 0 },
+    fechaFalla: "", //formatDateshort(Date.now()),
+    fechaps: "", //formatDateshort(Date.now()),
+    flotaLugarTrabajoId: 0,
+    flotaLugarTrabajo: { id: 0 },
+    hrAcumuladasMotor: 0,
+    hrEquipoInstalacion: 0,
+    hrHistoricoEquipo: 0,
+    hrHistoricoMotor: 0,
+    hrMotorInstalacion: 0,
+    hrOperadaMotor: 0,
+    id: 0,
+    intervencionId: 0,
+    intervencon: { id: 0 },
+    motivoCambioId: 0,
+    motivoCambio: { id: 0 },
+    tipoSalidaId: 0,
+    tipoSalida: { id: 0 },
+    tsr: "",
+    ubId: 0,
+    ub: { id: 0 },
+    unidadId: 0,
+    unidad: { id: 0 },
+    usuarioId: 0,
+    usuario: { id: 0 },
+    lugarTrabajoId: 0,
+    axial: 0.0,
+  };
 
   const [eemm, setEemm] = useState(eemmDefault);
+  const [desmontado, setDesmontado] = useState(true);
+  const [unidadMontada, setUnidadMontada] = useState(false);
+  const [esnMontado, setEsnMontado] = useState(false);
 
   const initialState = {
     eemmList: [],
@@ -89,14 +89,12 @@ export const EemmContextProvider = (props) => {
 
   /* OBETENER LISTADO DE por unidad EEMMS */
   const obtenerEemmUnidadlist = async (id_unidad) => {
-    let montado = false;
     try {
       const resultado = id_unidad ? await callEndpoint(getList(`${urlApi}/unidad/${id_unidad}`)) : [];
 
       if (resultado && resultado.data) {
-        resultado.data.forEach((item) => {
-          montado = item.activo;
-        });
+        let em = resultado.data[resultado.data.length - 1];
+        setUnidadMontada(em ? em.activo : false);
 
         dispatch({
           type: OBTENER_LISTA_UNIDAD,
@@ -108,24 +106,19 @@ export const EemmContextProvider = (props) => {
           payload: resultado,
         });
       }
-
-      return montado;
     } catch (error) {
       console.log(error);
-      return montado;
+      setUnidadMontada(false);
     }
   };
 
   /* OBETENER LISTADO DE por ESN EEMMS */
   const obtenerEemmEsnlist = async (id_esn) => {
-    let montado = false;
     try {
       const resultado = id_esn ? await callEndpoint(getList(`${urlApi}/esn/${id_esn}`)) : [];
       if (resultado && resultado.data) {
-        resultado.data.forEach((item) => {
-          console.log(item.esn.montado);
-          if (item.esn.montado) montado = item.esn.montado;
-        });
+        let em = resultado.data[resultado.data.length - 1];
+        setEsnMontado(em ? em.esn?.montado : false);
 
         dispatch({
           type: OBTENER_LISTA_ESN,
@@ -137,10 +130,9 @@ export const EemmContextProvider = (props) => {
           payload: resultado,
         });
       }
-      return montado;
     } catch (error) {
       console.log(error);
-      return montado;
+      setEsnMontado(false);
     }
   };
 
@@ -150,10 +142,13 @@ export const EemmContextProvider = (props) => {
       montado
         ? await callEndpoint(postObjectByID("esn/montado/true", id))
         : await callEndpoint(postObjectByID("esn/montado/false", id));
+
       alerta("success", "Esn actualizado con exito!");
+      return true;
     } catch (error) {
       console.log(error);
       alerta("error", `'Ocurrió un error al intentar actualizar el esn. ${error}`);
+      return false;
     }
   };
 
@@ -203,6 +198,7 @@ export const EemmContextProvider = (props) => {
         type: REGISTRAR,
         payload: resultado.data,
       });
+      setUnidadMontada(montaje);
       alerta("success", `${eemmtipo} realizado con exito!`);
     } catch (error) {
       console.log(error);
@@ -220,6 +216,7 @@ export const EemmContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
+      setUnidadMontada(montaje);
       alerta("success", `${eemmtipo} actualizado con exito!`);
     } catch (error) {
       console.log(error);
@@ -253,6 +250,12 @@ export const EemmContextProvider = (props) => {
         eemmDefault,
         eemm,
         setEemm,
+        desmontado,
+        setDesmontado,
+        unidadMontada,
+        setUnidadMontada,
+        esnMontado,
+        setEsnMontado,
 
         actualizarEsn,
         obtenerEemmEsnlist,

@@ -3,6 +3,11 @@ export const closeModal = () => {
   close.click();
 };
 
+export const fuerzaFiltros = () => {
+  let buscar = document.querySelector("#filtro_ANZR_");
+  buscar.click();
+};
+
 export const formatDate = (fecha_para_formatear) => {
   let fecha = new Date(fecha_para_formatear);
   let ano = fecha.getFullYear();

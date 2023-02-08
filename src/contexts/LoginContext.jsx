@@ -38,9 +38,7 @@ export const LoginContextProvider = (props) => {
       let permisos = [];
       let vistas = [];
 
-      let lugares_trabajo = JSON.parse(
-        sessionStorage.getItem("user_info_lugaresTrabajo")
-      );
+      let lugares_trabajo = JSON.parse(sessionStorage.getItem("user_info_lugaresTrabajo"));
       let modulos = lugares_trabajo.LugarTrabajo;
 
       modulos.forEach((item) => {
@@ -67,9 +65,7 @@ export const LoginContextProvider = (props) => {
         payload: permisos,
       });
 
-      let grupo = permisos
-        .map((item) => item.grupo)
-        .filter((element) => element !== undefined && element !== null);
+      let grupo = permisos.map((item) => item.grupo).filter((element) => element !== undefined && element !== null);
 
       let vistas_v2 = grupo?.map((item) => {
         return item?.map((grupo) => grupo.vistas);

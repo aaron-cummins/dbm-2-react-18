@@ -14,7 +14,7 @@ const TablaEemm = () => {
     { name: "Estado equipo", selector: (row) => row.estadoEquipo?.nombre, sortable: true },
     { name: "Estado motor", selector: (row) => row.estadoMotor?.nombre, sortable: true },
     { name: "Fecha PS", selector: (row) => formatDateshort(row.fechaps), sortable: true },
-    { name: "Hr operadas motor", selector: (row) => (row.hrOperadasMotor ? row.hrOperadasMotor : 0.0), sortable: true },
+    { name: "Hr operadas motor", selector: (row) => (row.hrOperadaMotor ? row.hrOperadaMotor : 0.0), sortable: true },
     { name: "Hr Equipo", selector: (row) => (row.hrEquipoInstalacion ? row.hrEquipoInstalacion : 0.0), sortable: true },
     { name: "Fecha falla", selector: (row) => (row.fechaFalla ? formatDateshort(row.fechaFalla) : ""), sortable: true },
   ];

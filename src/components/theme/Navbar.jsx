@@ -17,24 +17,14 @@ const NavButton = ({ title, customFunc, icon, color, dotColor }) => (
       onClick={() => customFunc()}
       style={{ color }}
       className="relative text-xl rounded-full p-3 dark:text-white hover:bg-light-gray-2">
-      <span
-        style={{ background: dotColor }}
-        className="absolute inline-flex rounded-full h-2 w-2 right-2 top-2"
-      />
+      <span style={{ background: dotColor }} className="absolute inline-flex rounded-full h-2 w-2 right-2 top-2" />
       {icon}
     </button>
   </TooltipComponent>
 );
 
 const Navbar = () => {
-  const {
-    activeMenu,
-    setActiveMenu,
-    handleClick,
-    isClicked,
-    setScreenSize,
-    screenSize,
-  } = useStateContext();
+  const { activeMenu, setActiveMenu, handleClick, isClicked, setScreenSize, screenSize } = useStateContext();
   const { usuarioLogeado } = useContext(LoginContext);
 
   useEffect(() => {
@@ -59,12 +49,7 @@ const Navbar = () => {
 
   return (
     <div className="flex justify-between p-1 md:ml-6 md:mr-6 relative">
-      <NavButton
-        title="Menu"
-        customFunc={handleActiveMenu}
-        color={"black"}
-        icon={<AiOutlineMenu />}
-      />
+      <NavButton title="Menu" customFunc={handleActiveMenu} color={"black"} icon={<AiOutlineMenu />} />
 
       {/*<div className="flex">
         <p>
@@ -87,15 +72,9 @@ const Navbar = () => {
           <div
             className="flex items-center gap-2 cursor-pointer p-1 hover:bg-light-gray-2 rounded-lg"
             onClick={() => handleClick("userProfile")}>
-            <img
-              className="rounded-full w-8 h-8"
-              src="img/users/d2.jpg"
-              alt="Perfil"
-            />
+            <img className="rounded-full w-8 h-8" src="img/users/d2.jpg" alt="Perfil" />
             <p>
-              <span className="text-gray-400 font-bold ml-1 text-14">
-                {usuarioLogeado?.nombres}
-              </span>
+              <span className="text-gray-400 font-bold ml-1 text-14">{usuarioLogeado?.nombres}</span>
             </p>
             <MdKeyboardArrowDown className="text-gray-400 text-14" />
           </div>

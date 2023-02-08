@@ -11,7 +11,7 @@ import useValidacionForm from "hooks/useValidacionForm";
 import { useSnackbar } from "notistack";
 
 const DesmontajeMotor = () => {
-  const { eemm, setEemm, obtenerEemmUnidadlist, eemmDefault } = useContext(EemmContext);
+  const { eemm, setEemm, obtenerEemmUnidadlist, eemmDefault, unidadMontada } = useContext(EemmContext);
   const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
   const { enqueueSnackbar } = useSnackbar();
   const {
@@ -33,6 +33,7 @@ const DesmontajeMotor = () => {
   } = useContext(SelectsContext);
 
   useEffect(() => {
+    setEemm(eemmDefault);
     obtenerAd();
     obtenerEstadoEquipo();
     obtenerEstadoMotor(false);
@@ -45,7 +46,7 @@ const DesmontajeMotor = () => {
   }, []);
 
   const [visible, setVisible] = useState(false);
-  const [desmontado, setDesmontado] = useState(true);
+
   const navigate = useNavigate();
 
   const validaciones = () => {
@@ -83,11 +84,7 @@ const DesmontajeMotor = () => {
 
   const handleSearch = (e) => {
     if (validaciones()) {
-      obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
-        setDesmontado(item);
-      });
-
-      //console.log(val.data);
+      obtenerEemmUnidadlist(eemm.unidad.id);
       setVisible(true);
     } else {
       enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
@@ -96,8 +93,10 @@ const DesmontajeMotor = () => {
   };
 
   const volver = () => {
-    setEemm(eemmDefault);
-    obtenerEemmUnidadlist(null);
+    //setEemm(eemmDefault);
+    //setEemm(eemmDefault);
+    //console.log(eemmDefault);
+    //obtenerEemmUnidadlist(null);
     navigate("/eemm");
     setError([]);
   };
@@ -125,7 +124,7 @@ const DesmontajeMotor = () => {
             placeholder="Lugar Trabajo"
             label="Lugar Trabajo"
             list={lugarTrabajoUsuarioList}
-            value={eemm.flotaLugarTrabajo.lugarTrabajo?.id}
+            value={eemm?.flotaLugarTrabajo?.lugarTrabajo?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.lugarTrabajoId}
@@ -138,7 +137,7 @@ const DesmontajeMotor = () => {
             placeholder="Flota"
             label="Flota"
             list={flotasLugarTrabajoList}
-            value={eemm.flotaLugarTrabajo?.id}
+            value={eemm?.flotaLugarTrabajo?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.flotaLugarTrabajoId}
@@ -151,7 +150,7 @@ const DesmontajeMotor = () => {
             placeholder="Unidad"
             label="Unidad"
             list={unidadesList}
-            value={eemm.unidad.id}
+            value={eemm?.unidad?.id}
             onChange={(e) => handleChange(e)}
             required={true}
             error={error.unidadId}
@@ -164,11 +163,7 @@ const DesmontajeMotor = () => {
       </Seccion>
 
       <Seccion titulo="Información de Desmontaje" visible={visible}>
-        {desmontado ? (
-          <FormDesmontaje search={handleSearch} desmontado={setDesmontado} />
-        ) : (
-          <Alerts type="danger">La unidad ya de encuentra desmontada.</Alerts>
-        )}
+        {unidadMontada ? <FormDesmontaje /> : <Alerts type="danger">La unidad ya de encuentra desmontada.</Alerts>}
       </Seccion>
     </>
   );

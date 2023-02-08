@@ -15,6 +15,7 @@ const FormMontaje = (props) => {
     eemm,
     setEemm,
     eemmDefault,
+    eemmUnidad,
     actualizarEsn,
     obtenerEemmEsnlist,
     obtenerEemmUnidadlist,
@@ -32,9 +33,42 @@ const FormMontaje = (props) => {
   } = useContext(SelectsContext);
 
   useEffect(() => {
-    eemmActual !== null ? setEemm(eemmActual) : setEemm(eemm);
+    //eemmActual !== null ? setEemm(eemmActual) : setEemm(eemm);
+    eemm ? setEemm(eemm) : setEemm(eemmDefault);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [eemmActual, eemm]);
+
+  useEffect(() => {
+    if (eemmUnidad.length > 0) {
+      //let em = eemmUnidad[eemmUnidad.length - 1];
+      let eemmAct = eemmDefault;
+      let HHequipo = 0;
+
+      eemmUnidad.forEach((item) => {
+        HHequipo += item.hrOperadaMotor;
+      });
+
+      eemmAct.id = 0;
+      eemmAct.lugarTrabajoId = eemm.lugarTrabajoId;
+      eemmAct.flotaLugarTrabajoId = eemm.flotaLugarTrabajo.id;
+      eemmAct.flotaLugarTrabajo = eemm.flotaLugarTrabajo;
+      eemmAct.unidadId = eemm.unidad.id;
+      eemmAct.unidad = eemm.unidad;
+      eemmAct.esnId = eemm.esn?.id;
+      eemmAct.esn = eemm.esn;
+
+      /* eemmAct.lugarTrabajoId = eemm?.flotaLugarTrabajo?.lugarTrabajo?.id;
+      eemmAct.flotaLugarTrabajoId = eemm?.flotaLugarTrabajo?.id;
+      eemmAct.unidadId = eemm?.unidad?.id;
+      eemmAct.esnId = eemm?.esn?.id;*/
+      eemmAct.hrEquipoInstalacion = HHequipo;
+
+      console.log(HHequipo);
+
+      setEemm(eemmAct);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [eemmUnidad]);
 
   const validaciones = () => {
     let valida = true;
@@ -85,19 +119,17 @@ const FormMontaje = (props) => {
   const handleOnSubmit = (e) => {
     e.preventDefault();
     if (validaciones()) {
-      eemmActual !== null ? actualizarEemm(MontajeAEnviar(), true) : registrarEemm(MontajeAEnviar(), true);
+      //eemmActual !== null ? actualizarEemm(MontajeAEnviar(), true) : registrarEemm(MontajeAEnviar(), true);
 
-      actualizarEsn(eemm.esn.id, true);
+      eemm.id !== 0 ? actualizarEemm(MontajeAEnviar(), false) : registrarEemm(MontajeAEnviar(), false);
 
-      obtenerEemmEsnlist(eemm.esn.id).then((item) => {
-        props.esnMontado(item);
+      actualizarEsn(eemm.esn.id, true).then((item) => {
+        obtenerEemmEsnlist(eemm.esn.id);
+        obtenerEemmUnidadlist(eemm.unidad.id);
       });
 
-      obtenerEemmUnidadlist(eemm.unidad.id).then((item) => {
-        props.unidadMontada(item);
-      });
+      //limpiaForm();
 
-      props.search();
       //limpiaForm();
       //closeModal();
     } else {
@@ -134,7 +166,7 @@ const FormMontaje = (props) => {
             value={eemm?.fechaps}
             onChangeFN={handleChange}
             required={true}
-            error={error.fechaps}
+            error={error?.fechaps}
           />
         </div>
         <div className="form-group mb-4">
@@ -146,7 +178,7 @@ const FormMontaje = (props) => {
             value={eemm?.hrEquipoInstalacion}
             onChangeFN={handleChange}
             required={true}
-            error={error.hrEquipoInstalacion}
+            error={error?.hrEquipoInstalacion}
           />
         </div>
         <div className="form-group mb-4">
@@ -158,7 +190,7 @@ const FormMontaje = (props) => {
             value={eemm?.hrMotorInstalacion}
             onChangeFN={handleChange}
             required={true}
-            error={error.hrMotorInstalacion}
+            error={error?.hrMotorInstalacion}
           />
         </div>
         <div className="form-group mb-4">
@@ -170,7 +202,7 @@ const FormMontaje = (props) => {
             value={eemm?.axial}
             onChangeFN={handleChange}
             required={true}
-            error={error.axial}
+            error={error?.axial}
           />
         </div>
       </div>
@@ -186,7 +218,7 @@ const FormMontaje = (props) => {
             value={eemm?.estadoEquipoInstalacion?.id}
             onChange={handleChange}
             required={true}
-            error={error.estadoEquipoInstalacionId}
+            error={error?.estadoEquipoInstalacionId}
           />
         </div>
 
@@ -200,7 +232,7 @@ const FormMontaje = (props) => {
             value={eemm?.estadoMotorInstalacion?.id}
             onChange={handleChange}
             required={true}
-            error={error.estadoMotorInstalacionId}
+            error={error?.estadoMotorInstalacionId}
           />
         </div>
 
@@ -214,7 +246,7 @@ const FormMontaje = (props) => {
             value={eemm?.estadoEquipo?.id}
             onChange={handleChange}
             required={true}
-            error={error.estadoEquipoId}
+            error={error?.estadoEquipoId}
           />
         </div>
 
@@ -228,7 +260,7 @@ const FormMontaje = (props) => {
             value={eemm?.estadoMotor?.id}
             onChange={handleChange}
             required={true}
-            error={error.estadoMotorId}
+            error={error?.estadoMotorId}
           />
         </div>
       </div>
@@ -244,7 +276,7 @@ const FormMontaje = (props) => {
             value={eemm?.contrato?.id}
             onChange={handleChange}
             required={true}
-            error={error.contratoId}
+            error={error?.contratoId}
           />
         </div>
 
@@ -257,7 +289,7 @@ const FormMontaje = (props) => {
             value={eemm?.intervencionId}
             onChangeFN={handleChange}
             required={true}
-            error={error.intervencionId}
+            error={error?.intervencionId}
           />
         </div>
         <div className="form-group mb-4">
@@ -270,7 +302,7 @@ const FormMontaje = (props) => {
             list={amList}
             onChange={handleChange}
             required={true}
-            error={error.amId}
+            error={error?.amId}
           />
         </div>
       </div>

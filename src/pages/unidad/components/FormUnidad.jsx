@@ -62,6 +62,10 @@ const FormUnidad = () => {
   useEffect(() => {
     if (unidadActual !== null) {
       unidadActual.lugarTrabajo = unidadActual.flotaLugarTrabajo.lugarTrabajo;
+      unidadActual.fechaActivacion = unidadActual.fechaActivacion ? formatDateshort(unidadActual.fechaActivacion) : "";
+      unidadActual.fechaDesactivacion = unidadActual.fechaDesactivacion
+        ? formatDateshort(unidadActual.fechaDesactivacion)
+        : "";
       setUnidad(unidadActual);
       obtenerFlotasLugarTrabajo(unidadActual.flotaLugarTrabajo.lugarTrabajo?.id);
     } else setUnidad(unidadDefault);
@@ -75,27 +79,29 @@ const FormUnidad = () => {
     if (validarTexto("nserieEquipo", unidad.nserieEquipo, "Serie de equipo requerido")) valida = false;
     if (validarTexto("modelo", unidad.modelo, "Modelo requerido")) valida = false;
     if (validarSelect("lugarTrabajoId", unidad.lugarTrabajo, "Debe seleccionar un lugar de trabajo")) valida = false;
-    if (validarSelect("flotaLugarTrabajoId", unidad.flotaLugarTrabajo, "Debe seleccionar una flota lugar trabajo")) valida = false;
+    if (validarSelect("flotaLugarTrabajoId", unidad.flotaLugarTrabajo, "Debe seleccionar una flota lugar trabajo"))
+      valida = false;
     if (validarSelect("aplicacionOemId", unidad.aplicacionOem, "Debe seleccionar una aplicacion Oem")) valida = false;
     if (validarSelect("oemId", unidad.oem, "Debe seleccionar un oem")) valida = false;
     if (validarSelect("versionId", unidad.version, "Debe seleccionar una versión de equipo")) valida = false;
-  
+
     return valida;
   };
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    
+
+    console.log(value);
+
     if (type === "checkbox") setUnidad({ ...unidad, [name]: checked });
-    else if (name === "lugarTrabajoId") { 
-      setUnidad({ ...unidad, [name]: value, lugarTrabajo: { id: value }});
-      obtenerFlotasLugarTrabajo(value); 
-    }
-    else if (name === "flotaLugarTrabajoId") setUnidad({...unidad, [name]: value, flotaLugarTrabajo: { id: value }, })
+    else if (name === "lugarTrabajoId") {
+      setUnidad({ ...unidad, [name]: value, lugarTrabajo: { id: value } });
+      obtenerFlotasLugarTrabajo(value);
+    } else if (name === "flotaLugarTrabajoId")
+      setUnidad({ ...unidad, [name]: value, flotaLugarTrabajo: { id: value } });
     else if (name === "aplicacionOemId") {
-    setUnidad({ ...unidad, aplicacionOem: { id: value }});
-    }
-    else if (name === "oemId") setUnidad({ ...unidad, oem: { id: value } });
+      setUnidad({ ...unidad, aplicacionOem: { id: value } });
+    } else if (name === "oemId") setUnidad({ ...unidad, oem: { id: value } });
     else if (name === "versionId") setUnidad({ ...unidad, version: { id: value } });
     else setUnidad({ ...unidad, [name]: value });
 
@@ -113,9 +119,7 @@ const FormUnidad = () => {
   const handleOnSubmit = async (e) => {
     e.preventDefault();
     if (validaciones()) {
-      unidadActual !== null
-        ? actualizarUnidad(UnidadAEnviar())
-        : registrarUnidad(UnidadAEnviar());
+      unidadActual !== null ? actualizarUnidad(UnidadAEnviar()) : registrarUnidad(UnidadAEnviar());
       closeModal();
       limpiaForm();
     } else {
@@ -255,7 +259,7 @@ const FormUnidad = () => {
               name="fechaActivacion"
               placeholder="Fecha Activación"
               label="Fecha Activación"
-              value={unidad.fechaActivacion ? formatDateshort(unidad.fechaActivacion) : ""}
+              value={unidad.fechaActivacion}
               onChangeFN={handleChange}
               required={true}
             />
@@ -267,9 +271,8 @@ const FormUnidad = () => {
               name="fechaDesactivacion"
               placeholder="Fecha Desactivación"
               label="Fecha Desactivación"
-              value={unidad.fechaDesactivacion ? formatDateshort(unidad.fechaDesactivacion) : ""}
+              value={unidad.fechaDesactivacion}
               onChangeFN={handleChange}
-              required={true}
             />
           </div>
           <div className="form-group mb-4">

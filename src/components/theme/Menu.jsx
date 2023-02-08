@@ -96,18 +96,21 @@ const Menu = (props) => {
               </div>
 
               <div className="border-l border-gray-500 mt-1 mb-1 hidden" id={`submenu-${item.nombre.replace(" ", "")}`}>
-                {item.vistas.map((menu) => (
-                  <NavLink
-                    to={`/${menu.accion}`}
-                    key={menu.accion}
-                    onClick={handleCloseSideBar}
-                    style={({ isActive }) => ({
-                      backgroundColor: isActive ? currentColor : "",
-                    })}
-                    className={({ isActive }) => (isActive ? activeLink : normalLink)}>
-                    <span className="capitalize text-sm">{menu.nombre}</span>
-                  </NavLink>
-                ))}
+                {item.vistas.map(
+                  (menu) =>
+                    menu.activo && (
+                      <NavLink
+                        to={`/${menu.accion}`}
+                        key={menu.accion}
+                        onClick={handleCloseSideBar}
+                        style={({ isActive }) => ({
+                          backgroundColor: isActive ? currentColor : "",
+                        })}
+                        className={({ isActive }) => (isActive ? activeLink : normalLink)}>
+                        <span className="capitalize text-sm">{menu.nombre}</span>
+                      </NavLink>
+                    )
+                )}
               </div>
             </li>
           ))}

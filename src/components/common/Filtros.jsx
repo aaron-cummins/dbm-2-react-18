@@ -32,7 +32,8 @@ const Filtros = (props) => {
               borderRadius: "10px",
             }}
             className={`gap-1 px-3 py-1.5 hover:drop-shadow-xl hover:bg-${currentColor} text-right inline-flex items-center`}
-            onClick={props.Fn}>
+            onClick={props.Fn}
+            id="filtro_ANZR_">
             Buscar
           </button>
         </span>
