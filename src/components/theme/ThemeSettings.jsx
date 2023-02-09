@@ -7,16 +7,17 @@ import { MdOutlineCancel } from "react-icons/md";
 import { useStateContext } from "contexts/ContextProvider";
 import { LoginContext } from "contexts/LoginContext";
 import { setUsuarioLugarTrabajo } from "utilities/Login_utiles";
-import { SelectLugarTrabajo } from "../";
+import { Select } from "../";
 import { useContext } from "react";
 import { getUsuarioLugarTrabajo } from "utilities/Login_utiles";
 import { useEffect } from "react";
 import { useState } from "react";
+import { SelectsContext } from "contexts/SelectsContext";
 
 const ThemeSettings = () => {
-  const { setMode, currentMode, setThemeSettings, setLugarTrabajoSelected } =
-    useStateContext();
+  const { setMode, currentMode, setThemeSettings, setLugarTrabajoSelected } = useStateContext();
   const { setMenuUsuario } = useContext(LoginContext);
+  const { lugarTrabajoUsuarioList } = useContext(SelectsContext);
   const handleOnChange = (e) => {
     setUsuarioLugarTrabajo(e.target.value);
     setLugarTrabajoSelected(e.target.value);
@@ -46,11 +47,13 @@ const ThemeSettings = () => {
         <div className="flex-col border-t-1 border-color p-4 ml-4">
           <p className="font-semibold text-xl ">Faena</p>
           <div className="mt-4">
-            <SelectLugarTrabajo
+            <Select
               onChange={handleOnChange}
               value={lugarActual}
               name="lugar_trabajo_global"
               id="lugar_trabajo_global"
+              label="Sleccione Lugar de Trabajo"
+              list={lugarTrabajoUsuarioList}
             />
           </div>
         </div>

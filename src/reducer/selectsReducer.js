@@ -45,7 +45,7 @@ import {
 } from "../const/actionTypes";
 
 //import/no-anonymous-default-export
-export default (state, action) => {
+const selectsReducer = (state, action) => {
   switch (action.type) {
     case OBTENER_LISTA_LUGAR_TRABAJO:
       return {
@@ -292,3 +292,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default selectsReducer;

@@ -1,6 +1,6 @@
 import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
 
-export default (state, action) => {
+const esnReducer = (state, action) => {
   switch (action.type) {
     case OBTENER_LISTA:
       return {
@@ -31,3 +31,4 @@ export default (state, action) => {
       return state;
   }
 };
+export default esnReducer;

@@ -91,7 +91,7 @@ const FormUnidad = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
 
-    console.log(value);
+    console.log(e);
 
     if (type === "checkbox") setUnidad({ ...unidad, [name]: checked });
     else if (name === "lugarTrabajoId") {
@@ -100,9 +100,9 @@ const FormUnidad = () => {
     } else if (name === "flotaLugarTrabajoId")
       setUnidad({ ...unidad, [name]: value, flotaLugarTrabajo: { id: value } });
     else if (name === "aplicacionOemId") {
-      setUnidad({ ...unidad, aplicacionOem: { id: value } });
-    } else if (name === "oemId") setUnidad({ ...unidad, oem: { id: value } });
-    else if (name === "versionId") setUnidad({ ...unidad, version: { id: value } });
+      setUnidad({ ...unidad, aplicacionOem: { id: value }, [name]: value });
+    } else if (name === "oemId") setUnidad({ ...unidad, oem: { id: value }, [name]: value });
+    else if (name === "versionId") setUnidad({ ...unidad, version: { id: value }, [name]: value });
     else setUnidad({ ...unidad, [name]: value });
 
     if (type === "select-one") validarNumero(name, value);

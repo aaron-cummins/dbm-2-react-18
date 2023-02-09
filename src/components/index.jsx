@@ -35,8 +35,8 @@ export { default as Seccion } from "./common/Seccion";
 export { default as Snackbar } from "./common/Snackbar";
 export { default as Spinner } from "./common/Spinner";
 
-export { default as Select } from "./Selects/Select";
-export { default as SelectAplicacion } from "./Selects/SelectAplicacion";
+export { default as Select } from "./Selects/Select_React";
+/*export { default as SelectAplicacion } from "./Selects/SelectAplicacion";
 export { default as SelectAplicacionOem } from "./Selects/SelectAplicacionOem";
 export { default as SelectCargo } from "./Selects/SelectCargo";
 export { default as SelectComuna } from "./Selects/SelectComuna";
@@ -72,5 +72,5 @@ export { default as SelectTipoContrato } from "./Selects/SelectTipoContrato";
 export { default as SelectUnidad } from "./Selects/SelectUnidad";
 export { default as SelectVersionEquipo } from "./Selects/SelectVersionEquipo";
 export { default as SelectVersionMotor } from "./Selects/SelectVersionMotor";
-export { default as SelectZona } from "./Selects/SelectZona";
+export { default as SelectZona } from "./Selects/SelectZona";*/
 // eslint-disable-next-line import/no-cycle

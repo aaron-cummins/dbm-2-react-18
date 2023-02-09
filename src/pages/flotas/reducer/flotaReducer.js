@@ -1,13 +1,6 @@
-import {
-  OBTENER_LISTA,
-  REGISTRAR,
-  OBTENER,
-  ACTUALIZAR,
-  ELIMINAR,
-  OBTENER_LISTA_ACTIVAS,
-} from "const/actionTypes";
+import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR, OBTENER_LISTA_ACTIVAS } from "const/actionTypes";
 
-export default (state, action) => {
+const flotaReducer = (state, action) => {
   switch (action.type) {
     case OBTENER_LISTA:
       return {
@@ -27,16 +20,12 @@ export default (state, action) => {
     case ACTUALIZAR:
       return {
         ...state,
-        flotaList: state.flotaList.map((flota) =>
-          flota.id === action.payload.id ? action.payload : flota
-        ),
+        flotaList: state.flotaList.map((flota) => (flota.id === action.payload.id ? action.payload : flota)),
       };
     case ELIMINAR:
       return {
         ...state,
-        flotaList: state.flotaList.filter(
-          (flota) => flota.id !== action.payload
-        ),
+        flotaList: state.flotaList.filter((flota) => flota.id !== action.payload),
       };
     case OBTENER_LISTA_ACTIVAS:
       return {
@@ -47,3 +36,4 @@ export default (state, action) => {
       return state;
   }
 };
+export default flotaReducer;

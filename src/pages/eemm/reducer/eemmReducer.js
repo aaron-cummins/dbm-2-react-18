@@ -8,7 +8,7 @@ import {
   OBTENER_LISTA_ESN,
 } from "const/actionTypes";
 
-export default (state, action) => {
+const eemmReducer = (state, action) => {
   switch (action.type) {
     case OBTENER_LISTA:
       return {
@@ -50,3 +50,4 @@ export default (state, action) => {
       return state;
   }
 };
+export default eemmReducer;

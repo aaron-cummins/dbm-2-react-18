@@ -1,23 +1,14 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  SelectModulo,
-  SelectRol,
-} from "components";
+import { Alerts, Buttons, Select } from "components";
 import { PermisosGlobalesContext } from "../context/permisosGlobalesContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { SelectsContext } from "contexts/SelectsContext";
 
 const FormPermisoGlobal = () => {
-  const {
-    registrarPermisoGlobal,
-    permisoGlobalActual,
-    actualizarPermisoGlobal,
-    obtenerPermisoGlobal,
-  } = useContext(PermisosGlobalesContext);
+  const { registrarPermisoGlobal, permisoGlobalActual, actualizarPermisoGlobal, obtenerPermisoGlobal } =
+    useContext(PermisosGlobalesContext);
+  const { modulosList, rolesList } = useContext(SelectsContext);
   const { mensaje } = useStateContext();
   const permisoGlobalDefault = useMemo(() => {
     return {
@@ -30,9 +21,7 @@ const FormPermisoGlobal = () => {
   const [PermisoGlobal, setPermisoGlobal] = useState(permisoGlobalDefault);
 
   useEffect(() => {
-    permisoGlobalActual
-      ? setPermisoGlobal(permisoGlobalActual)
-      : setPermisoGlobal(permisoGlobalDefault);
+    permisoGlobalActual ? setPermisoGlobal(permisoGlobalActual) : setPermisoGlobal(permisoGlobalDefault);
   }, [permisoGlobalActual, permisoGlobalDefault]);
 
   const handleChange = (e) => {
@@ -63,24 +52,26 @@ const FormPermisoGlobal = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts> : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
-          <SelectModulo
+          <Select
             id="moduloId"
             name="moduloId"
             value={PermisoGlobal.moduloId}
+            label="Modulo"
+            list={modulosList}
             onChange={handleChange}
             required={true}
           />
         </div>
         <div className="form-group mb-4">
-          <SelectRol
+          <Select
             id="rolId"
             name="rolId"
             value={PermisoGlobal.rolId}
+            label="Rol"
+            list={rolesList}
             onChange={handleChange}
             required={true}
           />

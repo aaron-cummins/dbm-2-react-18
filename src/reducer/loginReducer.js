@@ -1,6 +1,6 @@
 import { OBTENER, OBTENER_MENU, OBTENER_ACCIONES } from "../const/actionTypes";
 
-export default (state, action) => {
+const loginReducer = (state, action) => {
   switch (action.type) {
     case OBTENER:
       return {
@@ -23,3 +23,5 @@ export default (state, action) => {
       return state;
   }
 };
+
+export default loginReducer;

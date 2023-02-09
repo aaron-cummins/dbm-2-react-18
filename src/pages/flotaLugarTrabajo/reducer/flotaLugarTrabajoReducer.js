@@ -1,13 +1,6 @@
-import {
-  OBTENER_LISTA,
-  REGISTRAR,
-  OBTENER,
-  ACTUALIZAR,
-  ELIMINAR,
-  OBTENER_LISTA_ACTIVAS,
-} from "const/actionTypes";
+import { OBTENER_LISTA, REGISTRAR, OBTENER, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
 
-export default (state, action) => {
+const flotaLugarTrabajoReducer = (state, action) => {
   switch (action.type) {
     case OBTENER_LISTA:
       return {
@@ -34,11 +27,10 @@ export default (state, action) => {
     case ELIMINAR:
       return {
         ...state,
-        flotaLugarTrabajoList: state.flotaLugarTrabajoList.filter(
-          (flota) => flota.id !== action.payload
-        ),
+        flotaLugarTrabajoList: state.flotaLugarTrabajoList.filter((flota) => flota.id !== action.payload),
       };
     default:
       return state;
   }
 };
+export default flotaLugarTrabajoReducer;
