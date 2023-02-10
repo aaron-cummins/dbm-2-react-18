@@ -1,6 +1,7 @@
 export { default as ErrorPage } from "./utiles/ErrorPage";
 export { default as ForbiddenPage } from "./utiles/ForbiddenPage";
 export { default as LoadPage } from "./utiles/LoadPage";
+export { default as Inicio } from "./Inicio";
 
 export { default as Ecommerce } from "./Ecommerce";
 export { default as Kanban } from "./Kanban";

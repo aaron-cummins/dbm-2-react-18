@@ -26,7 +26,6 @@ const IndexEemm = () => {
   } = useContext(SelectsContext);
 
   useEffect(() => {
-    console.log("llego al index useeffecg");
     setEemm(eemmDefault);
     obtenerEemmEsnlist(null);
     obtenerEemmUnidadlist(null);
@@ -46,7 +45,7 @@ const IndexEemm = () => {
 
     if (name === "lugarTrabajoId") {
       obtenerFlotasLugarTrabajo(value);
-      setEemm({ ...eemm, unidad: { id: 0 }, [name]: value });
+      setEemm({ ...eemm, lugarTrabajo: { id: value }, [name]: value });
       limpiarFlotasLugarTrabajo();
       limpiarUnidades();
       limpiarEsn();
@@ -103,7 +102,7 @@ const IndexEemm = () => {
             placeholder="Lugar Trabajo"
             label="Lugar Trabajo"
             list={lugarTrabajoUsuarioList}
-            value={eemm?.flotaLugarTrabajo?.lugarTrabajo?.id}
+            value={eemm?.lugarTrabajo?.id}
             onChange={(e) => handleChange(e)}
             required={true}
           />

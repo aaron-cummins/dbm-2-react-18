@@ -69,7 +69,7 @@ const MontajeMotor = () => {
 
     if (name === "lugarTrabajoId") {
       obtenerFlotasLugarTrabajo(value);
-      setEemm({ ...eemm, [name]: value });
+      setEemm({ ...eemm, lugarTrabajo: { id: value }, [name]: value });
       limpiarFlotasLugarTrabajo();
       limpiarUnidades();
       limpiarEsn();

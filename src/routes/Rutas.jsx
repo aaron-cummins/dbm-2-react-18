@@ -72,6 +72,7 @@ import {
   DesmontajeMotor,
   AvisoDesmontaje,
   Ub,
+  Inicio,
 } from "pages";
 import AuthGuard from "./AuthGuard";
 
@@ -80,9 +81,9 @@ const Rutas = () => {
     <Routes>
       {/* Pagina de Error */}
       <Route path="*" element={<ErrorPage />} />
-      <Route path="/inicio" element={<Ecommerce />} />
+      <Route path="/inicio" element={<Inicio />} />
       {/* Dashboard */}
-      <Route path="/" element={<Ecommerce />}></Route>
+      <Route path="/" element={<Inicio />}></Route>
       <Route path="/ecommerce" element={<Ecommerce />}></Route>
 
       <Route element={<AuthGuard />}>

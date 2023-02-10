@@ -52,8 +52,9 @@ module.exports = {
         590: "590px",
       },
       backgroundImage: {
-        "hero-pattern":
-          "url('https://demos.wrappixel.com/premium-admin-templates/react/flexy-react/main/static/media/welcome-bg-2x-svg.25338f53.svg')",
+        "hero-pattern": "url('/src/assets/img/cummins-inicio.jpg')",
+        //"url:('https://dcc-webdcc-pro.s3.us-west-2.amazonaws.com/DCC03WebCummins/htdocs/content/uploads/20210324160643/porqueelegircummins-inicio.jpg')",
+        //"url('https://demos.wrappixel.com/premium-admin-templates/react/flexy-react/main/static/media/welcome-bg-2x-svg.25338f53.svg')",
         "motor-login":
           "url('https://dcc-webdcc-pro.s3.us-west-2.amazonaws.com/DCC03WebCummins/htdocs/content/uploads/20210324160643/porqueelegircummins-inicio.jpg')",
       },
