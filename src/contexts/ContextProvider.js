@@ -26,6 +26,9 @@ export const ContextProvider = ({ children }) => {
 
   const [lugarTrabajoSelected, setLugarTrabajoSelected] = useState(0);
 
+  const [cargando, setCargando] = useState(false);
+
+
   const [mensaje, SetMensaje] = useState(initialAlertMensaje);
 
   const setMode = (e) => {
@@ -54,7 +57,7 @@ export const ContextProvider = ({ children }) => {
         mensaje: null,
         tipoAlerta: null,
       });
-    }, 5000);
+    }, 1000);
   };
 
   const handleClick = (clicked) => setIsClicked({ ...initialState, [clicked]: true });
@@ -85,6 +88,7 @@ export const ContextProvider = ({ children }) => {
         setLugarTrabajoSelected,
         alerta,
         mensaje,
+        cargando, setCargando
       }}>
       {children}
     </StateContext.Provider>

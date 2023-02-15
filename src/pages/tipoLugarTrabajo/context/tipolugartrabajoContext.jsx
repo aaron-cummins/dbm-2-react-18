@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import tipolugartrabajoReducer from "../reducer/tipolugartrabajoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -51,9 +39,7 @@ export const TipolugartrabajoContextProvider = (props) => {
     try {
       let tipolugartrabajoEncontrado = null;
       if (tipolugartrabajo !== null) {
-        const resultado = await callEndpoint(
-          getByID(urlApi, tipolugartrabajo.id)
-        );
+        const resultado = await callEndpoint(getByID(urlApi, tipolugartrabajo.id));
         if (resultado && resultado.data) {
           tipolugartrabajoEncontrado = resultado.data;
         }
@@ -73,9 +59,7 @@ export const TipolugartrabajoContextProvider = (props) => {
   /* REGISTRAR TIPOLUGARTRABAJO */
   const registrarTipolugartrabajo = async (tipolugartrabajo) => {
     try {
-      const resultado = await callEndpoint(
-        postObject(urlApi, tipolugartrabajo)
-      );
+      const resultado = await callEndpoint(postObject(urlApi, tipolugartrabajo));
       dispatch({
         type: REGISTRAR,
         payload: resultado.data,
@@ -83,10 +67,7 @@ export const TipolugartrabajoContextProvider = (props) => {
       alerta("success", "Tipo lugar de trabajo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el tipo lugar de trabajo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el tipo lugar de trabajo. ${error}`);
     }
   };
 
@@ -101,10 +82,7 @@ export const TipolugartrabajoContextProvider = (props) => {
       alerta("success", "Tipo lugar de trabajo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el tipo lugar de trabajo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el tipo lugar de trabajo. ${error}`);
     }
   };
 
@@ -119,10 +97,7 @@ export const TipolugartrabajoContextProvider = (props) => {
       alerta("success", "Tipo lugar de trabajo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el tipo lugar de trabajo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el tipo lugar de trabajo. ${error}`);
     }
   };
 

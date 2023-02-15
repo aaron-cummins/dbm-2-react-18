@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoInyeccionContext } from "../context/tipoinyeccionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoInyeccion = () => {
-  const { tipoinyeccionList, obtenerTipoInyecciones, obtenerTipoInyeccion } =
-    useContext(TipoInyeccionContext);
-  const { mensaje } = useStateContext();
+  const { tipoinyeccionList, obtenerTipoInyecciones, obtenerTipoInyeccion } = useContext(TipoInyeccionContext);
 
   const getTipoInyeccion = (props) => obtenerTipoInyeccion(props);
 
@@ -26,23 +23,12 @@ const TablaTipoInyeccion = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoInyeccion(props)}
-          nombreform="tipoinyeccion"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getTipoInyeccion(props)} nombreform="tipoinyeccion" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={tipoinyeccionList} />
-    </>
-  );
+  return <Tabla columns={columns} data={tipoinyeccionList} />;
 };
 
 export default TablaTipoInyeccion;

@@ -1,17 +1,17 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { AplicacionOemContext } from "../context/aplicacionOemContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormAplicacionOem = () => {
-  const {
-    aplicacionOemActual,
-    registrarAplicacionOem,
-    actualizarAplicacionOem,
-    obtenerAplicacionOem,
-  } = useContext(AplicacionOemContext);
+  const { aplicacionOemActual, registrarAplicacionOem, actualizarAplicacionOem, obtenerAplicacionOem } =
+    useContext(AplicacionOemContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
 
   const aplicacionoemDefault = useMemo(
     () => ({
@@ -24,36 +24,45 @@ const FormAplicacionOem = () => {
   const [aplicacionoem, setAplicacionOem] = useState(aplicacionoemDefault);
 
   useEffect(() => {
-    aplicacionOemActual
-      ? setAplicacionOem(aplicacionOemActual)
-      : setAplicacionOem(aplicacionoemDefault);
+    aplicacionOemActual ? setAplicacionOem(aplicacionOemActual) : setAplicacionOem(aplicacionoemDefault);
   }, [aplicacionOemActual, aplicacionoemDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", aplicacionoem.nombre, "Nombre aplicación oem")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setAplicacionOem({
-          ...aplicacionoem,
-          [e.target.name]: e.target.checked,
-        })
-      : setAplicacionOem({
-          ...aplicacionoem,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setAplicacionOem({ ...aplicacionoem, [name]: checked });
+    else setAplicacionOem({ ...aplicacionoem, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setAplicacionOem(aplicacionoemDefault);
     obtenerAplicacionOem(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    aplicacionOemActual
-      ? actualizarAplicacionOem(AplicacionOemAEnviar())
-      : registrarAplicacionOem(AplicacionOemAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      aplicacionOemActual !== null
+        ? actualizarAplicacionOem(AplicacionOemAEnviar())
+        : registrarAplicacionOem(AplicacionOemAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const AplicacionOemAEnviar = () => {
@@ -63,9 +72,7 @@ const FormAplicacionOem = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -73,9 +80,10 @@ const FormAplicacionOem = () => {
             name="nombre"
             placeholder="Nombre"
             label="Nombre"
-            value={aplicacionoem.nombre}
+            value={aplicacionoem?.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
@@ -84,7 +92,7 @@ const FormAplicacionOem = () => {
             name="activo"
             label="Activo"
             onChangeFN={handleChange}
-            checked={aplicacionoem.activo}
+            checked={aplicacionoem?.activo}
           />
         </div>
       </div>

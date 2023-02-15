@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import motorReducer from "../reducer/motorReducer.js";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -75,13 +63,10 @@ export const MotorContextProvider = (props) => {
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "Motor creada con exito!");
+      alerta("success", "Motor creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear la motor. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el motor. ${error}`);
     }
   };
 
@@ -93,13 +78,10 @@ export const MotorContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "Motor actualizada con exito!");
+      alerta("success", "Motor actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la motor. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el motor. ${error}`);
     }
   };
 
@@ -111,13 +93,10 @@ export const MotorContextProvider = (props) => {
         type: ELIMINAR,
         payload: id,
       });
-      alerta("success", "Motor eliminada con exito!");
+      alerta("success", "Motor eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar la motor. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el motor. ${error}`);
     }
   };
 

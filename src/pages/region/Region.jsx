@@ -23,7 +23,6 @@ const Region = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            {" "}
             Nueva Región
           </button>
         </Header>

@@ -1,19 +1,7 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
 //import { getCargoList, getCargo, postCargo, putCargo, deleteCargo } from 'services/cargoService';
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import cargoReducer from "../reducer/cargoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
@@ -81,10 +69,7 @@ export const CargoContextProvider = (props) => {
       alerta("success", "Cargo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el cargo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el cargo. ${error}`);
     }
   };
 
@@ -100,10 +85,7 @@ export const CargoContextProvider = (props) => {
       alerta("success", "Cargo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el cargo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el cargo. ${error}`);
     }
   };
 
@@ -118,10 +100,7 @@ export const CargoContextProvider = (props) => {
       alerta("success", "Cargo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el cargo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el cargo. ${error}`);
     }
   };
 

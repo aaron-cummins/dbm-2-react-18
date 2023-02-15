@@ -1,11 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { OemContext } from "../context/oemContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaOem = () => {
   const { oemList, obtenerOems, obtenerOem } = useContext(OemContext);
-  const { mensaje } = useStateContext();
 
   const getOem = (props) => {
     obtenerOem(props);
@@ -27,24 +25,11 @@ const TablaOem = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getOem(props)}
-          nombreform="oem"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getOem(props)} nombreform="oem" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={oemList} />
-    </>
-  );
+  return <Tabla columns={columns} data={oemList} />;
 };
 
 export default TablaOem;

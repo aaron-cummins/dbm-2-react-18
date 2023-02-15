@@ -1,17 +1,18 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { TipoEmisionContext } from "../context/tipoemisionContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormTipoEmision = () => {
-  const {
-    registrarTipoEmision,
-    tipoemisionActual,
-    actualizarTipoEmision,
-    obtenerTipoEmision,
-  } = useContext(TipoEmisionContext);
-  const { mensaje, alerta } = useStateContext();
+  const { registrarTipoEmision, tipoemisionActual, actualizarTipoEmision, obtenerTipoEmision } =
+    useContext(TipoEmisionContext);
+  const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const tipoemisionDefault = useMemo(() => {
     return {
       id: 0,
@@ -23,42 +24,45 @@ const FormTipoEmision = () => {
   const [tipoemision, setTipoEmision] = useState(tipoemisionDefault);
 
   useEffect(() => {
-    tipoemisionActual
-      ? setTipoEmision(tipoemisionActual)
-      : setTipoEmision(tipoemisionDefault);
+    tipoemisionActual ? setTipoEmision(tipoemisionActual) : setTipoEmision(tipoemisionDefault);
   }, [tipoemisionActual, tipoemisionDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", tipoemision.nombre, "Nombre de tipo emisión requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setTipoEmision({
-          ...tipoemision,
-          [e.target.name]: e.target.checked,
-        })
-      : setTipoEmision({
-          ...tipoemision,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setTipoEmision({ ...tipoemision, [name]: checked });
+    else setTipoEmision({ ...tipoemision, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setTipoEmision(tipoemisionDefault);
     obtenerTipoEmision(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-
-    if (tipoemision.nombre === "") {
-      alerta("danger", "Debe ingresar un nombre valido");
+    if (validaciones()) {
+      tipoemisionActual !== null
+        ? actualizarTipoEmision(TipoEmisionAEnviar())
+        : registrarTipoEmision(TipoEmisionAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
       return false;
     }
-
-    tipoemisionActual
-      ? actualizarTipoEmision(TipoEmisionAEnviar())
-      : registrarTipoEmision(TipoEmisionAEnviar());
-
-    limpiaForm();
-    closeModal();
   };
 
   const TipoEmisionAEnviar = () => {
@@ -68,9 +72,7 @@ const FormTipoEmision = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -81,16 +83,11 @@ const FormTipoEmision = () => {
             value={tipoemision.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <Checkbox
-            id="activo"
-            name="activo"
-            label="Activo"
-            onChangeFN={handleChange}
-            checked={tipoemision.activo}
-          />
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={tipoemision.activo} />
         </div>
       </div>
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">
