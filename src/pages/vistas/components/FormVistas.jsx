@@ -1,19 +1,19 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "components";
+import { InputText, Buttons, Select, Checkbox } from "components";
 import { VistasContext } from "../context/vistasContext";
 import { closeModal, formatDate } from "utilities/Utiles";
-import SelectGrupo from "./SelectGrupo";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormVistas = () => {
-  const {
-    registrarVistas,
-    vistasActual,
-    actualizarVistas,
-    obtenerVistasGrouplist,
-    obtenerVistas,
-  } = useContext(VistasContext);
+  const { registrarVistas, vistasActual, actualizarVistas, obtenerVistasGrouplist, obtenerVistas } =
+    useContext(VistasContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { vistasGroupList } = useContext(VistasContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError } = useValidacionForm();
+
   const vistasDefault = useMemo(() => {
     return {
       id: 0,
@@ -21,6 +21,10 @@ const FormVistas = () => {
       controller: "",
       accion: "",
       grupoVistasId: 0,
+      vistasGroupHelper: {
+        id: 0,
+      },
+      activo: false,
       created_at: formatDate(Date(Date.now)),
       updated_at: formatDate(Date(Date.now)),
     };
@@ -37,38 +41,53 @@ const FormVistas = () => {
     vistasActual ? setVistas(vistasActual) : setVistas(vistasDefault);
   }, [vistasActual, vistasDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", vistas.nombre, "Nombre vistas requerido")) valida = false;
+    if (validarSelect("grupoVistasId", vistas.vistasGroupHelper, "Debe selecionar un grupo vistas")) valida = false;
+
+    return valida;
+  };
+
   const handleChange = (e) => {
-    setVistas({
-      ...vistas,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setVistas({ ...vistas, [name]: checked });
+    else if (name === "grupoVistasId") setVistas({ ...vistas, vistasGroupHelper: { id: value } });
+    else setVistas({ ...vistas, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setVistas(vistasDefault);
     obtenerVistas(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    vistasActual
-      ? actualizarVistas(VistasAEnviar())
-      : registrarVistas(VistasAEnviar());
-
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      vistasActual !== null ? actualizarVistas(VistasAEnviar()) : registrarVistas(VistasAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const VistasAEnviar = () => {
     let vistasTmp = { ...vistas };
+    vistasTmp.grupoVistasId = document.querySelector("#grupoVistasId").value;
     return vistasTmp;
   };
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -76,32 +95,36 @@ const FormVistas = () => {
             name="nombre"
             placeholder="Nombre"
             label="Nombre"
-            value={vistas.nombre}
+            value={vistas?.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
-          <label className="text-gray-700">Grupo</label>
-          <SelectGrupo
+          <Select
             id="grupoVistasId"
             name="grupoVistasId"
-            value={vistas.grupoVistasId}
+            value={vistas?.vistasGroupHelper?.id}
             onChange={handleChange}
+            label="Grupo vistas"
+            list={vistasGroupList}
+            error={error.grupoVistasId}
           />
         </div>
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-8">
+      <div className="grid grid-cols-3 gap-4">
+        <div className="form-group mb-4">
           <InputText
             id="accion"
             name="accion"
             placeholder="Acción"
             label="Acción"
-            value={vistas.accion}
+            value={vistas?.accion}
             onChangeFN={handleChange}
             required={true}
+            error={error.accion}
           />
         </div>
         <div className="form-group mb-4">
@@ -110,10 +133,14 @@ const FormVistas = () => {
             name="controller"
             placeholder="Controller"
             label="Controller"
-            value={vistas.controller}
+            value={vistas?.controller}
             onChangeFN={handleChange}
             required={true}
+            error={error.controller}
           />
+        </div>
+        <div className="form-group mb-4">
+          <Checkbox id="activo" name="activo" onChangeFN={handleChange} checked={vistas?.activo} label="Activo" />
         </div>
       </div>
 

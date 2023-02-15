@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Header, Modal } from "components";
 import { useStateContext } from "contexts/ContextProvider";
 
@@ -28,7 +28,7 @@ const LugarTrabajo = () => {
 
         <TablaLugarTrabajo />
 
-        <Modal ModalTitle="Lugar de Tabajo" modalId="lugarTrabajo-modal">
+        <Modal ModalTitle="Lugar de Trabajo" modalId="lugarTrabajo-modal">
           <FormLugarTrabajo />
         </Modal>
       </div>

@@ -1,15 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoCombustibleContext } from "../context/tipocombustibleContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoCombustible = () => {
-  const {
-    tipocombustibleList,
-    obtenerTipoCombustibles,
-    obtenerTipoCombustible,
-  } = useContext(TipoCombustibleContext);
-  const { mensaje } = useStateContext();
+  const { tipocombustibleList, obtenerTipoCombustibles, obtenerTipoCombustible } = useContext(TipoCombustibleContext);
 
   const getTipoCombustible = (props) => obtenerTipoCombustible(props);
 
@@ -29,23 +23,12 @@ const TablaTipoCombustible = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoCombustible(props)}
-          nombreform="tipocombustible"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getTipoCombustible(props)} nombreform="tipocombustible" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={tipocombustibleList} />
-    </>
-  );
+  return <Tabla columns={columns} data={tipocombustibleList} />;
 };
 
 export default TablaTipoCombustible;

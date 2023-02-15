@@ -1,19 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-  OBTENER_LISTA_ACTIVAS,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR, OBTENER_LISTA_ACTIVAS } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import vistasReducer from "../reducer/vistasReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -38,9 +25,13 @@ export const VistasContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList("vistasgroup"));
       if (resultado && resultado.data) {
+        let GrupoVistasActivos = [];
+        resultado.data.forEach((item) => {
+          item.activo && GrupoVistasActivos.push({ id: item.id, nombre: item.modulos.nombre + " / " + item.nombre });
+        });
         dispatch({
           type: OBTENER_LISTA_ACTIVAS,
-          payload: resultado.data,
+          payload: GrupoVistasActivos,
         });
       }
     } catch (error) {
@@ -53,6 +44,7 @@ export const VistasContextProvider = (props) => {
     try {
       const resultado = await callEndpoint(getList(urlApi));
       if (resultado && resultado.data) {
+        
         dispatch({
           type: OBTENER_LISTA,
           payload: resultado.data,
@@ -96,10 +88,7 @@ export const VistasContextProvider = (props) => {
       alerta("success", "Vista creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear la Vista. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear la Vista. ${error}`);
     }
   };
 
@@ -115,10 +104,7 @@ export const VistasContextProvider = (props) => {
       alerta("success", "Vista actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la Vista. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar la Vista. ${error}`);
     }
   };
 
@@ -133,10 +119,7 @@ export const VistasContextProvider = (props) => {
       alerta("success", "Vista eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar la Vista. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar la Vista. ${error}`);
     }
   };
 

@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons, Checkbox } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { RegionContext } from "../context/regionContext";
 import { useStateContext } from "contexts/ContextProvider";
 import { closeModal } from "utilities/Utiles";
+import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormRegion = () => {
-  const { registrarRegion, regionActual, actualizarRegion, obtenerRegion } =
-    useContext(RegionContext);
+  const { registrarRegion, regionActual, actualizarRegion, obtenerRegion } = useContext(RegionContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const regionDefault = useMemo(
     () => ({
       id: 0,
@@ -25,30 +29,43 @@ const FormRegion = () => {
     regionActual ? setRegion(regionActual) : setRegion(regionDefault);
   }, [regionActual, regionDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", region.nombre, "Nombre de la región requerida")) valida = false;
+    if (validarTexto("numero", region.numero, "Número requerido")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setRegion({
-          ...region,
-          [e.target.name]: e.target.checked,
-        })
-      : setRegion({
-          ...region,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setRegion({ ...region, [name]: checked });
+    else setRegion({ ...region, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setRegion(regionDefault);
     obtenerRegion(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    regionActual
-      ? actualizarRegion(RegionAEnviar())
-      : registrarRegion(RegionAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      regionActual !== null
+        ? actualizarRegion(RegionAEnviar())
+        : registrarRegion(RegionAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
 
   const RegionAEnviar = () => {
@@ -60,9 +77,7 @@ const FormRegion = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
         <div className="form-group mb-8">
           <InputText
@@ -73,6 +88,7 @@ const FormRegion = () => {
             value={region.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
         </div>
         <div className="form-group mb-4">
@@ -84,18 +100,13 @@ const FormRegion = () => {
             value={region.numero}
             onChangeFN={handleChange}
             required={true}
+            error={error.numero}
           />
         </div>
       </div>
 
       <div className="form-group form-check mb-6 items-center">
-        <Checkbox
-          id="activo"
-          name="activo"
-          label="Activo"
-          onChangeFN={handleChange}
-          checked={region.activo}
-        />
+        <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={region.activo} />
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

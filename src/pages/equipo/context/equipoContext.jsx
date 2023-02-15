@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import equipoReducer from "../reducer/equipoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
@@ -51,19 +39,19 @@ export const EquipoContextProvider = (props) => {
   /* OBTENER UNA EQUIPO */
   const obtenerEquipo = async (equipo) => {
     try {
-      let equipoEncontrada = null;
+      let equipoEncontrado = null;
       if (equipo !== null) {
         const resultado = await callEndpoint(getByID(urlApi, equipo.id));
         if (resultado && resultado.data) {
-          equipoEncontrada = resultado.data;
+          equipoEncontrado = resultado.data;
         }
       } else {
-        equipoEncontrada = equipo;
+        equipoEncontrado = equipo;
       }
 
       dispatch({
         type: OBTENER,
-        payload: equipoEncontrada,
+        payload: equipoEncontrado,
       });
     } catch (error) {
       console.log(error);
@@ -74,17 +62,17 @@ export const EquipoContextProvider = (props) => {
   const registrarEquipo = async (equipo) => {
     try {
       const resultado = await callEndpoint(postObject(urlApi, equipo));
+      let resul = resultado.data;
+      resul.oem = equipo.oem;
+      resul.aplicacionOem = equipo.aplicacionOem;
       dispatch({
         type: REGISTRAR,
-        payload: resultado.data,
+        payload: resul,
       });
-      alerta("success", "Región creada con exito!");
+      alerta("success", "Equipo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear la región. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el equipo. ${error}`);
     }
   };
 
@@ -92,24 +80,24 @@ export const EquipoContextProvider = (props) => {
   const actualizarEquipo = async (equipo) => {
     try {
       const resultado = await callEndpoint(putObject(urlApi, equipo));
+      let resul = resultado.data;
+      resul.oem = equipo.oem;
+      resul.aplicacionOem = equipo.aplicacionOem;
       dispatch({
         type: ACTUALIZAR,
-        payload: resultado.data,
+        payload: resul,
       });
-      alerta("success", "Región actualizada con exito!");
+      alerta("success", "Equipo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la región. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el equipo. ${error}`);
     }
   };
 
   /* ELIMINAR EQUIPO */
   const eliminarEquipo = async (id) => {
     try {
-      const resultado = await callEndpoint(deleteObject(urlApi, id));
+      await callEndpoint(deleteObject(urlApi, id));
       dispatch({
         type: ELIMINAR,
         payload: id,
@@ -117,10 +105,7 @@ export const EquipoContextProvider = (props) => {
       alerta("success", "Equipo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el equipo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el equipo. ${error}`);
     }
   };
 

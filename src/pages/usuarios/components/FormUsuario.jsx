@@ -1,21 +1,21 @@
 import React, { useEffect, useMemo, useState } from "react";
-import {
-  Alerts,
-  InputText,
-  Buttons,
-  Checkbox,
-  SelectCargo,
-  SelectLugarTrabajo,
-} from "components";
+import { InputText, Buttons, Checkbox, Select } from "components";
 import { UsuarioContext } from "../context/usuarioContext";
 import { closeModal } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
 import { useContext } from "react";
+import { useSnackbar } from "notistack";
+import { SelectsContext } from "contexts/SelectsContext";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormUsuario = () => {
-  const { registrarUsuario, usuarioActual, actualizarUsuario, obtenerUsuario } =
-    useContext(UsuarioContext);
-  const { mensaje, alerta } = useStateContext();
+  const { registrarUsuario, usuarioActual, actualizarUsuario, obtenerUsuario } = useContext(UsuarioContext);
+  const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const {
+    cargosList,
+  } = useContext(SelectsContext);
+  const { validarTexto, validarSelect, validarNumero, error, setError, validarMail, validarTelefono, validarUId, validacionRut} = useValidacionForm();
 
   const usuarioDefault = useMemo(() => {
     return {
@@ -29,6 +29,13 @@ const FormUsuario = () => {
       anexo: "",
       password: "",
       cargoId: 0,
+      cargo: {
+        id: 0,
+      },
+      lugarTrabajoId: 0,
+      lugarTrabajo: {
+        id: 0,
+      },
       id_lugar_trabajo: 0,
       created_at: Date.now,
       updated_at: Date.now,
@@ -40,60 +47,75 @@ const FormUsuario = () => {
   //const [mensaje, setMensaje] = useState(null);
 
   useEffect(() => {
-    usuarioActual !== null
-      ? setUsuario(usuarioActual)
-      : setUsuario(usuarioDefault);
+    usuarioActual !== null ? setUsuario(usuarioActual) : setUsuario(usuarioDefault);
   }, [usuarioActual, usuarioDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombres", usuario.nombres, "Nombres requeridos")) valida = false;
+    if (validarTexto("apellidos", usuario.apellidos, "Apellidos requeridos")) valida = false;
+
+    if (validarTexto("rut", usuario.rut, "Rut requerido")) valida = false;
+    if (validacionRut("rut", usuario.rut, "Rut incorrecto. Inténtelo nuevamente")) valida = false;
+
+    if (validarTexto("uid", usuario.uid, "UID requerido")) valida = false;
+    if (validarUId("uid", usuario.uid, "UID incorrecto. Inténtelo nuevamente")) valida = false;
+
+    if (validarTexto("correo", usuario.correo, "Correo corporativo requerido")) valida = false;
+    if (validarMail("correo", usuario.correo, "Correo corporativo incorrecto. Inténtelo nuevamente")) valida = false
+
+    if (validarTexto("telefono", usuario.telefono, "Teléfono requerido")) valida = false;
+    if (validarTelefono("telefono", usuario.telefono, "Teléfono incorrecto. Inténtelo nuevamente")) valida = false
+
+    if (validarTexto("anexo", usuario.anexo, "Anexo requerido")) valida = false;
+    if (validarSelect("cargoId", usuario.cargo, "Debe seleccionar una conversión de flotas")) valida = false;
+  
+    return valida;
+  };
+
   const handleChange = (e) => {
-    e.target.name === "activo"
-      ? setUsuario({
-          ...usuario,
-          [e.target.name]: e.target.checked,
-        })
-      : setUsuario({
-          ...usuario,
-          [e.target.name]: e.target.value,
-        });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setUsuario({ ...usuario, [name]: checked });
+    else if (name === "cargoId") setUsuario({ ...usuario, cargo: { id: value } }); 
+    else setUsuario({ ...usuario, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setUsuario(usuarioDefault);
     obtenerUsuario(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    if (
-      usuario.apellidos.trim() === "" ||
-      usuario.correo === "" ||
-      usuario.rut === "" ||
-      usuario.uid === ""
-    ) {
-      //setMensaje("El Apellido, Correo, Rut y Uid son obligatorios.");
-      alerta("danger", "El Apellido, Correo, Rut y Uid son obligatorios.");
-      return;
+    if (validaciones()) {
+      usuarioActual !== null
+        ? actualizarUsuario(UsuarioAEnviar())
+        : registrarUsuario(UsuarioAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
     }
-
-    usuarioActual !== null
-      ? actualizarUsuario(UsuarioAEnviar())
-      : registrarUsuario(UsuarioAEnviar());
-    limpiaForm();
-    closeModal();
   };
 
   const UsuarioAEnviar = () => {
     let usuarioTmp = { ...usuario };
+    usuarioTmp.cargoId = usuario.cargo.id;
     return usuarioTmp;
   };
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="nombres"
             name="nombres"
@@ -102,9 +124,10 @@ const FormUsuario = () => {
             value={usuario.nombres}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombres}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="apellidos"
             name="apellidos"
@@ -113,23 +136,25 @@ const FormUsuario = () => {
             value={usuario.apellidos}
             onChangeFN={handleChange}
             required={true}
+            error={error.apellidos}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="rut"
             name="rut"
             placeholder="Rut"
-            label="Rut"
+            label="Rut (sin punto y con dígito verificador)"
             value={usuario.rut}
             onChangeFN={handleChange}
             required={true}
+            error={error.rut}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="uid"
             name="uid"
@@ -138,35 +163,39 @@ const FormUsuario = () => {
             value={usuario.uid}
             onChangeFN={handleChange}
             required={true}
+            error={error.uid}
           />
         </div>
       </div>
 
-      <div className="form-group mb-6">
+      <div className="form-group mb-2">
         <InputText
           type="email"
           id="correo"
           name="correo"
-          placeholder="Correo"
+          placeholder="Nombre@cummins.cl"
           label="Correo"
           value={usuario.correo}
           onChangeFN={handleChange}
           required={true}
+          error={error.correo}
         />
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
+            type="tel"
             id="telefono"
             name="telefono"
-            placeholder="Telefono"
-            label="Telefono"
+            placeholder="(Código de área) Número"
+            label="Telefono (9 dígitos)"
             value={usuario.telefono}
             onChangeFN={handleChange}
+            error={error.telefono}
           />
         </div>
-        <div className="form-group mb-6">
+        <div className="form-group mb-2">
           <InputText
             id="anexo"
             name="anexo"
@@ -174,41 +203,29 @@ const FormUsuario = () => {
             label="Anexo"
             value={usuario.anexo}
             onChangeFN={handleChange}
+            error={error.anexo}
           />
         </div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="form-group mb-6">
-          <SelectCargo
+        <div className="form-group mb-2">
+          <Select
             id="cargoId"
             name="cargoId"
             placeholder="Cargo"
-            value={usuario.cargoId}
+            value={usuario.cargo.id}
             onChange={handleChange}
+            label="Cargo"
+            list={cargosList}
             required={true}
-          />
-        </div>
-        <div className="form-group mb-6">
-          <SelectLugarTrabajo
-            id="id_lugar_trabajo"
-            name="id_lugar_trabajo"
-            placeholder="Lugar Trabajo"
-            value={usuario.id_lugar_trabajo}
-            onChange={handleChange}
-            required={true}
+            error={error.cargoId}
           />
         </div>
       </div>
 
-      <div className="form-group mb-4">
-        <Checkbox
-          id="activo"
-          name="activo"
-          label="Activo"
-          onChangeFN={handleChange}
-          checked={usuario.activo}
-        />
+      <div className="form-group mb-2">
+        <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={usuario.activo} />
       </div>
 
       <div className="modal-footer flex flex-shrink-0 flex-wrap items-center justify-end p-4 border-t border-gray-200 rounded-b-md">

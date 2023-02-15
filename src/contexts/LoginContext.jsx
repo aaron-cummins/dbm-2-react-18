@@ -38,28 +38,37 @@ export const LoginContextProvider = (props) => {
       let permisos = [];
       let vistas = [];
 
-      let lugares_trabajo = JSON.parse(
-        sessionStorage.getItem("user_info_lugaresTrabajo")
-      );
+      let lugares_trabajo = JSON.parse(sessionStorage.getItem("user_info_lugaresTrabajo"));
       let modulos = lugares_trabajo.LugarTrabajo;
+
       modulos.forEach((item) => {
         if (parseInt(item.lugar_trabajo_id) === parseInt(id_lugar_trabajo)) {
-          vistas.push(item.vistas[0]);
+          vistas.push(item.vistas);
         }
       });
-      permisos = PermisosUsuario(vistas);
+
+      vistas = vistas.flat(3);
+
+      const vta = [];
+      let m = [];
+      vistas.forEach((item) => {
+        if (!m.includes(item.moduloId)) {
+          m.push(item.moduloId);
+          vta.push(item);
+        }
+      });
+
+      permisos = PermisosUsuario(vta);
 
       dispatch({
         type: OBTENER_MENU,
         payload: permisos,
       });
 
-      let grupo = permisos
-        .map((item) => item.grupo)
-        .filter((element) => element !== undefined);
+      let grupo = permisos.map((item) => item.grupo).filter((element) => element !== undefined && element !== null);
 
-      let vistas_v2 = grupo.map((item) => {
-        return item.map((grupo) => grupo.vistas);
+      let vistas_v2 = grupo?.map((item) => {
+        return item?.map((grupo) => grupo.vistas);
       });
       let vistas_ = vistas_v2.flat(2);
       let acciones = vistas_.map((item) => item.accion);

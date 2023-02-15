@@ -1,13 +1,17 @@
 import React, { useEffect, useState, useContext, useMemo } from "react";
-import { Alerts, InputText, Buttons } from "components";
+import { InputText, Buttons, Checkbox } from "components";
 import { RolesContext } from "../context/rolesContext";
 import { closeModal, formatDate } from "utilities/Utiles";
 import { useStateContext } from "contexts/ContextProvider";
+import { useSnackbar } from "notistack";
+import useValidacionForm from "hooks/useValidacionForm";
 
 const FormRoles = () => {
-  const { registrarRoles, rolesActual, actualizarRoles, obtenerRoles } =
-    useContext(RolesContext);
+  const { registrarRoles, rolesActual, actualizarRoles, obtenerRoles } = useContext(RolesContext);
   const { mensaje } = useStateContext();
+  const { enqueueSnackbar } = useSnackbar();
+  const { validarTexto, validarNumero, error, setError } = useValidacionForm();
+
   const rolesDefault = useMemo(() => {
     return {
       id: 0,
@@ -15,6 +19,7 @@ const FormRoles = () => {
       permisosGlobales: [],
       created_at: formatDate(Date(Date.now)),
       updated_at: formatDate(Date(Date.now)),
+      activo: false,
     };
   }, []);
 
@@ -24,26 +29,44 @@ const FormRoles = () => {
     rolesActual ? setRoles(rolesActual) : setRoles(rolesDefault);
   }, [rolesActual, rolesDefault]);
 
+  const validaciones = () => {
+    let valida = true;
+
+    if (validarTexto("nombre", roles.nombre, "Nombre de rol requerido")) valida = false;
+
+    return valida;
+  };
+
   const handleChange = (e) => {
-    setRoles({
-      ...roles,
-      [e.target.name]: e.target.value,
-    });
+    const { name, value, type, checked } = e.target;
+
+    if (type === "checkbox") setRoles({ ...roles, [name]: checked });
+    else setRoles({ ...roles, [name]: value });
+
+    if (type === "select-one") validarNumero(name, value);
+    else validarTexto(name, value);
   };
 
   const limpiaForm = () => {
     setRoles(rolesDefault);
     obtenerRoles(null);
+    setError({});
   };
 
-  const handleOnSubmit = (e) => {
+  const handleOnSubmit = async (e) => {
     e.preventDefault();
-    rolesActual !== null
-      ? actualizarRoles(RolesAEnviar())
-      : registrarRoles(RolesAEnviar());
-    limpiaForm();
-    closeModal();
+    if (validaciones()) {
+      rolesActual !== null
+        ? actualizarRoles(RolesAEnviar())
+        : registrarRoles(RolesAEnviar());
+      closeModal();
+      limpiaForm();
+    } else {
+      enqueueSnackbar("Debe corregir los problemas en el formulario", { variant: "error" });
+      return false;
+    }
   };
+
 
   const RolesAEnviar = () => {
     let rolesTmp = { ...roles };
@@ -55,11 +78,9 @@ const FormRoles = () => {
 
   return (
     <form onSubmit={handleOnSubmit}>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
+      {mensaje.mensaje ? enqueueSnackbar(mensaje.mensaje, { variant: mensaje.tipoAlerta }) : null}
       <div className="grid gap-4">
-        <div className="form-group mb-8">
+        <div className="form-group">
           <InputText
             id="nombre"
             name="nombre"
@@ -68,7 +89,11 @@ const FormRoles = () => {
             value={roles.nombre}
             onChangeFN={handleChange}
             required={true}
+            error={error.nombre}
           />
+        </div>
+        <div className="form-group form-check mb-6 items-center"> 
+          <Checkbox id="activo" name="activo" label="Activo" onChangeFN={handleChange} checked={roles.activo} />
         </div>
       </div>
 
