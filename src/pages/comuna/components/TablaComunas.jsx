@@ -1,13 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { ComunaContext } from "../context/comunaContext";
-import { useStateContext } from "contexts/ContextProvider";
 import { SelectsContext } from "contexts/SelectsContext";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaComunas = () => {
-  const { comunaList, obtenerComunas, obtenerComuna } =
-    useContext(ComunaContext);
-  const { mensaje } = useStateContext();
+  const { comunaList, obtenerComunas, obtenerComuna } = useContext(ComunaContext);
   const { obtenerRegiones } = useContext(SelectsContext);
   const getComuna = (props) => obtenerComuna(props);
 
@@ -20,7 +17,7 @@ const TablaComunas = () => {
   const columns = [
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
-    { name: "Región", selector: (row) => "", sortable: true },
+    { name: "Región", selector: (row) => row.region?.nombre, sortable: true },
     {
       name: "Activo",
       cell: (props) => <ColActivoTabla activo={props.activo} />,
@@ -28,24 +25,11 @@ const TablaComunas = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getComuna(props)}
-          nombreform="comuna"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getComuna(props)} nombreform="comuna" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={comunaList} />
-    </>
-  );
+  return <Tabla columns={columns} data={comunaList} />;
 };
 
 export default TablaComunas;

@@ -3,6 +3,8 @@ import { useStateContext } from "contexts/ContextProvider";
 import { Link, NavLink } from "react-router-dom";
 import { MdOutlineCancel } from "react-icons/md";
 import { TooltipComponent } from "@syncfusion/ej2-react-popups";
+import { RiArrowRightSLine } from "react-icons/ri";
+import { BiCategoryAlt } from "react-icons/bi";
 
 import logo from "assets/img/DBM2.0.png";
 
@@ -14,8 +16,7 @@ const initialState = {
 };
 
 const Menu = (props) => {
-  const { currentColor, activeMenu, setActiveMenu, setIsClicked } =
-    useStateContext();
+  const { currentColor, activeMenu, setActiveMenu, setIsClicked } = useStateContext();
 
   //const handleActiveMenu = () => setActiveMenu(!activeMenu);
 
@@ -26,22 +27,19 @@ const Menu = (props) => {
     setIsClicked(initialState);
   };
 
-  const activeLink =
-    "flex items-center gap-3 pl-2 pt-1 pb-1 rounded-lg text-white text-md";
+  const activeLink = "flex items-center gap-3 pl-2 pt-1 pb-1 rounded-lg text-white text-md";
   const normalLink =
     "flex items-center gap-3 pl-2 pt-1 pb-1 rounded-lg text-md text-white hover:text-gray-100 hover:bg-light-gray";
 
-  /*const openSubMenu = (e, controll) => {
+  const openSubMenu = (e, controll) => {
     let icon = document.querySelector(`#icon-${controll}`);
+    let menu = document.querySelector(`#submenu-${controll}`);
 
-    if (e.currentTarget.getAttribute("aria-expanded") === "true") {
-      e.currentTarget.classList.add("bg-gray-cummins");
-      icon.classList.add("rotate-180");
-    } else {
-      e.currentTarget.classList.remove("bg-gray-cummins");
-      icon.classList.remove("rotate-180");
-    }
-  };*/
+    icon.classList.toggle("rotate-90");
+    menu.classList.toggle("hidden");
+    e.currentTarget.classList.toggle("bg-light-gray");
+  };
+
   return (
     <div
       id={`control-${props.controller}`}
@@ -77,28 +75,42 @@ const Menu = (props) => {
       </div>
 
       {/* MENUSES */}
-      <div className="mt-1 ">
+      <div className="mt-1">
         <ul className="relative" key={`links-${props.controller}`}>
           {props.grupo.map((item) => (
             <li className="relative pb-1" key={item.id}>
-              <div className="justify-between mb-1 text-gray-400">
+              {/*<div className="justify-between mb-1 text-gray-200">
                 <p className="uppercase text-sm flex">{item.nombre}</p>
+          </div>*/}
+
+              <div
+                className="pt-2 pb-2 mt-2 flex items-center rounded-md duration-300 cursor-pointer hover:bg-light-gray text-white"
+                onClick={(e) => openSubMenu(e, item.nombre.replace(" ", ""))}>
+                <BiCategoryAlt />
+                <div className="flex justify-between w-full items-center text-[15px]">
+                  <span className="ml-4 text-gray-200">{item.nombre}</span>
+                  <span className="rotate-0" id={`icon-${item.nombre.replace(" ", "")}`}>
+                    <RiArrowRightSLine />
+                  </span>
+                </div>
               </div>
-              <div className="border-l border-gray-500 mt-1 mb-1">
-                {item.vistas.map((menu) => (
-                  <NavLink
-                    to={`/${menu.accion}`}
-                    key={menu.accion}
-                    onClick={handleCloseSideBar}
-                    style={({ isActive }) => ({
-                      backgroundColor: isActive ? currentColor : "",
-                    })}
-                    className={({ isActive }) =>
-                      isActive ? activeLink : normalLink
-                    }>
-                    <span className="capitalize text-sm">{menu.nombre}</span>
-                  </NavLink>
-                ))}
+
+              <div className="border-l border-gray-500 mt-1 mb-1 hidden" id={`submenu-${item.nombre.replace(" ", "")}`}>
+                {item.vistas.map(
+                  (menu) =>
+                    menu.activo && (
+                      <NavLink
+                        to={`/${menu.accion}`}
+                        key={menu.accion}
+                        onClick={handleCloseSideBar}
+                        style={({ isActive }) => ({
+                          backgroundColor: isActive ? currentColor : "",
+                        })}
+                        className={({ isActive }) => (isActive ? activeLink : normalLink)}>
+                        <span className="capitalize text-sm">{menu.nombre}</span>
+                      </NavLink>
+                    )
+                )}
               </div>
             </li>
           ))}

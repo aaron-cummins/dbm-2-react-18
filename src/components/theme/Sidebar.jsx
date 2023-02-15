@@ -19,7 +19,7 @@ const MenuInit = [
     id: 0,
     nombre: "Inicio",
     controller: "inicio",
-    accion: "ecommerce",
+    accion: "inicio",
     icono: 0,
   },
 ];
@@ -96,26 +96,17 @@ const Sidebar2 = () => {
               name="menubars"
               className="w-12 hover:border-l-4 hover:border-l-gray-500"
               onClick={(e) => handleMenubar(e, item.id)}>
-              <TooltipComponent
-                key={`tooltip-${item.controller}`}
-                content={item.nombre}
-                position="RightCenter">
+              <TooltipComponent key={`tooltip-${item.controller}`} content={item.nombre} position="RightCenter">
                 <Link
                   key={item.id}
                   to={item.accion ? item.accion : "#"}
                   onClick={(e) => {
-                    item.grupo
-                      ? handleActiveMenu(e, item.controller)
-                      : handleCloseSideBar();
+                    item.grupo ? handleActiveMenu(e, item.controller) : handleCloseSideBar();
                   }}
                   className="relative w-full h-12 flex flex-col justify-center items-center">
-                  <div className=" flex rounded-full w-8 h-8 text-3xl">
-                    {iconos(item.icono ? item.icono : 0)}
-                  </div>
+                  <div className=" flex rounded-full w-8 h-8 text-3xl">{iconos(item.icono ? item.icono : 0)}</div>
                   <p className="flex text-center text-[0.6rem]">
-                    {item.nombre.length > 8
-                      ? `${item.nombre.slice(0, 8)}.`
-                      : item.nombre}
+                    {item.nombre.length > 8 ? `${item.nombre.slice(0, 8)}.` : item.nombre}
                   </p>
                 </Link>
               </TooltipComponent>
@@ -128,10 +119,7 @@ const Sidebar2 = () => {
         </div>
       </div>
 
-      <div
-        className={`${
-          activeMenu ? "flex" : "hidden"
-        } w-64 flex-none overflow-auto bg-gray-cummins p-2 flex-col`}>
+      <div className={`${activeMenu ? "flex" : "hidden"} w-64 flex-none overflow-auto bg-gray-cummins p-2 flex-col`}>
         {menu?.map(
           (item) =>
             item.grupo && (

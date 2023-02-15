@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoAdmisionContext } from "../context/tipoadmisionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoAdmision = () => {
-  const { tipoadmisionList, obtenerTipoAdmisiones, obtenerTipoAdmision } =
-    useContext(TipoAdmisionContext);
-  const { mensaje } = useStateContext();
+  const { tipoadmisionList, obtenerTipoAdmisiones, obtenerTipoAdmision } = useContext(TipoAdmisionContext);
 
   const getTipoAdmision = (props) => obtenerTipoAdmision(props);
 
@@ -26,23 +23,12 @@ const TablaTipoAdmision = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoAdmision(props)}
-          nombreform="tipoadmision"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getTipoAdmision(props)} nombreform="tipoadmision" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={tipoadmisionList} />
-    </>
-  );
+  return <Tabla columns={columns} data={tipoadmisionList} />;
 };
 
 export default TablaTipoAdmision;
