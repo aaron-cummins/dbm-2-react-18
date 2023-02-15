@@ -1,13 +1,10 @@
 import React, { useContext, useEffect } from "react";
 import { LugarTrabajoContext } from "../contexts/LugarTrabajoContext";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
-import { useStateContext } from "contexts/ContextProvider";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 import { SelectsContext } from "contexts/SelectsContext";
 
 const TablaLugarTrabajo = () => {
-  const { lugartrabajoList, obtenerLugaresTrabajo, obtenerLugarTrabajo } =
-    useContext(LugarTrabajoContext);
-  const { mensaje } = useStateContext();
+  const { lugartrabajoList, obtenerLugaresTrabajo, obtenerLugarTrabajo } = useContext(LugarTrabajoContext);
 
   const {
     //obtenerRegiones,
@@ -31,7 +28,13 @@ const TablaLugarTrabajo = () => {
     { name: "Id", selector: (row) => row.id, sortable: true },
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
     { name: "Abreviación", selector: (row) => row.abreviacion, sortable: true },
-    { name: "Tipo", selector: (row) => row.tipo_lugar_trabajo, sortable: true },
+    {
+      name: "Tipo",
+      selector: (row) => row.tipoLugarTrabajo?.tipo,
+      sortable: true,
+    },
+    { name: "Comuna", selector: (row) => row.comuna.nombre, sortable: true },
+    { name: "Zona", selector: (row) => row.zona?.nombre, sortable: true },
     {
       name: "Activo",
       cell: (props) => <ColActivoTabla activo={props.activo} />,
@@ -40,23 +43,12 @@ const TablaLugarTrabajo = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getLugarTrabajo(props)}
-          nombreform="lugarTrabajo"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getLugarTrabajo(props)} nombreform="lugarTrabajo" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla data={lugartrabajoList} columns={columns} />
-    </>
-  );
+  return <Tabla data={lugartrabajoList} columns={columns} />;
 };
 
 export default TablaLugarTrabajo;

@@ -12,7 +12,7 @@ const VistasGroup = () => {
   return (
     <VistasGroupContextProvider>
       <div className="m-1 p-7 bg-white rounded-3xl">
-        <Header category="Administración" title="Groupo de vistas">
+        <Header category="Administración" title="Grupo de vistas">
           <button
             type="button"
             data-bs-toggle="modal"
@@ -29,7 +29,7 @@ const VistasGroup = () => {
 
         <TablaVistasGroup />
 
-        <Modal ModalTitle="Groupo de vistas" modalId="vistasgroup-modal">
+        <Modal ModalTitle="Grupo de vistas" modalId="vistasgroup-modal">
           <FormVistasGroup />
         </Modal>
       </div>

@@ -22,13 +22,13 @@ const TipoInyeccion = () => {
               borderRadius: "10px",
             }}
             className={`gap-5 p-3  hover:drop-shadow-xl hover:bg-${currentColor} text-center inline-flex items-center`}>
-            Nuevo Tipo Inyección
+            Nuevo Tipo de inyección
           </button>
         </Header>
 
         <TablaTipoInyeccion />
 
-        <Modal ModalTitle="Tipo Inyección" modalId="tipoinyeccion-modal">
+        <Modal ModalTitle="" modalId="tipoinyeccion-modal">
           <FormTipoInyeccion modalid="#tipoinyeccion-modal" />
         </Modal>
       </div>

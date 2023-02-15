@@ -5,14 +5,11 @@ import {
   REGISTRAR,
   ACTUALIZAR,
   ELIMINAR,
+  REGISTRAR_OTRO,
+  ELIMINAR_OTRO,
+  OBTENER_LISTA_OTROS,
 } from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import usuarioReducer from "../reducer/usuarioReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -27,6 +24,7 @@ export const UsuarioContextProvider = (props) => {
   const initialState = {
     usuarioList: [],
     usuarioActual: null,
+    usuarioPermisosList: [],
   };
 
   const [state, dispatch] = useReducer(usuarioReducer, initialState);
@@ -34,7 +32,7 @@ export const UsuarioContextProvider = (props) => {
   /* OBETENER LISTADO DE USUARIOS */
   const obtenerUsuariolist = async () => {
     try {
-      const resultado = await callEndpoint(getList(urlApi));
+      const resultado = await callEndpoint(getList(`${urlApi}/cargo`));
       if (resultado && resultado.data) {
         dispatch({
           type: OBTENER_LISTA,
@@ -51,7 +49,7 @@ export const UsuarioContextProvider = (props) => {
     try {
       let usuarioEncontrada = null;
       if (usuario !== null) {
-        const resultado = await callEndpoint(getByID(urlApi, usuario.id));
+        const resultado = await callEndpoint(getByID(`${urlApi}/cargo`, usuario.id));
         if (resultado && resultado.data) {
           usuarioEncontrada = resultado.data;
         }
@@ -79,10 +77,7 @@ export const UsuarioContextProvider = (props) => {
       alerta("success", "Usuario creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el Usuario. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el Usuario. ${error}`);
     }
   };
 
@@ -98,10 +93,7 @@ export const UsuarioContextProvider = (props) => {
       alerta("success", "Usuario actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el Usuario. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el Usuario. ${error}`);
     }
   };
 
@@ -116,10 +108,58 @@ export const UsuarioContextProvider = (props) => {
       alerta("success", "Usuario eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el Usuario. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el Usuario. ${error}`);
+    }
+  };
+
+  /* REGISTRAR PERMISOS USUARIO */
+  const registrarPermisosUsuario = async (permisos) => {
+    try {
+      for (const permi of permisos) {
+        const resultado = await callEndpoint(postObject("permisosusuario", permi));
+        dispatch({
+          type: REGISTRAR_OTRO,
+          payload: resultado.data,
+        });
+      }
+
+      alerta("success", "Permisos de usuario asignados con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta("error", `'Ocurrió un error al intentar asignar los permisos al usuario. ${error}`);
+    }
+  };
+
+  /* ELIMINAR PERMISOS USUARIO */
+  const eliminarPermisosUsuario = async (id_usuario) => {
+    try {
+      await callEndpoint(deleteObject("permisosusuario/delusuario", id_usuario));
+      dispatch({
+        type: ELIMINAR_OTRO,
+        payload: id_usuario,
+      });
+      //alerta("success", "Usuario eliminado con exito!");
+    } catch (error) {
+      console.log(error);
+      alerta("error", `'Ocurrió un error al intentar actualizar los permisos al usuario. ${error}`);
+    }
+  };
+
+  const obtenerPermisosUsuariolist = async (id_usuario) => {
+    try {
+      let permisos = null;
+
+      if (id_usuario !== null) {
+        const resultado = await callEndpoint(getByID("permisosusuario/usuario", id_usuario));
+        permisos = resultado.data;
+      }
+
+      dispatch({
+        type: OBTENER_LISTA_OTROS,
+        payload: permisos,
+      });
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -128,12 +168,17 @@ export const UsuarioContextProvider = (props) => {
       value={{
         usuarioList: state.usuarioList,
         usuarioActual: state.usuarioActual,
+        usuarioPermisosList: state.usuarioPermisosList,
 
         obtenerUsuariolist,
         obtenerUsuario,
         registrarUsuario,
         actualizarUsuario,
         eliminarUsuario,
+
+        obtenerPermisosUsuariolist,
+        registrarPermisosUsuario,
+        eliminarPermisosUsuario,
       }}>
       {props.children}
     </UsuarioContext.Provider>

@@ -1,13 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { ModulosContext } from "../context/modulosContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaModulos = () => {
-  const { modulosList, obtenerModuloslist, obtenerModulos } =
-    useContext(ModulosContext);
-  const { mensaje } = useStateContext();
-
+  const { modulosList, obtenerModuloslist, obtenerModulos } = useContext(ModulosContext);
   const getModulos = (props) => obtenerModulos(props);
 
   useEffect(() => {
@@ -20,24 +16,16 @@ const TablaModulos = () => {
     { name: "Nombre", selector: (row) => row.nombre, sortable: true },
     { name: "Controller", selector: (row) => row.controller, sortable: true },
     {
+      name: "Activo",
+      cell: (props) => <ColActivoTabla activo={props.activo} />,
+      sortable: true,
+    },
+    {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getModulos(props)}
-          nombreform="modulos"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getModulos(props)} nombreform="modulos" />,
     },
   ];
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={modulosList} />
-    </>
-  );
+  return <Tabla columns={columns} data={modulosList} />;
 };
 
 export default TablaModulos;

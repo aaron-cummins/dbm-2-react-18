@@ -1,11 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { PaisContext } from "../context/paisContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaPais = () => {
   const { paisList, obtenerPaises, obtenerPais } = useContext(PaisContext);
-  const { mensaje } = useStateContext();
 
   const getPais = (props) => obtenerPais(props);
 
@@ -25,24 +23,11 @@ const TablaPais = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getPais(props)}
-          nombreform="pais"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getPais(props)} nombreform="pais" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={paisList} />
-    </>
-  );
+  return <Tabla columns={columns} data={paisList} />;
 };
 
 export default TablaPais;

@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import aplicacionOemReducer from "../reducer/aplicacionOemReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -77,13 +65,10 @@ export const AplicacionOemContextProvider = (props) => {
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "Aplicacion Oem creada con exito!");
+      alerta("success", "Aplicación Oem creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el aplicacion oem. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear la aplicación oem. ${error}`);
     }
   };
 
@@ -95,13 +80,10 @@ export const AplicacionOemContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "AplicacionOem actualizado con exito!");
+      alerta("success", "Aplicación Oem actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el aplicacionoem. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar la aplicación oem. ${error}`);
     }
   };
 
@@ -113,13 +95,10 @@ export const AplicacionOemContextProvider = (props) => {
         type: ELIMINAR,
         payload: id,
       });
-      alerta("success", "AplicacionOem eliminado con exito!");
+      alerta("success", "Aplicación Oem eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el aplicacionoem. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar la aplicación oem. ${error}`);
     }
   };
 

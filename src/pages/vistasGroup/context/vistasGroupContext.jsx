@@ -1,19 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-  OBTENER_LISTA_ACTIVAS,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import vistasGroupReducer from "../reducer/vistasGroupReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -80,10 +67,7 @@ export const VistasGroupContextProvider = (props) => {
       alerta("success", "Módulo creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el Módulo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear el Módulo. ${error}`);
     }
   };
 
@@ -99,10 +83,7 @@ export const VistasGroupContextProvider = (props) => {
       alerta("success", "Módulo actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el Módulo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el Módulo. ${error}`);
     }
   };
 
@@ -117,10 +98,7 @@ export const VistasGroupContextProvider = (props) => {
       alerta("success", "Módulo eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el Módulo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el Módulo. ${error}`);
     }
   };
 

@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import aplicacionReducer from "../reducer/aplicacionReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
@@ -77,13 +65,10 @@ export const AplicacionContextProvider = (props) => {
         type: REGISTRAR,
         payload: resultado.data,
       });
-      alerta("success", "Aplicacion creado con exito!");
+      alerta("success", "Aplicación creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear el aplicacion. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear la aplicación. ${error}`);
     }
   };
 
@@ -96,13 +81,10 @@ export const AplicacionContextProvider = (props) => {
         type: ACTUALIZAR,
         payload: resultado.data,
       });
-      alerta("success", "Aplicacion actualizado con exito!");
+      alerta("success", "Aplicación actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el aplicacion. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar la aplicación. ${error}`);
     }
   };
 
@@ -114,13 +96,10 @@ export const AplicacionContextProvider = (props) => {
         type: ELIMINAR,
         payload: id,
       });
-      alerta("success", "Aplicacion eliminado con exito!");
+      alerta("success", "Aplicación eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el aplicacion. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar la aplicación. ${error}`);
     }
   };
 

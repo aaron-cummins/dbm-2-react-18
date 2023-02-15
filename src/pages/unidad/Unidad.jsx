@@ -1,10 +1,9 @@
 import React from "react";
-import { Header, Modal } from "components";
-import { useStateContext } from "contexts/ContextProvider";
 import { UnidadContextProvider } from "./context/unidadContext";
-
-import FormUnidad from "./components/FormUnidad";
+import { useStateContext } from "contexts/ContextProvider";
+import { Header, Modal } from "components";
 import TablaUnidad from "./components/TablaUnidad";
+import FormUnidad from "./components/FormUnidad";
 
 const Unidad = () => {
   const { currentColor } = useStateContext();
@@ -28,8 +27,8 @@ const Unidad = () => {
 
         <TablaUnidad />
 
-        <Modal ModalTitle="Unidad" modalId="unidad-modal">
-          <FormUnidad />
+        <Modal ModalTitle="Unidad" modalId="unidad-modal" dimension="xl">
+          <FormUnidad modalid="#unidad-modal" />
         </Modal>
       </div>
     </UnidadContextProvider>

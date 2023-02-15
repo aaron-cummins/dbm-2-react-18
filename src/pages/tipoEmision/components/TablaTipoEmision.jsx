@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoEmisionContext } from "../context/tipoemisionContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoEmision = () => {
-  const { tipoemisionList, obtenerTipoEmisiones, obtenerTipoEmision } =
-    useContext(TipoEmisionContext);
-  const { mensaje } = useStateContext();
+  const { tipoemisionList, obtenerTipoEmisiones, obtenerTipoEmision } = useContext(TipoEmisionContext);
 
   const getTipoEmision = (props) => obtenerTipoEmision(props);
 
@@ -25,24 +22,11 @@ const TablaTipoEmision = () => {
     },
     {
       name: "Acciones",
-      cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoEmision(props)}
-          nombreform="tipoemision"
-        />
-      ),
+      cell: (props) => <OpcionesTabla editar={true} FnEditar={() => getTipoEmision(props)} nombreform="tipoemision" />,
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={tipoemisionList} />
-    </>
-  );
+  return <Tabla columns={columns} data={tipoemisionList} />;
 };
 
 export default TablaTipoEmision;

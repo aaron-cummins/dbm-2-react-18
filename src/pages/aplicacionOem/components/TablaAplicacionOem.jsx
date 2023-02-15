@@ -1,16 +1,10 @@
 import React, { useEffect, useContext } from "react";
 import { AplicacionOemContext } from "../context/aplicacionOemContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaAplicacionOem = () => {
-  const { aplicacionOemList, obtenerAplicacionOem, obtenerAplicacionesOem } =
-    useContext(AplicacionOemContext);
-  const { mensaje } = useStateContext();
-
-  const getAplicacionOem = (props) => {
-    obtenerAplicacionOem(props);
-  };
+  const { aplicacionOemList, obtenerAplicacionOem, obtenerAplicacionesOem } = useContext(AplicacionOemContext);
+  const getAplicacionOem = (props) => obtenerAplicacionOem(props);
 
   useEffect(() => {
     obtenerAplicacionesOem();
@@ -28,23 +22,12 @@ const TablaAplicacionOem = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getAplicacionOem(props)}
-          nombreform="aplicacionoem"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getAplicacionOem(props)} nombreform="aplicacionoem" />
       ),
     },
   ];
 
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={aplicacionOemList} />
-    </>
-  );
+  return <Tabla columns={columns} data={aplicacionOemList} />;
 };
 
 export default TablaAplicacionOem;

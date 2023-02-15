@@ -1,19 +1,7 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
 //import { getVersionEquipoList, getVersionEquipo, postVersionEquipo, putVersionEquipo, deleteVersionEquipo } from 'services/versionequipoService';
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import versionEquipoReducer from "../reducer/versionEquipoReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 
@@ -81,10 +69,7 @@ export const VersionEquipoContextProvider = (props) => {
       alerta("success", "Versión equipo creada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar crear la versión equipo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar crear la versión equipo. ${error}`);
     }
   };
 
@@ -100,10 +85,7 @@ export const VersionEquipoContextProvider = (props) => {
       alerta("success", "Versión equipo actualizada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar la versión equipo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar la versión equipo. ${error}`);
     }
   };
 
@@ -118,10 +100,7 @@ export const VersionEquipoContextProvider = (props) => {
       alerta("success", "Versión equipo eliminada con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar la versión equipo. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar la versión equipo. ${error}`);
     }
   };
 

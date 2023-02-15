@@ -1,13 +1,15 @@
 import DataTable from "react-data-table-component";
 import Checkbox from "@mui/material/Checkbox";
 import { ArrowDownward } from "@mui/icons-material";
-import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { Spinner } from "components";
+//import useFetchAndLoad from "hooks/useFetchAndLoad";
+import { useStateContext } from "contexts/ContextProvider";
 
 const sortIcon = <ArrowDownward />;
 const selectProps = { indeterminate: (isIndeterminate) => isIndeterminate };
 
 const Tabla = (props) => {
-  const { loading } = useFetchAndLoad();
+  const { cargando } = useStateContext();
 
   const customStyles = {
     rows: {
@@ -17,31 +19,48 @@ const Tabla = (props) => {
     },
     headCells: {
       style: {
-        paddingLeft: "8px", // override the cell padding for head cells
-        paddingRight: "8px",
-        background: "#fafafa",
+        paddingLeft: "16px", // override the cell padding for head cells
+        paddingRight: "16px",
+        background: "#e9ecef", //"#fafafa",
         fontSize: "20x",
+        fontWeight: 900,
       },
     },
     cells: {
       style: {
-        paddingLeft: "8px", // override the cell padding for data cells
-        paddingRight: "8px",
+        paddingLeft: "16px", // override the cell padding for data cells
+        paddingRight: "16px",
       },
     },
   };
 
+  const paginationOptions = {
+    rowsPerPageText: "Filas por página:",
+    rangeSeparatorText: "de",
+    noRowsPerPage: false,
+    selectAllRowsItem: false,
+    selectAllRowsItemText: "Todos",
+  };
+
   return (
-    <DataTable
-      progressPending={loading}
-      customStyles={customStyles}
-      pagination
-      selectableRowsComponent={Checkbox}
-      selectableRowsComponentProps={selectProps}
-      sortIcon={sortIcon}
-      dense
-      {...props}
-    />
+    <>
+      <div className="border-solid border-1">
+        <DataTable
+          progressPending={cargando}
+          progressComponent={<Spinner />}
+          customStyles={customStyles}
+          pagination={!props.pagination ? true : props.pagination}
+          paginationComponentOptions={paginationOptions}
+          noDataComponent="No se encontraron datos para mostrar"
+          selectableRowsComponent={Checkbox}
+          selectableRowsComponentProps={selectProps}
+          paginationRowsPerPageOptions={[10, 25, 30, 50]}
+          sortIcon={sortIcon}
+          dense
+          {...props}
+        />
+      </div>
+    </>
   );
 };
 

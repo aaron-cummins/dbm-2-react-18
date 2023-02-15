@@ -1,18 +1,6 @@
 import React, { createContext, useReducer } from "react";
-import {
-  OBTENER,
-  OBTENER_LISTA,
-  REGISTRAR,
-  ACTUALIZAR,
-  ELIMINAR,
-} from "const/actionTypes";
-import {
-  getList,
-  getByID,
-  postObject,
-  putObject,
-  deleteObject,
-} from "services/genericService";
+import { OBTENER, OBTENER_LISTA, REGISTRAR, ACTUALIZAR, ELIMINAR } from "const/actionTypes";
+import { getList, getByID, postObject, putObject, deleteObject } from "services/genericService";
 import oemReducer from "../reducer/oemReducer";
 import useFetchAndLoad from "hooks/useFetchAndLoad";
 import { useStateContext } from "contexts/ContextProvider";
@@ -79,7 +67,7 @@ export const OemContextProvider = (props) => {
       alerta("success", "Oem creado con exito!");
     } catch (error) {
       console.log(error);
-      alerta("danger", `'Ocurrió un error al intentar crear el oem. ${error}`);
+      alerta("error", `'Ocurrió un error al intentar crear el oem. ${error}`);
     }
   };
 
@@ -95,10 +83,7 @@ export const OemContextProvider = (props) => {
       alerta("success", "Oem actualizado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar actualizar el oem. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar actualizar el oem. ${error}`);
     }
   };
 
@@ -113,10 +98,7 @@ export const OemContextProvider = (props) => {
       alerta("success", "Oem eliminado con exito!");
     } catch (error) {
       console.log(error);
-      alerta(
-        "danger",
-        `'Ocurrió un error al intentar eliminar el oem. ${error}`
-      );
+      alerta("error", `'Ocurrió un error al intentar eliminar el oem. ${error}`);
     }
   };
 

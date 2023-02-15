@@ -1,12 +1,9 @@
 import React, { useEffect, useContext } from "react";
 import { TipoFiltradoContext } from "../context/tipofiltradoContext";
-import { useStateContext } from "contexts/ContextProvider";
-import { Alerts, ColActivoTabla, OpcionesTabla, Tabla } from "components";
+import { ColActivoTabla, OpcionesTabla, Tabla } from "components";
 
 const TablaTipoFiltrado = () => {
-  const { tipofiltradoList, obtenerTipoFiltrados, obtenerTipoFiltrado } =
-    useContext(TipoFiltradoContext);
-  const { mensaje } = useStateContext();
+  const { tipofiltradoList, obtenerTipoFiltrados, obtenerTipoFiltrado } = useContext(TipoFiltradoContext);
 
   const getTipoFiltrado = (props) => obtenerTipoFiltrado(props);
 
@@ -26,22 +23,11 @@ const TablaTipoFiltrado = () => {
     {
       name: "Acciones",
       cell: (props) => (
-        <OpcionesTabla
-          editar={true}
-          FnEditar={() => getTipoFiltrado(props)}
-          nombreform="tipofiltrado"
-        />
+        <OpcionesTabla editar={true} FnEditar={() => getTipoFiltrado(props)} nombreform="tipofiltrado" />
       ),
     },
   ];
-  return (
-    <>
-      {mensaje.mensaje ? (
-        <Alerts type={mensaje.tipoAlerta}>{mensaje.mensaje}</Alerts>
-      ) : null}
-      <Tabla columns={columns} data={tipofiltradoList} />
-    </>
-  );
+  return <Tabla columns={columns} data={tipofiltradoList} />;
 };
 
 export default TablaTipoFiltrado;
